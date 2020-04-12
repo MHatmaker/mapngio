@@ -5,5 +5,6 @@ import { Injectable } from '@angular/core';
 })
 export class SlidedataService {
 
-  constructor() { }
+      constructor(private mapListElement: any, private slideNumber: number, private mapName: string) {
+      }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import {  PusherConfig } from '../libs/PusherConfig';
-import { MapInstanceService } from './/mapinstance.service';
+import { MapinstanceService } from './mapinstance.service';
 import { MLConfig } from '../libs/MLConfig';
 // import { Pusher } from 'pusher-client';
 import { Pusher } from 'pusher-js';
@@ -58,7 +58,7 @@ export class PusherclientService {
 
       constructor(
           private pusherConfig: PusherConfig,
-          private mapInstanceService: MapInstanceService,
+          private mapInstanceService: MapinstanceService,
           private mapOpener: MapopenerService
         ) {
       }
@@ -302,7 +302,7 @@ export class PusherclientService {
           frame.lon = frame.x;
           frame.zoom = frame.z;
       }
-      const withoutHidden = _.without(this.clients, this.clients['hiddenmap']);
+      const withoutHidden = _.without(this.clients, this.clients.get('hiddenmap'));
       console.log(withoutHidden);
       const withoutSubmitter = _.without(withoutHidden, this.clients[frame.mapId]);
       console.log(withoutSubmitter);

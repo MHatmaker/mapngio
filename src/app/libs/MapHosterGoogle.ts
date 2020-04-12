@@ -16,7 +16,7 @@ import { PusherclientService } from '../services/pusherclient.service';
 import { PusherConfig } from './PusherConfig';
 // import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
-import { GeoCodingService, OSMAddress } from '../services/GeoCodingService';
+import { GeocodingService, OSMAddress } from '../services/geocoding.service';
 import { Observable } from 'rxjs/Observable'
 import { MapLocOptions } from '../services/positionupdate.interface';
 import { SearchplacesService } from '../services/searchplaces.service';
@@ -121,7 +121,7 @@ export class MapHosterGoogle extends MapHoster {
     private pusherConfig: PusherConfig;
     private pusherClientService: PusherclientService;
     private positionUpdateService: PositionupdateService;
-    private geoCoder: GeoCodingService;
+    private geoCoder: GeocodingService;
     private initialLocations: LocationsService;
 
     constructor(private mapNumber: number, mlconfig: MLConfig) {
@@ -132,7 +132,7 @@ export class MapHosterGoogle extends MapHoster {
         this.pusherClientService = AppModule.injector.get(PusherclientService);
         this.positionUpdateService = AppModule.injector.get(PositionupdateService);
         this.pusherConfig = AppModule.injector.get(PusherConfig);
-        this.geoCoder = AppModule.injector.get(GeoCodingService);
+        this.geoCoder = AppModule.injector.get(GeocodingService);
         this.initialLocations = AppModule.injector.get(LocationsService);
     }
 
@@ -241,35 +241,29 @@ export class MapHosterGoogle extends MapHoster {
             bnds = this.mphmap.getBounds(),
             xtntDict = {
                 src: 'google',
-                zoom: zm < this.maxZoom ? zm: this.maxZoom - 1,
+                zoom: zm < this.maxZoom ? zm : this.maxZoom - 1,
                 lon: fixedLL.lon,
                 lat: fixedLL.lat,
-                scale: this.scale2Level[zm < this.maxZoom ? zm: this.maxZoom - 1].scale,
-                action: action,
+                scale: this.scale2Level[zm < this.maxZoom ? zm : this.maxZoom - 1].scale,
+                action,
                 bounds: bnds
             };
         return xtntDict;
     }
 
-    compareExtents(msg, xtnt) {
-        var cmp = true,
-            gmBounds = this.mphmap.getBounds(),
-            ne,
-            sw,
-            wdth,
-            hgt,
-            lonDif,
-            latDif;
+    compareExtents(msg: string, xtnt) {
+        let cmp = true;
+        const gmBounds = this.mphmap.getBounds();
 
         if (gmBounds) {
-            ne = gmBounds.getNorthEast();
-            sw = gmBounds.getSouthWest();
+            const ne = gmBounds.getNorthEast();
+            const sw = gmBounds.getSouthWest();
             cmp = xtnt.zoom === this.zmG;
-            wdth = Math.abs(ne.lng() - sw.lng());
-            hgt = Math.abs(ne.lat() - sw.lat());
+            const wdth = Math.abs(ne.lng() - sw.lng());
+            const hgt = Math.abs(ne.lat() - sw.lat());
             if (!(wdth === 0 || hgt === 0)) {
-                lonDif = Math.abs((xtnt.lon - this.cntrxG) / wdth);
-                latDif =  Math.abs((xtnt.lat - this.cntryG) / hgt);
+                const lonDif = Math.abs((xtnt.lon - this.cntrxG) / wdth);
+                const latDif =  Math.abs((xtnt.lat - this.cntryG) / hgt);
                 // cmp = ((cmp == true) && (xtnt.lon == this.cntrxG) && (xtnt.lat == this.cntryG));
                 cmp = ((cmp === true) && (lonDif < 0.0005) && (latDif < 0.0005));
                 console.log('compareExtents ' + msg + ' ' + cmp);
@@ -391,18 +385,15 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     retrievedClick(clickPt) {
-        var fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9),
-            content,
-            popPt,
-            btnShare;
+        const fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9);
         console.log('Back in retrievedClick - with click at ' +  clickPt.x + ', ' + clickPt.y);
         // latlng = L.latLng(clickPt.y, clickPt.x, clickPt.y);
         // $inj = this.mlconfig.getInjector();
         // linkrSvc = $inj.get('LinkrService');
         // linkrSvc.hideLinkr();
 
-        popPt = new google.maps.LatLng(clickPt.y, clickPt.x);
-        content = 'Map click at ' + fixedLL.lat + ', ' + fixedLL.lon;
+        const popPt = new google.maps.LatLng(clickPt.y, clickPt.x);
+        let content = 'Map click at ' + fixedLL.lat + ', ' + fixedLL.lon;
         if (clickPt.title) {
             content += '<br>' + clickPt.title;
         }
@@ -416,11 +407,12 @@ export class MapHosterGoogle extends MapHoster {
         console.log(`referrerId is ${clickPt.referrerId}, I am ${this.mlconfig.getUserId()}`);
         console.log(`popoverId is ${clickPt.popId}`);
         if (clickPt.referrerId !== this.mlconfig.getUserId()) {
-            if(this.popupSet.has('' + clickPt.x + ', ' + clickPt.y) == false){
+            if (this.popupSet.has('' + clickPt.x + ', ' + clickPt.y) === false) {
             // if(this.markerInfoPopups.has(clickPt.popId) === false) {
-              let titleShared = '(shared )' + clickPt.title;
-              let lbl = this.labels[this.labelIndex++ % this.labels.length];
-              let mip = new MarkerInfoPopup(popPt, content, titleShared, // 'Received from user ' + clickPt.referrerName + ', ' + clickPt.referrerId,
+              const titleShared = '(shared )' + clickPt.title;
+              const lbl = this.labels[this.labelIndex++ % this.labels.length];
+              const mip = new MarkerInfoPopup(popPt, content, titleShared,
+                // 'Received from user ' + clickPt.referrerName + ', ' + clickPt.referrerId,
                 null, this.mphmap, this.mlconfig.getUserId(), this.mapNumber, clickPt.popId, lbl, true);
               this.markerInfoPopups.set(clickPt.popId, mip);
               this.markers.push(mip.getMarker());
@@ -431,9 +423,9 @@ export class MapHosterGoogle extends MapHoster {
               // this.markerInfoPopups[place.name] = mip;
               // this.popDetails.infoWnd.open(this.mphmap, this.popDetails.infoMarker);
 
-              btnShare = document.getElementsByClassName('sharebutton')[0];
+              const btnShare: HTMLElement = document.getElementsByClassName('sharebutton')[0];
               if (btnShare) {
-                  console.debug(btnShare);
+                  console.log(btnShare);
                   btnShare.style.visibility = 'hidden';
               }
             }
@@ -441,10 +433,10 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     setCurrentLocation( loc: MapLocOptions) {
-      let cntr = new google.maps.LatLng(loc.center.lat, loc.center.lng);
+      const cntr = new google.maps.LatLng(loc.center.lat, loc.center.lng);
       // this.updateGlobals('setCurrentLocation', loc.center.lng, loc.center.lat, this.zmG);
       this.mphmap.panTo(cntr);
-      var userMarker = new google.maps.Marker({
+      const userMarker = new google.maps.Marker({
             position: cntr,
             map: this.mphmap,
             icon: this.im
@@ -453,24 +445,20 @@ export class MapHosterGoogle extends MapHoster {
     }
 
   async searchOnStartupMap(queryPlaces) {
-        let service = new google.maps.places.PlacesService(this.mphmap);
-        await service.textSearch(queryPlaces, (places) => {
-            this.mlconfig.setInitialPlaces(places);
-            console.log(places);
-                if(places && places.length > 0) {
-                    this.placeMarkers(places);
-            }
-        });
+      const service = new google.maps.places.PlacesService(this.mphmap);
+      await service.textSearch(queryPlaces, (places) => {
+          this.mlconfig.setInitialPlaces(places);
+          console.log(places);
+          if (places && places.length > 0) {
+              this.placeMarkers(places);
+          }
+      });
     }
     configureMap(gMap, mapOptions, goooogle, googPlaces, config) {
         console.log('MapHosterGoogle configureMap');
-        var
-            firstCntr: any,
-            qlat: string,
-            qlon: string,
-            qzoom: string,
-            initZoom: string = mapOptions.zoom,
-            listener: any;
+        let initZoom = '';
+        let qlat = '';
+        let qlon = '';
 
         this.mlconfig = config;
         this.self = this;
@@ -482,17 +470,18 @@ export class MapHosterGoogle extends MapHoster {
         if (this.mlconfig.testUrlArgs()) {
             qlat = this.mlconfig.lat();
             qlon = this.mlconfig.lon();
-            qzoom = this.mlconfig.zoom();
-            initZoom = qzoom; //parseInt(qzoom, 10);
+            const qzoom = this.mlconfig.zoom();
+            initZoom = qzoom; // parseInt(qzoom, 10);
             this.updateGlobals('iin configureMap - nit with qlon, qlat', +qlon, +qlat, +qzoom);
         } else {
             if (mapOptions) {
-                this.updateGlobals('in configureMap - MapHosterGoogle init with passed in mapOptions', mapOptions.center.lng(), mapOptions.center.lat(), +initZoom);
+                this.updateGlobals('in configureMap - MapHosterGoogle init with passed in mapOptions',
+                mapOptions.center.lng(), mapOptions.center.lat(), +initZoom);
             } else {
                 this.updateGlobals('in configureMap - MapHosterGoogle init with hard-coded values', +qlon, +qlat, +initZoom);
             }
         }
-        firstCntr = new google.maps.LatLng(this.cntryG, this.cntrxG);
+        const firstCntr = new google.maps.LatLng(this.cntryG, this.cntrxG);
         this.mphmap.panTo(firstCntr);
         this.mphmap.setCenter(firstCntr);
         // LocateSelfCtrl.setMap(goooogle, this.mphmap);
@@ -541,7 +530,7 @@ export class MapHosterGoogle extends MapHoster {
         }
 
         function fillMapWithMarkers(places) {
-            if(places) {
+            if (places) {
                 this.placeMarkers(places);
             }
           /*
@@ -553,33 +542,24 @@ export class MapHosterGoogle extends MapHoster {
         }
 
         google.maps.event.addListenerOnce(this.mphmap, 'tilesloaded', () => {
-            var zsvc = new google.maps.MaxZoomService(),
-                cntr = new google.maps.LatLng(this.cntryG, this.cntrxG), // {lat: this.cntryG, lng: this.cntrxG}, //
-                center,
-                gmQuery = this.mlconfig.query(),
-                bnds,
-                gBnds,
-                ll,
-                ur,
-                // pacinput,
-                qtext,
-                service;
+            const zsvc = new google.maps.MaxZoomService(),
+                cntr = new google.maps.LatLng(this.cntryG, this.cntrxG); // {lat: this.cntryG, lng: this.cntrxG},
             console.log('>>>>>>>>>>>>>> tiles loaded >>>>>>>>>>>>>>>>>>>>');
 
             this.hideLoading();
             this.mapReady = true;
-            center = this.mphmap.getCenter();
+            const center = this.mphmap.getCenter();
             // google.maps.event.trigger(this.mphmap, 'resize');
             // this.mphmap.setCenter(center);
             this.addInitialSymbols();
             // google.maps.event.trigger(this.mphmap, 'resize');
             // this.mphmap.setCenter(center);
-            gmQuery = this.mlconfig.getQuery();
+            const gmQuery = this.mlconfig.getQuery();
             console.log('getMaxZoomAtLatLng for ' + cntr.lng() + ', ' + cntr.lat());
 
             zsvc.getMaxZoomAtLatLng(cntr,  (response) => {
                 console.log('zsvc.getMaxZoomAtLatLng returned response:');
-                console.debug(response);
+                console.log(response);
                 if (response && response.status === google.maps.MaxZoomStatus.OK) {
                     this.maxZoom = response.zoom;
                     this.zoomLevels = this.maxZoom - this.minZoom;
@@ -613,20 +593,20 @@ export class MapHosterGoogle extends MapHoster {
             //     this.mlconfig.setQuery(gmQuery);
             // }
             // if (this.searchFiredFromUrl === true) {
-            if (this.mlconfig.getSource() == EMapSource.placesgoogle ||
-                  this.mlconfig.getSource() == EMapSource.urlgoogle ||
-                  this.mlconfig.getSource() == EMapSource.sharegoogle) {
-                console.log('getBoundsFromUrl or from share config.......in MapHosterGoogle 'tilesloaded' listener');
-                bnds = this.mlconfig.getBounds();
-                qtext = this.mlconfig.getQuery();
-                if (this.mlconfig.getSource() == EMapSource.sharegoogle || this.mlconfig.getSource() == EMapSource.placesgoogle) {
-                    let xtExt = this.extractBounds('pan');
+            if (this.mlconfig.getSource() === EMapSource.placesgoogle ||
+                  this.mlconfig.getSource() === EMapSource.urlgoogle ||
+                  this.mlconfig.getSource() === EMapSource.sharegoogle) {
+                console.log('getBoundsFromUrl or from share config.......in MapHosterGoogle "tilesloaded" listener');
+                const bnds = this.mlconfig.getBounds();
+                const qtext = this.mlconfig.getQuery();
+                if (this.mlconfig.getSource() === EMapSource.sharegoogle || this.mlconfig.getSource() === EMapSource.placesgoogle) {
+                    const xtExt = this.extractBounds('pan');
                     this.pusherClientService.publishPanEvent(xtExt);
                 }
-                console.debug(bnds);
-                ll = new google.maps.LatLng(bnds.lly, bnds.llx);
-                ur = new google.maps.LatLng(bnds.ury, bnds.urx);
-                gBnds = new google.maps.LatLngBounds(ll, ur);
+                console.log(bnds);
+                const ll = new google.maps.LatLng(bnds.lly, bnds.llx);
+                const ur = new google.maps.LatLng(bnds.ury, bnds.urx);
+                const gBnds = new google.maps.LatLngBounds(ll, ur);
                 this.searchFiredFromUrl = false;
 
 /* this is the previously functional location for accessing pac-input
@@ -634,7 +614,7 @@ export class MapHosterGoogle extends MapHoster {
                 pacinput.value = qtext;
 */
                 // pacinput.focus();
-                if (qtext != '') {
+                if (qtext !== '') {
                     this.queryPlaces.bounds = gBnds;
                     this.queryPlaces.query = qtext;
                     this.queryPlaces.location = center;
@@ -644,8 +624,8 @@ export class MapHosterGoogle extends MapHoster {
 
             // setupQueryListener();
             // ();
-            let initialPlaces = this.mlconfig.getInitialPlaces();
-            if( initialPlaces) {
+            const initialPlaces = this.mlconfig.getInitialPlaces();
+            if ( initialPlaces) {
                 this.placeMarkers(initialPlaces);
               }
         });
@@ -676,14 +656,13 @@ export class MapHosterGoogle extends MapHoster {
         // Bias the SearchBox results towards places that are within the bounds of the
         // current map's viewport.
         this.boundsListenerHandle = this.mphmap.addListener('bounds_changed',  () => {
-            var changedBounds = this.mphmap.getBounds(),
-                convertedBounds;
+            const changedBounds = this.mphmap.getBounds();
             // console.debug(changedBounds);
             if (this.searchBox) {
                 this.searchBox.setBounds(changedBounds);
             }
-            convertedBounds = {'llx': changedBounds.getSouthWest().lng(), 'lly': changedBounds.getSouthWest().lat(),
-                         'urx': changedBounds.getNorthEast().lng(), 'ury': changedBounds.getNorthEast().lat()};
+            const convertedBounds = {llx: changedBounds.getSouthWest().lng(), lly: changedBounds.getSouthWest().lat(),
+                         urx: changedBounds.getNorthEast().lng(), ury: changedBounds.getNorthEast().lat()};
             this.mlconfig.setBounds(convertedBounds);
         });
 
@@ -713,13 +692,13 @@ export class MapHosterGoogle extends MapHoster {
             // console.log(this.mphmap.getBounds());
         // });
         google.maps.event.addDomListener(window, 'resize', () => {
-            var center = this.mphmap.getCenter();
+            const center = this.mphmap.getCenter();
             google.maps.event.trigger(this.mphmap, 'resize');
             this.mphmap.setCenter(center);
-        })
+        });
 
         this.mphmap.addListener('mousemove', (e) => {
-            var ltln = e.latLng,
+            const ltln = e.latLng,
                 fixedLL = this.utils.toFixedTwo(ltln.lng(), ltln.lat(), 4),
                 evlng = fixedLL.lon,
                 evlat = fixedLL.lat,
@@ -730,17 +709,18 @@ export class MapHosterGoogle extends MapHoster {
                 cntrlat = fixedCntrLL.lat;
 
             if (this.scale2Level.length > 0 && zm < this.maxZoom) {
-                // var view = 'Zoom: ' + zm + ' Scale: ' + this.scale2Level[zm].scale + ' Center: ' + cntrlng + ', ' + cntrlat + ' Current: ' + evlng + ', ' + evlat;
+                // var view = 'Zoom: ' + zm + ' Scale: ' + this.scale2Level[zm].scale +
+                // ' Center: ' + cntrlng + ', ' + cntrlat + ' Current: ' + evlng + ', ' + evlat;
                 // document.getElementById('mppos').value = view;
                 console.log('positionUpdateService emitting at zoom level ' + zm);
                 this.positionUpdateService.positionData.emit({key: 'coords',
                     val: {
-                        'zm': zm < this.maxZoom ? zm: this.maxZoom - 1,
-                        'scl': this.scale2Level[zm < this.maxZoom ? zm: this.maxZoom - 1].scale,
-                        'cntrlng': cntrlng,
-                        'cntrlat': cntrlat,
-                        'evlng': evlng,
-                        'evlat': evlat
+                        zm: zm < this.maxZoom ? zm : this.maxZoom - 1,
+                        scl: this.scale2Level[zm < this.maxZoom ? zm : this.maxZoom - 1].scale,
+                        cntrlng,
+                        cntrlat,
+                        evlng,
+                        evlat
                     }});
             }
         });
@@ -781,31 +761,30 @@ export class MapHosterGoogle extends MapHoster {
 
     }
        gotResize() {
-            var center = this.mphmap.getCenter();
+            const center = this.mphmap.getCenter();
             google.maps.event.trigger(this.mphmap, 'resize');
             this.mphmap.setCenter(center);
             // console.log(this.mphmap.getBounds());
         }
-        showClickResult(content, popPt) {
+        showClickResult(content: string, popPt) {
             console.log(`showClickResult`);
             // if (this.popDetails !== null) {
             //     this.popDetails.infoWnd.close();
             //     this.popDetails.infoMarker.setMap(null);
             // }
-            let label = this.labels[this.labelIndex++ % this.labels.length];
-            let mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info', null, // placeholder for image icon url
+            const label = this.labels[this.labelIndex++ % this.labels.length];
+            const mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info', null, // placeholder for image icon url
               this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
             this.markerInfoPopups.set(mip.getId(), mip);
               // AppModule.injector.get(Pophandlerprovider).addpopup('mapclicked', mip);
               // this.markerInfoPopups[place.name] = mip;
             // this.popDetails.infoWnd.open(this.mphmap, this.popDetails.infoMarker);
-            if (this.selfPusherDetails.pusher)
-            {
-                var fixedLL = this.utils.toFixedTwo(popPt.lng(), popPt.lat(), 6);
-                var referrerId = this.mlconfig.getUserId();
-                var referrerName = this.pusherConfig.getUserName();
-                var pushLL = {'x': fixedLL.lon, 'y': fixedLL.lat, 'z': '0',
-                    'referrerId': referrerId, 'referrerName': referrerName };
+            if (this.selfPusherDetails.pusher) {
+                const fixedLL = this.utils.toFixedTwo(popPt.lng(), popPt.lat(), 6),
+                referrerId = this.mlconfig.getUserId(),
+                referrerName = this.pusherConfig.getUserName(),
+                pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: '0',
+                    referrerId, referrerName };
                 console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + fixedLL.lat + ', ' + fixedLL.lon);
                 this.selfPusherDetails.pusher.channel(this.selfPusherDetails.channelName).trigger('client-MapClickEvent', pushLL);
             }
@@ -814,17 +793,17 @@ export class MapHosterGoogle extends MapHoster {
 
 
         async onMapClick(e) {
-            var popPt = e.latLng,
+            const popPt = e.latLng,
                 popPtRaw = {lat: popPt.lat(), lng: popPt.lng()},
-                fixedLL = this.utils.toFixedTwo(popPt.lng(), popPt.lat(), 9),
-                content = 'You clicked the map at ' + fixedLL.lat + ', ' + fixedLL.lon;
+                fixedLL = this.utils.toFixedTwo(popPt.lng(), popPt.lat(), 9);
+            let content = 'You clicked the map at ' + fixedLL.lat + ', ' + fixedLL.lon;
 
-                this.geoCoder.geoCode({location: popPtRaw}).then((adrs) => {
-                    if(adrs) {
-                        content = adrs;
-                    }
-                    this.showClickResult(content, popPt);
-                });
+            this.geoCoder.geoCode({location: popPtRaw}).then((adrs) => {
+                if (adrs) {
+                    content = adrs;
+                }
+                this.showClickResult(content, popPt);
+            });
         }
 
     getMapHosterName() {
@@ -836,7 +815,7 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     getEventDictionary() {
-        var eventDct = this.pusherEventHandler.getEventDct();
+        const eventDct = this.pusherEventHandler.getEventDct();
         return eventDct;
     }
 /*
@@ -905,20 +884,20 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     getCenter() {
-        var pos = { 'lon': this.cntrxG, 'lat': this.cntryG, 'zoom': this.zmG};
+        const pos = { lon: this.cntrxG, lat: this.cntryG, zoom: this.zmG};
         console.log('return accurate center from getCenter()');
-        console.debug(pos);
+        console.log(pos);
         return pos;
     }
 
     formatCoords(pos) {
-        var fixed = this.utils.toFixedTwo(pos.lng, pos.lat, 5),
-            formatted  = '<div style='color: blue;'>' + fixed.lon + ', ' + fixed.lat + '</div>';
+        const fixed = this.utils.toFixedTwo(pos.lng, pos.lat, 5),
+            formatted  = '<div style="color: blue;">' + fixed.lon + ', ' + fixed.lat + '</div>';
         return formatted;
     }
 
     geoLocate(pos) {
-        var infoWindow = new google.maps.InfoWindow();
+        const infoWindow = new google.maps.InfoWindow();
         infoWindow.setPosition(pos);
         infoWindow.setContent(this.formatCoords(pos));
         this.mphmap.setCenter(pos);
@@ -927,22 +906,20 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     publishPosition(pos) {
-        var gmQuery,
-            pubBounds;
         if (this.selfPusherDetails.pusher) {
             console.log('MapHosterGoogle.publishPosition');
             console.log(pos);
 
-            gmQuery = this.mlconfig.query();
+            const gmQuery = this.mlconfig.query();
             if (gmQuery !== '') {
                 console.log('adding gmQuery: ' + gmQuery);
                 pos.gmquery = gmQuery;
                 pos.search += '&gmquery=' + gmQuery;
-                pubBounds = this.mlconfig.getBoundsForUrl();
+                const pubBounds = this.mlconfig.getBoundsForUrl();
                 pos.search += pubBounds;
             }
             console.log('After adding gmQuery');
-            console.debug(pos.search);
+            console.log(pos.search);
 
             this.selfPusherDetails.pusher.channel(this.selfPusherDetails.channelName).trigger('client-NewMapPosition', pos);
         }
@@ -955,8 +932,8 @@ export class MapHosterGoogle extends MapHoster {
 
     getSearchBounds() {
         console.log('MapHosterGoogle getSearchBounds');
-        var bounds = this.mphmap.getBounds();
-        console.debug(bounds);
+        const bounds = this.mphmap.getBounds();
+        console.log(bounds);
         return bounds;
     }
 

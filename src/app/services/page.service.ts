@@ -1,9 +1,24 @@
-import { Injectable } from '@angular/core';
+
+import {Injectable, EventEmitter} from '@angular/core';
+import { MenuOptionModel } from './../side-menu-content/models/menu-option-model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PageService {
 
-  constructor() { }
+    currentPage = 'map';
+    currentMapType = 'google';
+    menuOption = new EventEmitter<MenuOptionModel>();
+
+    constructor() {
+    }
+
+    setPage(p: string) {
+        this.currentPage = p;
+    }
+
+    setMap(m: string) {
+        this.currentMapType = m;
+    }
 }
