@@ -7,75 +7,67 @@ import { MapHosterGoogle } from './MapHosterGoogle';
 // import { GoogleMap } from '@agm/core/services/google-maps-types';
 import { Startup } from './Startup';
 import { PusherConfig } from './PusherConfig';
-import { MapInstanceService} from '../../../services/MapInstanceService';
-import { CurrentMapTypeService } from '../../../services/currentmaptypeservice';
-import { PusherClientService } from '../../../services/pusherclient.service';
-import { MapLocOptions, MapLocCoords } from '../../../services/positionupdate.interface';
-import { AppModule } from '../../../app/app.module';
+import { MapinstanceService} from '../services/mapinstance.service';
+import { CurrentmaptypeService } from '../services/currentmaptype.service';
+import { PusherclientService } from '../services/pusherclient.service';
+import { MapLocOptions, MapLocCoords } from '../services/positionupdate.interface';
+import { AppModule } from '../app.module';
 
 // @Injectable()
 export class StartupGoogle extends Startup {
-    // private hostName : string = "MapHosterGoogle";
+    // private hostName: string = 'MapHosterGoogle';
 
-    private gMap : google.maps.Map = null;
-    private newSelectedWebMapId : string = '';
-    private pusherChannel : string = '';
-    private pusher : any = null;
-    private mapHoster : MapHosterGoogle;
-    private mlconfig : MLConfig;
-    private pusherConfig : PusherConfig;
-    private mapInstanceService : MapInstanceService;
-    private pusherClientService : PusherClientService;
-    private currentMapTypeService : CurrentMapTypeService;
+    private gMap: google.maps.Map = null;
+    private newSelectedWebMapId = '';
+    private pusherChannel = '';
+    private pusher: any = null;
+    private mapHoster: MapHosterGoogle;
+    private mlconfig: MLConfig;
+    private pusherConfig: PusherConfig;
+    private mapInstanceService: MapinstanceService;
+    private pusherClientService: PusherclientService;
+    private currentMapTypeService: CurrentmaptypeService;
 
-    constructor (private mapNumber : number, mlconfig : MLConfig) {
+    constructor(private mapNumber: number, mlconfig: MLConfig) {
         super();
         this.mlconfig = mlconfig;
         this.mlconfig.setMapNumber(mapNumber);
         this.pusherConfig = AppModule.injector.get(PusherConfig);
-        this.currentMapTypeService = AppModule.injector.get(CurrentMapTypeService);
-        this.mapInstanceService = AppModule.injector.get(MapInstanceService);
-        this.pusherClientService = AppModule.injector.get(PusherClientService);
+        this.currentMapTypeService = AppModule.injector.get(CurrentmaptypeService);
+        this.mapInstanceService = AppModule.injector.get(MapinstanceService);
+        this.pusherClientService = AppModule.injector.get(PusherclientService);
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + mapNumber);
     }
 
 
-    getMap () {
+    getMap() {
         return this.gMap;
     }
 
-    getMapNumber () {
+    getMapNumber() {
         return this.mapNumber;
     }
-    getMapHosterInstance  (ndx) {
+    getMapHosterInstance(ndx) {
         return this.mapHoster;
     }
 
-    configure (newMapId : string, mapElement : HTMLElement, mapLocOpts : MapLocOptions) : google.maps.Map {
-        var
-            centerLatLng,
-            initZoom,
-            mapGoogleLocOpts = {};
-            // qlat,
-            // qlon,
-            // bnds,
-            // zoomStr;
+    configure(newMapId: string, mapElement: HTMLElement, mapLocOpts: MapLocOptions): google.maps.Map {
 
-        console.log("StartupGoogle configure with map no. " + this.mapNumber);
+        console.log('StartupGoogle configure with map no. ' + this.mapNumber);
         this.newSelectedWebMapId = newMapId;
 
-        // window.loading = dojo.byId("loadingImg");
+        // window.loading = dojo.byId('loadingImg');
         // utils.showLoading();
-        centerLatLng = new google.maps.LatLng(mapLocOpts.center.lat, mapLocOpts.center.lng);
-        initZoom = mapLocOpts.zoom;
+        const centerLatLng = new google.maps.LatLng(mapLocOpts.center.lat, mapLocOpts.center.lng);
+        const initZoom = mapLocOpts.zoom;
 
         // if (mapLocOpts) {
         //     centerLatLng = mapLocOpts.center;
         //     initZoom = mapLocOpts.zoom;
         // }
 
-        mapGoogleLocOpts = {
-            center: centerLatLng, //new google.maps.LatLng(41.8, -87.7),
+        const mapGoogleLocOpts = {
+            center: centerLatLng,
             // center: new google.maps.LatLng(51.50, -0.09),
             zoom: initZoom,
             zoomControlOptions: {
@@ -98,14 +90,14 @@ export class StartupGoogle extends Startup {
 
         this.pusher = this.pusherClientService.createPusherClient(
             this.mlconfig,
-            function (channel, userName) {
+            function(channel, userName) {
                 this.pusherConfig.setUserName(userName);
             },
             null
         );
         if (!this.pusher) {
-            console.log("failed to create Pusher in StartupGoogle");
+            console.log('failed to create Pusher in StartupGoogle');
         }
         return this.gMap;
-    };
+    }
 }
