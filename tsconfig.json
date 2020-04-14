@@ -1,5 +1,5 @@
 {
-  "compileOnSave": true,
+  "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
@@ -20,10 +20,11 @@
             "arcgis-js-api/v4"
         ]
     },
+    
     "files": [
         "index.d.ts",
         "./node_modules/@types/arcgis-js-api/index.d.ts"
-    }
+    ],
     "lib": [
       "es2018",
       "dom"

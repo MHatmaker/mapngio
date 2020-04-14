@@ -2,7 +2,7 @@
 import { Injectable,
          EventEmitter } from '@angular/core';
 import { MapLocOptions, MapLocCoords, IMapShare } from '../services/positionupdate.interface';
-import { mlBounds } from '../libs/mlBounds.interface';
+import { ImlBounds } from './mlbounds.service';
 import { EMapSource } from './configparams.service';
 
 
@@ -19,7 +19,7 @@ export class MapopenerService implements IMapShare {
     query: string;
     mapLocOpts: MapLocOptions;
     userName: string;
-    mlBounds: mlBounds;
+    mlBounds: ImlBounds;
     source: EMapSource;
     webmapId: string;
 

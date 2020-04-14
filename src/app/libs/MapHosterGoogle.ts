@@ -28,7 +28,7 @@ import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
 import { AppModule } from '../app.module';
 
-declare var google;
+// declare var google;
 
 class PointIndex {
   constructor(private x: number, private y: number) {
@@ -71,7 +71,7 @@ export class MapHosterGoogle extends MapHoster {
     hostName = 'MapHosterGoogle';
     scale2Level = [];
     mphmap: any;
-    google;
+    google: typeof google;
     mapReady = true;
     zmG = -1;
     userZoom = true;
@@ -173,7 +173,7 @@ export class MapHosterGoogle extends MapHoster {
         console.log(cntxt + ' Globals: lon ' + this.cntrxG + ' lat ' + this.cntryG + ' zoom ' + this.zmG);
     }
 
-    collectScales(levels) {
+    collectScales(levels: number) {
         this.scale2Level = [];
         const sc2lv = this.scale2Level,
         // var topLevel = ++levels;
@@ -187,7 +187,7 @@ export class MapHosterGoogle extends MapHoster {
         }
     }
 
-    placeMarkers(places) {
+    placeMarkers(places: any) { // google.maps.places.PlacesService) {
         for (const marker of this.markers) {
             if (marker) {
                 marker.setMap(null);
@@ -197,6 +197,8 @@ export class MapHosterGoogle extends MapHoster {
         // For each place, get the icon, place name, and location.
         this.markers = [];
         const boundsForMarkers = new google.maps.LatLngBounds();
+        // for (let i = 0; i < places.``; i++) {
+        //     const place = places[i];
         for (const place of places) {
             if (place) {
                 const lbl = this.labels[this.labelIndex++ % this.labels.length];

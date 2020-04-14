@@ -3,7 +3,7 @@
 // } from '@angular/core';
 import { IPosition, PositionService } from '../services/position.service';
 import { IConfigParams, EMapSource } from '../services/configparams.service';
-import { ImlBounds, ImlBoundsParams } from '../services/mlbounds.service';
+import { ImlBoundsParams } from '../services/mlbounds.service';
 import {Utils } from './utils';
 import { AppModule } from '../app.module';
 console.log('loading MLConfig');

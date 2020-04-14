@@ -1,4 +1,5 @@
 import { mlBounds } from '../libs/mlBounds.interface';
+// import { ImlBounds } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 
 export interface IPositionParams {

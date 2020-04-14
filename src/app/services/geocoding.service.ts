@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { createClient, GoogleMapsClient } from '@google/maps';
 import { Observable } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators'
+import { map, tap, catchError } from 'rxjs/operators';
 // import 'rxjs/add/operator/map'
 
     /*
