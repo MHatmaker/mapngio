@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
 import { MLConfig } from './MLConfig';
 import { PusherConfig } from './PusherConfig';
-import { PusherClientService } from '../../../services/pusherclient.service';
+import { PusherclientService } from '../services/pusherclient.service';
 // import { utils } from './utils';
-import { ImlBounds, xtntParams } from '../../../services/mlbounds.service';
+import { ImlBounds, XtntParams } from '../services/mlbounds.service';
 // import { ConfigParams } from '../../../services/configparams.service';
 import * as L from 'leaflet';
 import { GeoCoder } from './GeoCoder';
-import { IPositionParams, IPositionData } from '../../../services/positionupdate.interface';
-import { PositionUpdateService } from '../../../services/positionupdate.service';
+import { IPositionParams, IPositionData } from '../services/positionupdate.interface';
+import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
-import { MapLocOptions } from '../../../services/positionupdate.interface';
-import { AppModule } from '../../../app/app.module';
-import { utils } from './utils';
+import { MapLocOptions } from '../services/positionupdate.interface';
+import { AppModule } from '../app.module';
+import { Utils } from './utils';
 
 
 // @Injectable()
@@ -38,16 +38,17 @@ export class MapHosterLeaflet extends MapHoster {
     CustomControl = null;
     queryListenerLoaded = false;
     pusherEvtHandler;
-    mlconfig : MLConfig;
-    pusherConfig : PusherConfig;
-    utils : any;
+    mlconfig: MLConfig;
+    pusherConfig: PusherConfig;
+    utils: any;
 
 
-    constructor(private mapNumber: number, mlconfig: MLConfig,
-        private geoCoderLflt : GeoCoder) {
+    constructor(
+      private mapNumber: number, mlconfig: MLConfig,
+      private geoCoderLflt: GeoCoder) {
         super();
         this.mlconfig = mlconfig;
-        this.utils = AppModule.injector.get(utils);
+        this.utils = AppModule.injector.get(Utils);
         this.pusherConfig = AppModule.injector.get(PusherConfig);
         this.CustomControl =  L.Control.extend({
             options: {
@@ -69,13 +70,11 @@ export class MapHosterLeaflet extends MapHoster {
     // MapHosterLeaflet.prototype.updateGlobals (msg, this.cntrx, this.cntry, zm)
     updateGlobals(msg: string, cntrx: number, cntry: number, zm: number) {
         console.log('updateGlobals ' + msg);
-        var lfltBounds = this.mphmap.getBounds(),
-            ne,
-            sw;
-        console.debug(lfltBounds);
+        const lfltBounds = this.mphmap.getBounds();
+        console.log(lfltBounds);
         if (lfltBounds) {
-            ne = lfltBounds.getNorthEast();
-            sw = lfltBounds.getSouthWest();
+            const ne = lfltBounds.getNorthEast();
+            const sw = lfltBounds.getSouthWest();
             this.bounds = lfltBounds;
             lfltBounds.xmin = sw.lng;
             lfltBounds.ymin = sw.lat;
@@ -119,28 +118,23 @@ export class MapHosterLeaflet extends MapHoster {
 
 
     markerInfoPopup(pos, content: string, hint) {
-        var shareBtnId = 'idShare' + hint,
+        const shareBtnId = 'idShare' + hint,
             contentId = 'idContent' + hint,
             contextHint = hint,
             contextContent = content,
-            triggerPusher,
-            allContent = '<h4  style='color:#A0743C; visibility: visible'>' + hint +
-                '</h4><div id='' + contentId + '' >' + content +
-                '</div><br><button class='trigger  btn-primary' id='' + shareBtnId + ''>Share</button>',
+            allContent = '<h4  style="color:#A0743C; visibility: visible">' + hint +
+                '</h4><div id=' + contentId + ' >' + content +
+                '</div><br><button class="trigger btn-primary" id=' + shareBtnId + '>Share</button>',
             contextPos = pos;
 
         this.mrkr = L.marker(pos).addTo(this.mphmap);
 
 
-        triggerPusher = function () {
-            var fixedLL,
-                referrerId,
-                referrerName,
-                pushLL;
-            fixedLL = this.utils.toFixed(contextPos[1], contextPos[0], 6);
-            referrerId = this.mlconfig.getUserId();
-            referrerName = this.pusherConfig.getUserName();
-            pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: '0',
+        const triggerPusher = function() {
+            const fixedLL = this.utils.toFixed(contextPos[1], contextPos[0], 6);
+            const referrerId = this.mlconfig.getUserId();
+            const referrerName = this.pusherConfig.getUserName();
+            const pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: '0',
                 referrerId, referrerName,
                 address: contextContent, title: contextHint };
             console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + fixedLL.lat + ', ' + fixedLL.lon);
@@ -214,7 +208,7 @@ export class MapHosterLeaflet extends MapHoster {
             // cntrlng = fixedCntrLL.lon,
             // cntrlat = fixedCntrLL.lat;
 
-        AppModule.injector.get(PositionUpdateService).positionData.emit(
+        AppModule.injector.get(PositionupdateService).positionData.emit(
           {
             key: 'zm',
             val: {
@@ -255,7 +249,7 @@ export class MapHosterLeaflet extends MapHoster {
             });
     }
 
-    extractBounds(action): xtntParams {
+    extractBounds(action): XtntParams {
             // scale = mphmap.options.crs.scale(zm),
             // oldMapCenter = mphmapCenter,
 
@@ -298,7 +292,7 @@ export class MapHosterLeaflet extends MapHoster {
 
         if (cmp === false) {
             console.log('MapHoster Leaflet setBounds publishPanEvent');
-            AppModule.injector.get(PusherClientService).publishPanEvent(xtExt);
+            AppModule.injector.get(PusherclientService).publishPanEvent(xtExt);
             this.updateGlobals('setBounds with cmp false', xtExt.lon, xtExt.lat, xtExt.zoom);
         }
     }
@@ -308,7 +302,7 @@ export class MapHosterLeaflet extends MapHoster {
         const ll = L.latLng(clickPt.y, clickPt.x, clickPt.y);
             // $inj,
             // linkrSvc,
-        let content = 'Received Pushed Click from user ' + clickPt.referrerName + ', ' + clickPt.referrerId + ' at ' + latlng.toString();
+        let content = 'Received Pushed Click from user ' + clickPt.referrerName + ', ' + clickPt.referrerId + ' at ' + ll.toString();
 
         // $inj = this.pusherConfig.getInjector();
         // linkrSvc = $inj.get('LinkrService');
@@ -416,7 +410,10 @@ export class MapHosterLeaflet extends MapHoster {
 
         const lyr = L.tileLayer(osmUrl, {
             maxZoom: 18,
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a>, Imagery � <a href='http://cloudmade.com'>CloudMade</a>'
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">' +
+            'OpenStreetMap</a> contributors, ' +
+            '<a href="http://creativecommons.org/licenses/by-sa/2.0/"' +
+            '>CC-BY-SA</a>, Imagery � <a href="http://cloudmade.com">CloudMade</a>'
         }).addTo(this.mphmap);
         lyr.on('load', function() {
         // setTimeout(function() {
@@ -539,7 +536,7 @@ export class MapHosterLeaflet extends MapHoster {
         const bndsUrl = this.mlconfig.getBoundsForUrl();
         pos.search += bnds;
 
-        AppModule.injector.get(PusherClientService).publishPosition(pos);
+        AppModule.injector.get(PusherclientService).publishPosition(pos);
     }
 
     getCenter() {

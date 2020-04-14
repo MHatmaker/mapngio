@@ -5,7 +5,8 @@ import {
 } from '@angular/core';
 import { PusherConfig } from './PusherConfig';
 import { Utils } from './utils';
-import { MapLocOptions, IMapShare } from '../services/positionupdate.service';
+import { MapLocOptions } from '../services/positionupdate.interface';
+import { IMapShare } from '../services/positionupdate.interface';
 import { EMapSource } from '../services/configparams.service';
 import { HttpClient } from '@angular/common/http';
 // import { MapLocOptions, MapLocCoords } from '../../../services/positionupdate.interface';

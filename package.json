@@ -1,7 +1,6 @@
 {
-  "name": "maplinkr",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
+  "private": true,
+  "author": "Ionic_Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -11,7 +10,6 @@
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
-  "private": true,
   "dependencies": {
     "@angular/animations": "^9.1.0",
     "@angular/common": "~8.2.14",
@@ -65,5 +63,6 @@
     "tslint": "~5.15.0",
     "typescript": "~3.4.3"
   },
-  "description": "An Ionic project"
+  "version": "0.0.1",
+  "name": "maplinkr"
 }

@@ -1,10 +1,10 @@
-import {Injectable} from '@angular/core';
+// import {Injectable} from '@angular/core';
 import { MLConfig } from './MLConfig';
 // import { PusherConfig } from './PusherConfig';
 // import { PusherClientService } from '../services/pusherclient.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { Utils } from './utils';
-import { ImlBounds } from '../services/mlbounds.service';
+import { ImlBoundsParams } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 // import { GoogleMap, Size, Point, LatLngLiteral, LatLng, LatLngBounds } from '@agm/core/services/google-maps-types';
 // import { createClient, GoogleMapsClient } from '@google/maps';
@@ -16,13 +16,13 @@ import { PusherclientService } from '../services/pusherclient.service';
 import { PusherConfig } from './PusherConfig';
 // import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
-import { GeocodingService, OSMAddress } from '../services/geocoding.service';
-import { Observable } from 'rxjs/Observable'
+import { GeocodingService } from '../services/geocoding.service';
+// import { Observable } from 'rxjs';
 import { MapLocOptions } from '../services/positionupdate.interface';
-import { SearchplacesService } from '../services/searchplaces.service';
+// import { SearchplacesService } from '../services/searchplaces.service';
 import { LocationsService } from '../services/locations.service';
 // import { InfopopupComponent } from '../src/infopopup/infopopup';
-import { GmpopoverService } from '../services/gmpopover.service';
+// import { GmpopoverService } from '../services/gmpopover.service';
 import { Popover } from 'ionic-angular';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
@@ -140,7 +140,7 @@ export class MapHosterGoogle extends MapHoster {
         console.log('updateGlobals ');
         const gmBounds = this.mphmap.getBounds();
         const
-            mapLinkrBounds: ImlBounds = {urx: -1, ury: -1, llx: -1, lly: -1, getCenter: null};
+            mapLinkrBounds: ImlBoundsParams = {urx: -1, ury: -1, llx: -1, lly: -1};
         if (gmBounds) {
             const ne = gmBounds.getNorthEast();
             const sw = gmBounds.getSouthWest();
@@ -423,12 +423,17 @@ export class MapHosterGoogle extends MapHoster {
               // this.markerInfoPopups[place.name] = mip;
               // this.popDetails.infoWnd.open(this.mphmap, this.popDetails.infoMarker);
 
-              const btnShare: HTMLElement = document.getElementsByClassName('sharebutton')[0];
-              if (btnShare) {
-                  console.log(btnShare);
-                  btnShare.style.visibility = 'hidden';
-              }
+              const elms = document.getElementsByClassName('sharebutton');
+              for (const elm of elms) {
+                if (elm instanceof (HTMLElement)) {
+                  const btnShare = elm;
+                  if (btnShare) {
+                    console.log(btnShare);
+                    btnShare.style.visibility = 'hidden';
+                  }
+                }
             }
+          }
         }
     }
 
@@ -661,7 +666,7 @@ export class MapHosterGoogle extends MapHoster {
             if (this.searchBox) {
                 this.searchBox.setBounds(changedBounds);
             }
-            const convertedBounds = {llx: changedBounds.getSouthWest().lng(), lly: changedBounds.getSouthWest().lat(),
+            const convertedBounds: ImlBoundsParams = {llx: changedBounds.getSouthWest().lng(), lly: changedBounds.getSouthWest().lat(),
                          urx: changedBounds.getNorthEast().lng(), ury: changedBounds.getNorthEast().lat()};
             this.mlconfig.setBounds(convertedBounds);
         });

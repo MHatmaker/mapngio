@@ -1,5 +1,5 @@
 import { Injectable, EventEmitter } from '@angular/core';
-import { IPositionData } from './positionupdate.interface'
+import { IPositionData } from './positionupdate.interface';
 
 @Injectable({
   providedIn: 'root'

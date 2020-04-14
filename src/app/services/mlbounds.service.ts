@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { loadModules } from 'esri-loader';
 
-export interface ImlBounds {
+export interface ImlBoundsParams {
     llx: number;
     lly: number;
     urx: number;
     ury: number;
+}
+
+export interface ImlBounds extends ImlBoundsParams {
     getCenter(): Promise<{x: number, y: number}>;
 }
 
