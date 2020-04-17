@@ -14,24 +14,15 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-
-    "paths": {
-        "arcgis-js-api": [
-            "arcgis-js-api/v4"
-        ]
-    },
-    
-    "files": [
-        "index.d.ts",
-        "./node_modules/@types/arcgis-js-api/index.d.ts"
-    ],
+    "types": [ "arcgis-js-api", "googlemaps", "google"],
     "lib": [
-      "es2018",
-      "dom"
+      "es2018", "dom", "es2018.promise", "DOM.Iterable"
     ]
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+    "strictInjectionParameters": true,
+    "enableIvy": false,
+    "preserveSymlinks": true
   }
 }

@@ -7,7 +7,7 @@ import { ImlBounds, XtntParams } from '../services/mlbounds.service';
 // import { ConfigParams } from '../../../services/configparams.service';
 import * as L from 'leaflet';
 import { GeoCoder } from './GeoCoder';
-import { IPositionParams, IPositionData } from '../services/positionupdate.interface';
+// import { IPositionParams, IPositionData } from '../services/positionupdate.interface';
 import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
@@ -80,7 +80,7 @@ export class MapHosterLeaflet extends MapHoster {
             lfltBounds.ymin = sw.lat;
             lfltBounds.xmax = ne.lng;
             lfltBounds.ymax = ne.lat;
-            this.mlconfig.setBounds({llx: sw.lng, lly: sw.lat, urx: ne.lng, ury: ne.lat, getCenter : null});
+            this.mlconfig.setBounds({llx: sw.lng, lly: sw.lat, urx: ne.lng, ury: ne.lat});
         }
         this.zmG = zm;
         this.cntrxG = cntrx;
@@ -393,9 +393,9 @@ export class MapHosterLeaflet extends MapHoster {
         this.geoCoderLflt =  new GeoCoder(); // .nominatim();
 
         if (this.mlconfig.testUrlArgs()) {
-            const qlat = this.mlconfig.lat();
-            const qlon = this.mlconfig.lon();
-            const qzoom = this.mlconfig.zoom();
+            const qlat = +this.mlconfig.lat();
+            const qlon = +this.mlconfig.lon();
+            const qzoom = +this.mlconfig.zoom();
             this.mphmap.setView([qlat, qlon], qzoom);
             this.updateGlobals('init with qlon, qlat', qlon, qlat, qzoom);
         } else {

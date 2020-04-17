@@ -11,7 +11,7 @@ import { Utils, ILonLatStrings } from './utils';
 import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { loadModules } from 'esri-loader';
-// import esri = __esri;
+import _esri = __esri;
 // import * as esri from 'arcgis-js-api';
 // import { Point } from 'esri/geometry/Point';
 // import { ImlBounds } from '../../../services/mlbounds.service'
@@ -54,7 +54,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
 
     selectedMarkerId = 101;
     initialActionListHtml = '';
-    geoLocator: __esri.Locator;
+    geoLocator: _esri.Locator;
     screenPt = null;
     fixedLLG = null;
     // btnShare;
@@ -88,7 +88,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     //     'dojo/_base/event'
     // ],
 
-    constructor(private mphmap: __esri.MapView,
+    constructor(private mphmap: _esri.MapView,
                 private mapNumber: number,
                 mlconfig: MLConfig,
                 private elementRef: ElementRef) {
@@ -441,7 +441,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
               this.showClickResult(null, e.mapPoint);
           }
 
-        }).otherwise( (err) => {
+        }).catch( (err) => {
           console.log(err);
         });
 
@@ -631,7 +631,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       this.mphmap.on('zoom-end', (evt) => {
           console.log('onZoomEnd with userZoom = ' + this.userZoom);
           if (this.userZoom === true) {
-              this.setBounds(this.extractBounds(this.mphmap.getLevel(), evt.extent.getCenter(), 'zoom'));
+              this.setBounds(this.extractBounds(this.mphmap.get('effectiveLODs'), evt.extent.getCenter(), 'zoom'));
           }
           // this.userZoom = true;
       });
@@ -670,7 +670,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
 
       this.mphmap.on('pan-end', (evt) => {
           if (this.userZoom === true) {
-              this.setBounds(this.extractBounds(this.mphmap.getLevel(), evt.extent.getCenter(), 'pan'));
+              this.setBounds(this.extractBounds(this.mphmap.zoom, evt.extent.getCenter(), 'pan'));
           }
       });
       this.mphmap.on('pointer-move', (evt) => {

@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ['googlemaps', '__esri', 'arcgis-js-api']
+    "types": ["arcgis-js-api", "google", "googlemaps"]
   },
   "include": [
     "src/**/*.ts"

@@ -4,12 +4,13 @@ import {  PusherConfig } from '../libs/PusherConfig';
 import { MapinstanceService } from './mapinstance.service';
 import { MLConfig } from '../libs/MLConfig';
 // import { Pusher } from 'pusher-client';
-import { Pusher } from 'pusher-js';
+// import Pusher from 'pusher-js';
 import { IEventDct } from '../libs/PusherEventHandler';
 import { MapopenerService } from './mapopener.service';
 import { IMapShare } from './positionupdate.interface';
-declare const Pusher: any;
+// declare const Pusher: any;
 import * as _ from 'underscore';
+declare const Pusher: any;
 
 
 class PusherClient {
@@ -35,7 +36,7 @@ export class PusherclientService {
       private channel: any = null;
       private CHANNELNAME = '';
       // private mph: null;
-      private pusher: Pusher;
+      // private pusher: Pusher;
       private callbackFunction: null;
       private info: null;
       // private isInitialized: false;
@@ -131,7 +132,7 @@ export class PusherclientService {
           console.log('with channel ' + this.CHANNELNAME);
 
           console.log('PusherPath is ' + this.pusherConfig.getPusherPath() + '/pusher/auth');
-          this.pusher = new Pusher(APP_KEY, {
+          const pusher = new Pusher(APP_KEY, {
               authTransport: 'jsonp',
               authEndpoint: this.pusherConfig.getPusherPath() + '/pusher/auth', // 'http://linkr622-arcadian.rhcloud.com/',
               clientAuth: {
@@ -142,7 +143,7 @@ export class PusherclientService {
               }
           });
 
-          this.pusher.connection.bind('state_change', (state) => {
+          pusher.connection.bind('state_change', (state) => {
               if (state.current === 'connected') {
                   // alert('Yipee! We've connected!');
                   console.log('Yipee! We"ve connected!');
@@ -152,7 +153,7 @@ export class PusherclientService {
               }
           });
           console.log('Pusher subscribe to channel ' + this.CHANNELNAME);
-          this.channel = this.pusher.subscribe(this.CHANNELNAME);
+          this.channel = pusher.subscribe(this.CHANNELNAME);
 
           this.channel.bind('client-NewUrlEvent', (frame) => {
               console.log('frame is', frame);

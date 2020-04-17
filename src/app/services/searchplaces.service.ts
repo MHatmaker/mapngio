@@ -1,7 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { mlBounds } from '../libs/mlBounds.interface';
+// import { mlBounds } from '../libs/mlBounds.interface';
 import { MapLocOptions, MapLocCoords, IMapShare } from './positionupdate.interface';
 import { MapinstanceService } from './mapinstance.service';
 import { Utils } from '../libs/utils';

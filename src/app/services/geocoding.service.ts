@@ -75,7 +75,7 @@ export class GeocodingService {
         return adrs;
     });
   }
-
+/*
   public geocode(request: google.maps.GeocoderRequest ): Observable<OSMAddress> {
       const
             options = {
@@ -85,18 +85,20 @@ export class GeocodingService {
             qstr = options.serviceUrl + 'reverse/?lat=' + request.location.lat + '&lon=' + request.location.lng + '&zoom=' + zm +
                 '&addressdetails=1&format=json';
       console.log(qstr);
-      return this.http.get(qstr).map((res) => {
-          const item = res.json();
-          console.log(item);
-          // return jres.map(item => {
-          //     console.log(item);
-          //     console.log(item.address);
-          return new OSMAddress(item.places, item.license, item.osm_type, item.osm_id,
-                                item.lat, item.lon, item.display_name, item.address);
+      const item = this.http.get<IOSMAddress>(qstr).toPromise();
+
+      console.log(item);
+      // return jres.map(item => {
+      //     console.log(item);
+      //     console.log(item.address);
+      // return new OSMAddress(item.places, item.license, item.osm_type, item.osm_id,
+      //                       item.lat, item.lon, item.display_name, item.address);
+      return item;
       // })
-      });
+      }
     // return this.reverse(request.location, request.scale);
     }
+    */
     /*
     return new Promise<Observable<OSMAddress>>((resolve, reject) => {
       var pos = request.location,

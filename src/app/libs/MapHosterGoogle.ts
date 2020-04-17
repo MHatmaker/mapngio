@@ -421,9 +421,6 @@ export class MapHosterGoogle extends MapHoster {
               this.addToPopupSet(clickPt.x, clickPt.y);
               // this.addToPopupSet(mip.getMarker().getPosition().lng(), mip.getMarker().getPosition().lat());
               mip.openSharedPopover();
-                // AppModule.injector.get(PophandlerProvider).addPopup('received', mip);
-              // this.markerInfoPopups[place.name] = mip;
-              // this.popDetails.infoWnd.open(this.mphmap, this.popDetails.infoMarker);
 
               const elms = document.getElementsByClassName('sharebutton');
               for (const elm of elms) {

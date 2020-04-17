@@ -1,6 +1,6 @@
 
 import {Injectable, EventEmitter} from '@angular/core';
-import { MenuOptionModel } from './../side-menu-content/models/menu-option-model';
+import { MenuOptionModel } from '../components/side-menu-content/models/menu-option-model';
 
 @Injectable({
   providedIn: 'root'
