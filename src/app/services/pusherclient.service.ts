@@ -303,7 +303,8 @@ export class PusherclientService {
           frame.lon = frame.x;
           frame.zoom = frame.z;
       }
-      const withoutHidden = _.without(this.clients, this.clients.get('hiddenmap'));
+      const keys = Array.from(this.clients.keys());
+      const withoutHidden = _.without(keys, 'hiddenmap');  // this.clients.get('hiddenmap'));
       console.log(withoutHidden);
       const withoutSubmitter = _.without(withoutHidden, this.clients[frame.mapId]);
       console.log(withoutSubmitter);

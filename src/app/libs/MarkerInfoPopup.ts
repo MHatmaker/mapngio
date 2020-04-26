@@ -1,6 +1,6 @@
 
 import { InfopopService } from '../services/infopop.service';
-import { Popover } from 'ionic-angular';
+import { PopoverController } from '@ionic/angular';
 // import { PophandlerProvider } from '../../../providers/pophandler/pophandler';
 import { InfopopComponent } from '..//components/infopop/infopop.component';
 import { v4 as uuid } from 'uuid';
@@ -9,8 +9,9 @@ import { Utils } from './utils';
 import { PusherConfig } from './PusherConfig';
 import { GeocodingService, OSMAddress } from '../services/geocoding.service';
 import { PusherclientService } from '../services/pusherclient.service';
+// import {} from 'googlemaps';
 
-declare var google;
+// declare var google;
 
 
 export class MarkerInfoPopup {
@@ -25,10 +26,12 @@ export class MarkerInfoPopup {
     private geoCoder: GeocodingService;
     private infopopService: InfopopService;
 
-    constructor(private pos, private content: string, public title: string,
-        private placeIconUrl, private mphmap, private userId: string, private mapNumber: number,
-        private popupId: string, private labelarg: any,
-        private isShared: boolean = false) {
+    constructor(
+      private pos,
+      private content: string, public title: string,
+      private placeIconUrl, private mphmap, private userId: string, private mapNumber: number,
+      private popupId: string, private labelarg: any,
+      private isShared: boolean = false) {
         this.utils = AppModule.injector.get(Utils);
         this.pusherConfig = AppModule.injector.get(PusherConfig);
         this.pusherClientService = AppModule.injector.get(PusherclientService);
@@ -43,7 +46,7 @@ export class MarkerInfoPopup {
             origin: new google.maps.Point(0, 0),
             anchor: new google.maps.Point(17, 34),
             scaledSize: new google.maps.Size(25, 25),
-            labelOrigin: new google.maps.Point(20,16)
+            labelOrigin: new google.maps.Point(20, 16)
         };
         let contentRaw = '';
         const self = this,
@@ -74,10 +77,10 @@ export class MarkerInfoPopup {
                 const infopop = this.infopopService;
                 const subscriber = infopop.dockPopEmitter.subscribe((retval: any) => {
                     console.log(`dockPopEmitter event received from ${retval.title} in popover for ${title} userId ${self.userId}`);
-                    if(retval) {
+                    if (retval) {
                         console.log(`retval.action is ${retval.action}`);
-                        if(retval.action === 'undock') {
-                          if(retval.title === self.popupId) {
+                        if (retval.action === 'undock') {
+                          if (retval.title === self.popupId) {
                               console.log('titles matched....');
                           } else {
                               console.log('titles did not match....unsubscribe');
@@ -86,11 +89,11 @@ export class MarkerInfoPopup {
                           console.log(`close popover for ${title}`);
                           infopop.close(self.popupId);
                           console.log('dockPopEmitter client received and processed undock');
-                        } else if(retval.action === 'close') {
+                        } else if (retval.action === 'close') {
                             console.log('dockPopEmitter client received close...close popover');
                             subscriber.unsubscribe();
                             // infopop.close(self.popupId);
-                        } else if(retval.action === 'share') {
+                        } else if (retval.action === 'share') {
                           console.log('dockPopEmitter client received share');
                           self.shareClick(e, self, retval.title, retval.labelShort);
                         }
@@ -104,14 +107,14 @@ export class MarkerInfoPopup {
                     subscriber.unsubscribe();
                 });
                 self.popupId = uuid();
-                if(infopop.hasModal(self.popupId, self.mapNumber) === false) {
+                if (infopop.hasModal(self.popupId, self.mapNumber) === false) {
                     console.log(`open popover for ${self.userId} with title ${title}`);
                     this.popOver = await infopop.create(marker, self.mapNumber, InfopopComponent, contentRaw,
                       title, labelarg, self.popupId, ! self.isShared);
                     console.log('back from infopop.create');
                     console.log(self.popOver);
                 }
-            }
+            };
 
         // let lbl = marker.getLabel();
         // lbl.color = '#eb3a44';
@@ -119,14 +122,14 @@ export class MarkerInfoPopup {
         // lbl.fontSize = '16px';
         // lbl.fontWeight = 'bold';
         // marker.setLabel(lbl);
-        // if(! this.mrkr) {
+        // if (! this.mrkr) {
         //     this.mrkr = marker;
         // }
         this.popMarker = marker;
         // this.popMarker.setLabel(lbl);
         google.maps.event.addListener(marker, 'click',  async (event) => {
             // this.pophandlerProvider.closePopupsExceptOne(marker.title);
-            console.log(`triggered click listener for user ${this.userId} on marker ${marker.title}`);
+            console.log(`triggered click listener for user ${this.userId} on marker ${marker.getTitle()}`);
             const latlng = {lat: pos.lat(), lng: pos.lng()};
             this.geoCoder.geoCode({location: latlng}).then((adrs) => {
                 contentRaw = adrs;
@@ -142,20 +145,21 @@ export class MarkerInfoPopup {
     }
 
     shareClick(e: Event, self, popoverId, labelShort) {
-        console.log(`shareClick with popoverId: ${popoverId}, this.popupId ${this.popupId} `)
-        if(popoverId === this.popupId) {
+        console.log(`shareClick with popoverId: ${popoverId}, this.popupId ${this.popupId} `);
+        if (popoverId === this.popupId) {
           const marker = self.popMarker,
-                fixedLL = self.utils.toFixedTwo(marker.position.lng(), marker.position.lat(), 9),
-                referrerName = self.pusherConfig.getUserName(),
-                referrerId = this.userId,
-                mapId = 'map' + this.userId,
-                pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: self.zmG,
-                  referrerId, referrerName,
-                  mapId, popId: popoverId, mapNumber: this.mapNumber,
-                  address: marker.address, title: marker.title };
-            console.log('You, ' + referrerName + ', ' + referrerId +
-            ',clicked the map with id ' + popoverId + ' at ' + fixedLL.lat + ', ' + fixedLL.lon);
-            self.pusherClientService.publishClickEvent(pushLL);
+              fixedLL = self.utils.toFixedTwo(marker.position.lng(), marker.position.lat(), 9),
+              referrerName = self.pusherConfig.getUserName(),
+              referrerId = this.userId,
+              mapId = 'map' + this.userId,
+              pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: self.zmG,
+                referrerId, referrerName,
+                mapId, popId: popoverId, mapNumber: this.mapNumber,
+                address: marker.address, title: marker.title };
+
+          console.log('You, ' + referrerName + ', ' + referrerId +
+          ',clicked the map with id ' + popoverId + ' at ' + fixedLL.lat + ', ' + fixedLL.lon);
+          self.pusherClientService.publishClickEvent(pushLL);
         }
     }
 
@@ -176,7 +180,7 @@ export class MarkerInfoPopup {
 
     }
 
-    closePopover () {
+    closePopover() {
       const infopop = this.infopopService;
       infopop.close(this.popupId);
     }

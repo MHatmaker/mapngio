@@ -23,10 +23,11 @@ import { MapLocOptions } from '../services/positionupdate.interface';
 import { LocationsService } from '../services/locations.service';
 // import { InfopopupComponent } from '../src/infopopup/infopopup';
 // import { GmpopoverService } from '../services/gmpopover.service';
-import { Popover } from 'ionic-angular';
+// import { Popover } from '@ionic/angular';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
 import { AppModule } from '../app.module';
+// import {} from 'googlemaps';
 
 // declare var google;
 
@@ -88,7 +89,7 @@ export class MapHosterGoogle extends MapHoster {
     popupSet: Set<string> = new Set<string>(); // SetObj<PointIndex> = new SetObj<PointIndex>();
     popups = [];
     infoWnds = new Map<string, google.maps.InfoWindow> ();
-    popovers = new Map<string, Popover>();
+    // popovers = new Map<string, Popover>();
     markerInfoPopups = new Map<string, MarkerInfoPopup> ();
     currentPopup = null;
     mrkr = null;

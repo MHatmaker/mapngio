@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 import { Injectable,
     EventEmitter,
     Injector,
@@ -6,9 +6,10 @@ import { Injectable,
     EmbeddedViewRef,
     ApplicationRef } from '@angular/core';
 import * as _ from 'underscore';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import { MapinstanceService } from './mapinstance.service';
-import { InfopopComponent } from '../components/infopop/infopop.component';
+import { ImlPoint, MlpointService } from './mlbounds.service';
+// import { InfopopComponent } from '../components/infopop/infopop.component';
 
 class PopupItem {
   mapNumber: number;
@@ -29,7 +30,7 @@ export class InfopopService {
       private mrkrlabel: string;
       private mapNumber: number;
       private geopos: {'lng': number, 'lat': number};
-      private pos: any;
+      private pos: ImlPoint;
       private popupId: string;
       public show: boolean;
       private domElem: HTMLElement;
@@ -57,7 +58,9 @@ export class InfopopService {
         this.show = showHide;
 
         this.geopos = {lng: markerElement.getPosition().lng(), lat: markerElement.getPosition().lat()};
-        this.pos = this.project(markerElement.getPosition());
+        const gll = markerElement.getPosition();
+        const gpos = this.project(new google.maps.Point(gll.lng(), gll.lat()));
+        this.pos = new MlpointService(gpos.x, gpos.y);
 
         const componentRef = this.componentFactoryResolver
           .resolveComponentFactory(component)
@@ -127,7 +130,8 @@ export class InfopopService {
 
       close(ngUid: string) {
           // close modal specified by id
-          this.dockPopEmitter.emit({action: 'close', title: ngUid, labelShort: '', position: this.pos});
+          this.dockPopEmitter.emit({action: 'close', title: ngUid, labelShort: '',
+          position: {x: this.pos.lng(), y: this.pos.lat()}});
           // const modal = _.find(this.modals, { ngUid: ngUid });
           const modal = this.modalMap.get(ngUid); // [ngUid];
           if (modal) {
@@ -139,12 +143,16 @@ export class InfopopService {
       share(id: string) {
           // console.log(`infopop emitting share action with title (id): ${id}`);
           const modal = this.modalMap.get(id);
-          this.dockPopEmitter.emit({action: 'share', title: id, labelShort: modal.pop.mrkrlabel, position: this.pos});
+          this.dockPopEmitter.emit({
+            action: 'share',
+            title: id,
+            labelShort: modal.pop.mrkrlabel,
+            position: {x: this.pos.lng(), y: this.pos.lat()}});
       }
       undock(id: string) {
           const modal = this.modalMap.get(id);
           const coords = modal.pop.getCoordinates();
-          const latlng = new google.maps.LatLng(coords.lng, coords.lat);
+          // const latlng = new google.maps.LatLng(coords.lng, coords.lat);
           // const pos = this.project(latlng);
           const pos = {x: coords.lng, y: coords.lat};
           this.dockPopEmitter.emit({action: 'undock', title: id, labelShort: '', position: pos});
@@ -158,8 +166,8 @@ export class InfopopService {
       }
   // The mapping between latitude, longitude and pixels is defined by the web
       // mercator projection.
-      project(latLng): google.maps.Point {
-        let siny = Math.sin(latLng.lat() * Math.PI / 180);
+      project(latLng: google.maps.Point): google.maps.Point {
+        let siny = Math.sin(latLng.y * Math.PI / 180);
         const TILE_SIZE = 256;
 
         // Truncating to 0.9999 effectively limits latitude to 89.189. This is
@@ -167,7 +175,7 @@ export class InfopopService {
         siny = Math.min(Math.max(siny, -0.9999), 0.9999);
 
         return new google.maps.Point(
-            TILE_SIZE * (0.5 + latLng.lng() / 360),
+            TILE_SIZE * (0.5 + latLng.x / 360),
             TILE_SIZE * (0.5 - Math.log((1 + siny) / (1 - siny)) / (4 * Math.PI)));
         }
 }

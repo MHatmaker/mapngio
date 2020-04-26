@@ -1,7 +1,7 @@
 
 import { Injectable, EventEmitter } from '@angular/core';
 import { GmpopoverComponent } from '../components/gmpopover/gmpopover.component';
-import { PopoverController, Popover } from 'ionic-angular';
+import { PopoverController } from '@ionic/angular';
 import { PophandlerService } from '../services/pophandler.service';
 
 
@@ -14,16 +14,23 @@ export class PopRect {
 })
 export class GmpopoverService {
 
-  private popOver: Popover = null;
+  private popOver: HTMLIonPopoverElement = null;
   private title: string;
-  private popovers = new Map<string, Popover>();
+  private content: string;
+  private popovers = new Map<string, GmpopoverComponent>();
+  private compProps = {
+      title: this.title,
+      content: this.content
+    };
   public dockPopEmitter = new EventEmitter<{'action': string, 'title': string}>();
 
   constructor(private popCtrl: PopoverController, private pophandler: PophandlerService) {
     console.log('Hello GmpopoverService');
 
   }
-  open(content: string, title: string): {pop: Popover, poprt: PopRect} {
+
+      /*
+  async open(content: string, title: string): {pop: GmpopoverComponent, poprt: PopRect} {
     this.title = title;
     // if(this.popOver) {
     //   console.log(`in RE-open  for ${title}, call dismiss on previous popovers`);
@@ -31,8 +38,8 @@ export class GmpopoverService {
     //   // this.popOver = null;
     // } else {
     console.log(`Create new popOver for ${title}`);
-    this.popOver = this.popCtrl.create(GmpopoverComponent,
-        {title, content}, {cssClass: 'popover-custom', enableBackdropDismiss: true});
+    const po = await this.popCtrl.create({component: GmpopoverComponent,
+        cssClass: 'popover-custom', componentProps: this.compProps, backdropDismiss: true});
     // }
     const ev = {
         target: {
@@ -45,9 +52,15 @@ export class GmpopoverService {
           }
         }
       };
-    this.popOver.present({ev});
+      po.onDidDismiss()
+    this.popOver.content = content;
+    this.popOver.title = title;
+    this.popOver.viewCtrl.create();
+    await po.present().then(() => {
 
-    this.popOver.onDidDismiss((data: {action: string, title: string}) => {
+    })
+
+    po.onDidDismiss( => {   // : {action: string, title: string}) => {
         console.log(`popover onDidDismiss`);
         if (data) {
           console.log(`got title ${data.title}`);
@@ -64,6 +77,35 @@ export class GmpopoverService {
     });
     const rect = new PopRect('20', '100', 'unset');
     return {pop: this.popOver, poprt: rect};
+  }
+    */
+
+  dismiss(data: {action: string, title: string}) {
+    if (data) {
+      console.log(`got title ${data.title}`);
+      data.title = this.title;
+    } else {
+      console.log('onDidDismiss with background click');
+      data = {title: this.title, action: 'undock'};
+    }
+    console.log(data);
+    this.dockPopEmitter.emit(data);
+
+    const rect = new PopRect('20', '100', 'unset');
+    return {pop: this.popOver, poprt: rect};
+  }
+
+  async presentPopover(ev: any) {
+
+    const compProps = {
+      title: this.title,
+      content: this.content
+    };
+    const popOver = await this.popCtrl.create({component: GmpopoverComponent,
+        cssClass: 'popover-custom', componentProps: compProps,
+      event: ev,
+    translucent: true});
+    return await popOver.present();
   }
 
   closePopover(title: string) {

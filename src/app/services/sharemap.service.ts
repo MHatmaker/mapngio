@@ -2,7 +2,7 @@
 import { Injectable, Output, EventEmitter } from '@angular/core';
 import { InfopopupComponent } from '../components/infopopup/infopopup.component';
 import { PusherclientService } from './pusherclient.service';
-import { ModalController } from 'ionic-angular';
+import { ModalController } from '@ionic/angular';
 
 @Injectable({
   providedIn: 'root'
@@ -37,9 +37,9 @@ export class SharemapService {
   getInfo() {
     return this.info;
   }
-  showInfo(nfo) {
-
-    const modal = this.modalCtrl.create(InfopopupComponent, nfo);
+  async showInfo(nfo) {
+    // need to pass nfo to modal
+    const modal = await this.modalCtrl.create({component: InfopopupComponent});
     modal.present();
   }
 

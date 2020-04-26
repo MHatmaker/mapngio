@@ -1,8 +1,6 @@
 
 import { Injectable } from '@angular/core';
 import { MarkerInfoPopup } from '../libs/MarkerInfoPopup';
-import { Popover } from 'ionic-angular';
-import { GmpopoverService } from './gmpopover.service';
 
 @Injectable({
   providedIn: 'root'

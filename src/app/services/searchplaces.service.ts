@@ -5,8 +5,9 @@ import { Injectable } from '@angular/core';
 import { MapLocOptions, MapLocCoords, IMapShare } from './positionupdate.interface';
 import { MapinstanceService } from './mapinstance.service';
 import { Utils } from '../libs/utils';
+// import {} from 'googlemaps';
 
-declare var google;
+// declare var google;
 
 @Injectable({
   providedIn: 'root'

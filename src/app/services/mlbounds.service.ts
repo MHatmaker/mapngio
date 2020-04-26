@@ -7,6 +7,14 @@ export interface ImlBoundsParams {
     urx: number;
     ury: number;
 }
+export interface ImlPointParams {
+  latp: number;
+  lngp: number;
+}
+export interface ImlPoint extends ImlPointParams {
+  lat(): number;
+  lng(): number;
+}
 
 export interface ImlBounds extends ImlBoundsParams {
     getCenter(): Promise<{x: number, y: number}>;
@@ -23,6 +31,21 @@ export interface XtntParams  {
 
 console.log('loading MLBounds');
 
+@Injectable({
+  providedIn: 'root'
+})
+export class MlpointService implements ImlPoint {
+
+
+    constructor( public lngp: number,  public latp: number) {
+    }
+    lat(): number {
+      return this.latp;
+    }
+    lng(): number {
+      return this.lngp;
+    }
+}
 @Injectable({
   providedIn: 'root'
 })

@@ -14,7 +14,6 @@
     "typeRoots": [
       "./node_modules/@types"
     ],
-    "types": [ "arcgis-js-api", "googlemaps", "google"],
     "lib": [
       "es2018", "dom", "es2018.promise", "DOM.Iterable"
     ]
