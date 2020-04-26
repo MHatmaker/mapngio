@@ -27,7 +27,7 @@ import { LocationsService } from '../services/locations.service';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
 import { AppModule } from '../app.module';
-// import {} from 'googlemaps';
+import {} from 'googlemaps';
 
 // declare var google;
 
