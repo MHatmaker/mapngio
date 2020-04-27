@@ -9,7 +9,8 @@ import { Utils } from './utils';
 import { PusherConfig } from './PusherConfig';
 import { GeocodingService, OSMAddress } from '../services/geocoding.service';
 import { PusherclientService } from '../services/pusherclient.service';
-import {} from 'googlemaps';
+// import {} from 'googlemaps';
+// import { google } from 'googleapis';
 
 // declare var google;
 
