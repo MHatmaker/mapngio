@@ -27,7 +27,8 @@ import { LocationsService } from '../services/locations.service';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
 import { AppModule } from '../app.module';
-// import {} from 'googlemaps';
+import { } from 'googlemaps';
+// import { LatLng, LatLngBounds, SearchplacesService, PlacesService, Marker, events, event, MaxZoomStatus } from 'googlemaps';
 // import { google } from 'googleapis';
 
 // declare var google;
@@ -731,8 +732,8 @@ export class MapHosterGoogle extends MapHoster {
             }
         });
 
-        this.mphmap.addListener('click',  (event) => {
-            this.onMapClick(event);
+        this.mphmap.addListener('click', (e) => {
+            this.onMapClick(e);
         });
 
         this.pusherEventHandler = new PusherEventHandler(this.mlconfig.getMapNumber());

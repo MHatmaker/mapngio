@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { createClient, GoogleMapsClient } from '@google/maps';
+import { createClient, GoogleMapsClient } from 'googlemaps'; // '@google/maps';
 import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 // import 'rxjs/add/operator/map'
@@ -48,7 +48,7 @@ export class OSMAddress {
 export class GeocodingService {
 
 
-  private geoCoder: GoogleMapsClient;
+  private geoCoder: google.maps.Geocoder = null;
 
   public constructor(private http: HttpClient) {
     this.geoCoder = createClient({

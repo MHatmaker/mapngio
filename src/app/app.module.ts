@@ -10,10 +10,13 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DomchangeDirective } from './directives/domchange.directive';
 
+import { MapPageModule } from './map/map.module';
+
+
 @NgModule({
   declarations: [AppComponent, DomchangeDirective],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, MapPageModule],
   providers: [
     StatusBar,
     SplashScreen,
