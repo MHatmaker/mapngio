@@ -10,7 +10,7 @@ import { PusherConfig } from '..//libs/PusherConfig';
 import { PusherEventHandler } from '../libs/PusherEventHandler';
 import { PusherclientService } from '../services/pusherclient.service';
 import { MapinstanceService} from '../services/mapinstance.service';
-// import { CarouselComponent} from '../mlcomponents/Carousel/carousel.component';
+import { CarouselComponent} from '../components/carousel/carousel.component';
 
 import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
@@ -34,7 +34,8 @@ import { MapopenerService } from '../services/mapopener.service';
 import { MapLocOptions, MapLocCoords, IMapShare } from '../services/positionupdate.interface';
 import { MlboundsService } from '../services/mlbounds.service';
 import { SearchplacesService } from '../services/searchplaces.service';
-import { AppModule } from '../app.module';
+// import { AppModule } from '../app.module';
+// import { MLInjector } from '../libs/MLInjector';
 
 
 @Component({
@@ -61,7 +62,8 @@ export class MapPage implements AfterViewInit {
       private slideshareService: SlideshareService, pageService: PageService,
       private slideViewService: SlideviewService, private modalCtrl: ModalController,
       private agoAlert: AlertController,
-      private mapOpener: MapopenerService, private hostConfig: HostConfig, private pusherConfig: PusherConfig) {
+      private mapOpener: MapopenerService, private hostConfig: HostConfig, private pusherConfig: PusherConfig,
+      private pusherClientService: PusherclientService) {
       // If we navigated to this page, we will have an item available as a nav param
       // this.selectedMapType = navParams.subItems.length === 0 ?  'google': navParams.subItems[0].displayName; //get('title');
       this.setupMenuActions(modalCtrl);
@@ -127,9 +129,9 @@ export class MapPage implements AfterViewInit {
             modal.present();
             const { data } = await modal.onDidDismiss();
             if (data.mode === 'usepush') {
-                const pusherClientService = AppModule.injector.get(PusherclientService);
+                // const pusherClientService = AppModule.injector.get(PusherclientService);
                 // publish stringifyed IMapShare
-                pusherClientService.publishPosition(data);
+                this.pusherClientService.publishPosition(data);
                 // this.onNewMapPosition(data);
           }
 

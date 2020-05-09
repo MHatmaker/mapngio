@@ -74,7 +74,7 @@ export class MapHosterGoogle extends MapHoster {
     hostName = 'MapHosterGoogle';
     scale2Level = [];
     mphmap: any;
-    google: typeof google.maps;
+    google: typeof google;
     mapReady = true;
     zmG = -1;
     userZoom = true;

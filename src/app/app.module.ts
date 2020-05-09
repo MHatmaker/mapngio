@@ -9,17 +9,26 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { DomchangeDirective } from './directives/domchange.directive';
+// import { MapPage } from './map/map.page';
+// import { CarouselComponent } from './components/carousel/carousel.component';
+import { MLInjector } from './libs/MLInjector';
+import { PusherConfig } from './libs/PusherConfig';
+import { Utils } from './libs/utils';
+import { HostConfig } from './libs/HostConfig';
 
 // import { MapPageModule } from './map/map.module';
 
 
 @NgModule({
   declarations: [AppComponent, DomchangeDirective],
-  entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule], // MapPageModule],
+  entryComponents: [ ],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [
     StatusBar,
     SplashScreen,
+    PusherConfig,
+    Utils,
+    HostConfig,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
@@ -29,5 +38,6 @@ export class AppModule {
     static injector: Injector;
     constructor(injector: Injector) {
         AppModule.injector = injector;
+        MLInjector.injector = injector;
     }
 }

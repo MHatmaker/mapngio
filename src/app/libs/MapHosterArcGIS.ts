@@ -26,7 +26,7 @@ import { ImlBounds, MlboundsService, XtntParams } from '../services/mlbounds.ser
 import { DomService } from '../services/dom.service';
 import { ReflectiveInjector } from '@angular/core';
 import { MapLocOptions } from '../services/positionupdate.interface';
-import { AppModule } from '../app.module';
+import { MLInjector } from '../libs/MLInjector';
 
 const proj4 = (proj4x as any).default;
 
@@ -98,8 +98,8 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         this.cntrxG = pos.lon;
         this.cntryG = pos.lat;
         this.zmG = pos.zoom;
-        this.utils = AppModule.injector.get(Utils);
-            // let mpopn = AppModule.injector.get(MapopenerProvider);
+        this.utils = MLInjector.injector.get(Utils);
+            // let mpopn = MLInjector.injector.get(MapopenerProvider);
             // mpopn.addHiddenCanvas.emit();
             // this.updateGlobals('adding hidden canvas updateGlobals', pos.lon, pos.lat, pos.zoom);
     }
@@ -165,7 +165,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
             // 'urx': this.bounds.xmax, 'ury': this.bounds.ymax});
         }
         console.log('Updated Globals ' + msg + ' ' + this.cntrxG + ', ' + this.cntryG + ': ' + this.zmG);
-        AppModule.injector.get(PositionupdateService).positionData.emit(
+        MLInjector.injector.get(PositionupdateService).positionData.emit(
             {key: 'zm',
               val: {
                 zm: this.zmG,
@@ -264,7 +264,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
                 // if (selfPusherDetails.pusher && selfPusherDetails.channelName) {
                 //     selfPusherDetails.pusher.channel(selfPusherDetails.channelName).trigger('client-MapXtntEvent', xtExt);
                 // }
-                AppModule.injector.get(PusherclientService).publishPanEvent(xtExt);
+                MLInjector.injector.get(PusherclientService).publishPanEvent(xtExt);
                 await this.updateGlobals('in setBounds with cmp false', xtExt.lon, xtExt.lat, xtExt.zoom);
                 // letconsole.debug(sendRet);
             }
@@ -272,7 +272,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     }
 
     setUserName(name: string) {
-        AppModule.injector.get(PusherConfig).setUserName(name);
+        MLInjector.injector.get(PusherConfig).setUserName(name);
     }
     getEventDictionary() {
         const eventDct = this.pusherEventHandler.getEventDct();
@@ -492,7 +492,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         }
         this.mphmap.popup.on('trigger-action', (event) => {
           if (event.action.id === 'idShareInfo') {
-            AppModule.injector.get(PusherclientService).publishClickEvent(pushContent);
+            MLInjector.injector.get(PusherclientService).publishClickEvent(pushContent);
           }
         });
 
@@ -515,7 +515,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     configForPusher(content) {
         // if (selfPusherDetails.pusher) {
         const referrerId = this.mlconfig.getUserId();
-        const referrerName = AppModule.injector.get(PusherConfig).getUserName();
+        const referrerName = MLInjector.injector.get(PusherConfig).getUserName();
 
         const pushLL = {
             x: this.fixedLLG.lon,
@@ -615,7 +615,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       // this.mphmap.centerAndZoom(startCenter, this.zmG);
       this.mphmap.goTo({target: startCenter, zoom: this.zmG});
       this.showGlobals('After centerAndZoom');
-      AppModule.injector.get(PusherclientService).publishPanEvent({lat: startCenter.y, lon: startCenter.x, zoom: this.zmG});
+      MLInjector.injector.get(PusherclientService).publishPanEvent({lat: startCenter.y, lon: startCenter.x, zoom: this.zmG});
 
       this.initMap();
       this.geoLocator = new esriLocator({url: 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'});
@@ -682,7 +682,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           fixedLL = this.utils.toFixedTwo(ltln.longitude, ltln.latitude, 4),
           evlng = fixedLL.lon,
           evlat = fixedLL.lat;
-      AppModule.injector.get(PositionupdateService).positionData.emit(
+      MLInjector.injector.get(PositionupdateService).positionData.emit(
           {key: 'coords',
             val: {
               zm: this.zmG,

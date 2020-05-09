@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 import { MapPageRoutingModule } from './map-routing.module';
 
 import { MapPage } from './map.page';
+import { CarouselComponent } from '../components/carousel/carousel.component';
+import { PusherConfig } from '../libs/PusherConfig';
 
 @NgModule({
   imports: [
@@ -15,6 +17,9 @@ import { MapPage } from './map.page';
     IonicModule,
     MapPageRoutingModule
   ],
-  declarations: [MapPage]
+  providers: [
+    PusherConfig,
+  ],
+  declarations: [MapPage, CarouselComponent],
 })
 export class MapPageModule {}

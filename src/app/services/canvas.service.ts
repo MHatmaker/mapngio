@@ -9,19 +9,19 @@ import {
 } from '@angular/core';
 import { MapinstanceService } from './mapinstance.service';
 import { SlideshareService } from './/slideshare.service';
-import { SlideviewService } from './/slideview.service';
+// import { SlideviewService } from './/slideview.service';
 import { IPosition } from './position.service';
 import { IConfigParams, EMapSource } from './/configparams.service';
 import { MLConfig } from '../libs/MLConfig';
-import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
-import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
-import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
+// import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
+// import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
+// import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
 import { PusherConfig } from '../libs/PusherConfig';
 // import { Geolocation } from '@ionic-native/geolocation';
 import { Plugins } from '@capacitor/core';
-import { MapLocCoords, MapLocOptions, IMapShare } from './positionupdate.interface';
+import { MapLocOptions, IMapShare } from './positionupdate.interface';
 import { MapopenerService } from './mapopener.service';
-import { MlboundsService, ImlBounds } from './mlbounds.service';
+// import { MlboundsService, ImlBounds } from './mlbounds.service';
 
 const { Geolocation } = Plugins;
 
@@ -52,8 +52,8 @@ export class CanvasService {
         private injector: Injector,
         private mapInstanceService: MapinstanceService,
         private slideshareService: SlideshareService,
-        private slideViewService: SlideviewService,
-        private geoLocation: Geolocation,
+        // private slideViewService: SlideviewService,
+        // private geoLocation: Geolocation,
         private mapOpener: MapopenerService,
         private pusherConfig: PusherConfig
       ) {
@@ -97,7 +97,7 @@ export class CanvasService {
 
     public async getCurrentLocation(isInitial: boolean = true) {
       console.log('getCurrentLocation');
-      const options = {timeout: 10000, enableHighAccuracy: false};
+      // const options = {timeout: 10000, enableHighAccuracy: false};
       const position = await Geolocation.getCurrentPosition();
       // this.geoLocation.getCurrentPosition(options).then((position) => {
       if (isInitial) {
@@ -107,7 +107,7 @@ export class CanvasService {
 
       const glat = position.coords.latitude;
       const glng = position.coords.longitude;
-      const latLng = new google.maps.LatLng(glat, glng);
+      // const latLng = new google.maps.LatLng(glat, glng);
       this.currentLoc = {
         center: {lng: glng, lat: glat},
         zoom: 15,

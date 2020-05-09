@@ -5,7 +5,8 @@ import { IPosition, PositionService } from '../services/position.service';
 import { IConfigParams, EMapSource } from '../services/configparams.service';
 import { ImlBoundsParams } from '../services/mlbounds.service';
 import {Utils } from './utils';
-import { AppModule } from '../app.module';
+// import { AppModule } from '../app.module';
+import { MLInjector } from './MLInjector';
 console.log('loading MLConfig');
 
 // @Injectable()
@@ -45,7 +46,7 @@ export class MLConfig {
     };
 
     constructor(cfgparams: IConfigParams) {
-      this.utils = AppModule.injector.get(Utils);
+      this.utils = MLInjector.injector.get(Utils);
       this.details.mlposition = cfgparams.mlposition;
       this.details.mapId = cfgparams.mapId;
       this.details.mapType = cfgparams.mapType;
