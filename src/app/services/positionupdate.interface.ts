@@ -1,4 +1,4 @@
-import { ImlBounds } from './mlbounds.service';
+import { ImlBounds, ImlBoundsParams} from './mlbounds.service';
 // import { ImlBounds } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 
@@ -30,7 +30,7 @@ export interface MapLocOptions {
 export interface IMapShare {
   mapLocOpts: MapLocOptions;
   userName: string;
-  mlBounds: ImlBounds;
+  mlBounds: ImlBoundsParams;
   source: EMapSource;
   webmapId: string;
 }

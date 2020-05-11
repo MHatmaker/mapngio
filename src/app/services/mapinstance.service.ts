@@ -12,7 +12,7 @@ export class MapinstanceService {
     currentSlideNumber = 0;
     configInstances: Map<string, MLConfig> = new Map<string, MLConfig>();
     mapHosterInstances: Map<string, MapHoster> = new Map<string, MapHoster>();
-    hiddenMap: any;
+    hiddenMap: google.maps.Map;
 
     constructor() {
         console.log('service to return nextSlideNumber');
@@ -79,7 +79,7 @@ export class MapinstanceService {
     setHiddenMap(map: any) {
         this.hiddenMap = map;
     }
-    getHiddenMap() {
+    getHiddenMap(): google.maps.Map {
         return this.hiddenMap;
     }
     removeConfigInstances(slideNo: number) {
