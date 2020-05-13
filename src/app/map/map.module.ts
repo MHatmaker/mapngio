@@ -13,6 +13,7 @@ import { PositionviewComponent } from '../components/positionview/positionview.c
 import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component';
 import { LocateselfComponent } from '../components/locateself/locateself.component';
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
+import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
 
 @NgModule({
   imports: [
@@ -24,7 +25,8 @@ import { PushersetupComponent } from '../components/pushersetup/pushersetup.comp
   ],
   entryComponents: [
     LocateselfComponent,
-    PushersetupComponent
+    PushersetupComponent,
+    // MultiCanvasGoogle
   ],
   providers: [
   ],
@@ -35,6 +37,8 @@ import { PushersetupComponent } from '../components/pushersetup/pushersetup.comp
     PositionviewComponent,
     HiddenmapComponent,
     LocateselfComponent,
-    PushersetupComponent],
+    PushersetupComponent,
+    // MultiCanvasGoogle
+  ],
 })
 export class MapPageModule {}

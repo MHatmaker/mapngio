@@ -27,6 +27,9 @@ import { PusherclientService } from './services/pusherclient.service';
 import { PageService } from './services/page.service';
 import { SearchplacesService } from './services/searchplaces.service';
 
+import { MultiCanvasGoogle } from './components/multicanvas/multicanvasgoogle.component';
+import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
+
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
 // import { PositionviewComponent } from './components/positionview/positionview.component';
 
@@ -37,11 +40,14 @@ import { SearchplacesService } from './services/searchplaces.service';
 @NgModule({
   declarations: [
     AppComponent,
-    DomchangeDirective
+    DomchangeDirective,
+    MultiCanvasGoogle,
+    SideMenuContentComponent
     // PlacesSearchComponent,
     // PositionviewComponent
   ],
   entryComponents: [
+    MultiCanvasGoogle
     // PlacesSearchComponent,
     // PositionviewComponent
   ],

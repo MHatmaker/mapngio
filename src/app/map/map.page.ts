@@ -239,15 +239,15 @@ export class MapPage implements AfterViewInit {
           modal.present();
           const { data } = await modal.onDidDismiss();
           console.log('showLocate returned');
-          console.log(data.mode);
-          if (data.mode === 'showme') {
+          console.log(data);
+          if (data === 'showme') {
             this.canvasService.addInitialCanvas(this.pusherConfig.getUserName());
-          } else if (data.mode === 'usequery') {
+          } else if (data === 'usequery') {
             console.log('must be a request for Ago Online item on startup');
             this.hostConfig.showConfig('showConfig for ago url startup');
           } else {
             const modal0 = await this.modalCtrl.create({component: PushersetupComponent});
-            modal0.present();
+            await modal0.present();
             this.searchMap();
             return;
           }

@@ -3,7 +3,7 @@ import { CanvasService } from '../../services/canvas.service';
 import { SlideviewService } from '../../services/slideview.service';
 
 @Component({
-  selector: 'multi-canvas-google',
+  selector: 'maplinkr-googlemap',
   templateUrl: './multicanvasgoogle.component.html',
   styles: ['./multicanvas.component.css']
 })
