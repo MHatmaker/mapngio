@@ -40,8 +40,8 @@ import { SearchplacesService } from '../services/searchplaces.service';
 
 @Component({
   selector: 'app-map',
-  templateUrl: './map.page.html',
-  styleUrls: ['./map.page.scss'],
+  templateUrl: '../map/map.page.html',
+  styleUrls: ['../map/map.page.scss'],
 })
 export class MapPage implements AfterViewInit {
 

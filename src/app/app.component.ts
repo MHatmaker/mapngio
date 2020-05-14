@@ -25,6 +25,8 @@ import { CanvasService } from './services/canvas.service';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
+  // templateUrl: './map/map.page.html',
+  // styleUrls: ['./map/map.page.scss'],
 })
 export class AppComponent {
   @ViewChild('mlcontent', {static: false}) nav: NavController; // <--- Reference to the Nav
@@ -34,7 +36,7 @@ export class AppComponent {
   public options: Array<MenuOptionModel>;
   public channel: any;
   private userName: string;
-  rootPage = MapPage;
+  rootPage = AppComponent;
 
   // Settings for the SideMenuComponent
   public sideMenuSettings: SideMenuSettings = {

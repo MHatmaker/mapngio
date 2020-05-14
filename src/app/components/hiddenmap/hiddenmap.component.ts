@@ -6,7 +6,7 @@ import { PusherclientService } from '../../services/pusherclient.service';
 import { PusherEventHandler } from '../../libs/PusherEventHandler';
 import { MapinstanceService } from '../../services/mapinstance.service';
 
-declare var google;
+// declare var google;
 
 @Component({
   selector: 'hiddenmap',
