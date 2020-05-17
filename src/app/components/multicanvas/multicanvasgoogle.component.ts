@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
 import { SlideviewService } from '../../services/slideview.service';
 
@@ -8,7 +8,7 @@ import { SlideviewService } from '../../services/slideview.service';
   styles: ['./multicanvas.component.css']
 })
 
-export class MultiCanvasGoogle implements OnDestroy {
+export class MultiCanvasGoogle implements OnDestroy, OnInit {
     // private el: string = null;
     private currentSubscription;
     private ndx = 0;

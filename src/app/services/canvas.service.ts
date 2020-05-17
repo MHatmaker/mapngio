@@ -242,28 +242,31 @@ export class CanvasService {
                   slideNumber: currIndex,
                   mapName: 'Map ' + currIndex
               });
-      return appendedElem;
+      return;
   }
 
 
-    appendNewCanvasToContainer(component: any): HTMLElement {
+    appendNewCanvasToContainer(component: any) {
         this.canvases.push(component);
         const mapParent = document.getElementsByClassName('mapcontent')[0];
         // Create a component reference from the component
-        const componentRef = this.componentFactoryResolver
-          .resolveComponentFactory(component)
-          .create(MLInjector.injector);
+        // const componentRef = this.componentFactoryResolver
+        //   .resolveComponentFactory(component)
+        //   .create(MLInjector.injector);
+        const r = this.componentFactoryResolver;
+        const fac = r.resolveComponentFactory(component);
+        const compRef = fac.create(MLInjector.injector);
 
         // Attach component to the appRef so that it's inside the ng component tree
-        this.appRef.attachView(componentRef.hostView);
+        this.appRef.attachView(compRef.hostView);
 
         // Get DOM element from component
-        const domElem = (componentRef.hostView as EmbeddedViewRef<any>)
+        const domElem = (compRef.hostView as EmbeddedViewRef<any>)
           .rootNodes[0] as HTMLElement;
 
         // Append DOM element to the body
         mapParent.appendChild(domElem);
-        return domElem;
+        return;
     }
     /*
     makeCanvasSlideListItem (ndx) {
