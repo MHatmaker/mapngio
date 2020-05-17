@@ -36,7 +36,7 @@ export class AppComponent {
   public options: Array<MenuOptionModel>;
   public channel: any;
   private userName: string;
-  rootPage = AppComponent;
+  rootPage = MapPage;
 
   // Settings for the SideMenuComponent
   public sideMenuSettings: SideMenuSettings = {

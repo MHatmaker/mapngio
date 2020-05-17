@@ -13,6 +13,7 @@ import { SlideshareService } from './/slideshare.service';
 import { IPosition } from './position.service';
 import { IConfigParams, EMapSource } from './/configparams.service';
 import { MLConfig } from '../libs/MLConfig';
+import { MLInjector } from '../libs/MLInjector';
 // import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
 // import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
 // import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
@@ -251,7 +252,7 @@ export class CanvasService {
         // Create a component reference from the component
         const componentRef = this.componentFactoryResolver
           .resolveComponentFactory(component)
-          .create(this.injector);
+          .create(MLInjector.injector);
 
         // Attach component to the appRef so that it's inside the ng component tree
         this.appRef.attachView(componentRef.hostView);

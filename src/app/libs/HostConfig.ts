@@ -19,9 +19,11 @@ interface IUserName {
   name: string;
 }
 interface IPusherkeys {
-  appid: string;
-  appkey: string;
-  appsecret: string;
+  pusherkeys: {
+    appid: string;
+    appkey: string;
+    appsecret: string;
+  };
 }
 
 export interface IPositionStr {
@@ -234,13 +236,19 @@ export class HostConfig implements IHostConfigDetails {
     async getPusherKeys() {
       console.log('await in hostConfig.getPusherKeys');
       const timeStamp = Date.now();
-      const response = await this.http.get<IPusherkeys>(this.pusherConfig.getPusherPath() +
-       '/pusherkeys' + '?tsp=' + timeStamp).toPromise();
 
-      console.log(response);
-      console.log('return from hostConfig.getPusherKeys');
-      this.pusherConfig.setPusherKeys(response);
-      return response;
+      this.http.get<IPusherkeys>(this.pusherConfig.getPusherPath() +
+      '/pusherkeys' + '?tsp=' + timeStamp).subscribe(data  => {
+        const pks = data;
+        //   appid: data.appid,
+        //   appkey: data.appkey,
+        //   appsecret: data.appsecret
+        // }
+        console.log(pks.pusherkeys);
+        console.log('return from hostConfig.getPusherKeys');
+        this.pusherConfig.setPusherKeys(pks.pusherkeys);
+        return pks;
+      });
     }
 
     // getUserNameFromServer($http, opts): void {
