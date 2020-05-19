@@ -30,6 +30,7 @@ import { SearchplacesService } from './services/searchplaces.service';
 import { MultiCanvasGoogle } from './components/multicanvas/multicanvasgoogle.component';
 import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
 import { CarouselComponent} from './components/carousel/carousel.component';
+import { MapPageModule } from './map/map.module';
 
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
 // import { PositionviewComponent } from './components/positionview/positionview.component';
@@ -42,17 +43,16 @@ import { CarouselComponent} from './components/carousel/carousel.component';
   declarations: [
     AppComponent,
     DomchangeDirective,
-    MultiCanvasGoogle,
     SideMenuContentComponent
     // PlacesSearchComponent,
     // PositionviewComponent
   ],
   entryComponents: [
-    MultiCanvasGoogle
+    // MultiCanvasGoogle
     // PlacesSearchComponent,
     // PositionviewComponent
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule],
   providers: [
     StatusBar,
     SplashScreen,

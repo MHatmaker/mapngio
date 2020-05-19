@@ -4,6 +4,7 @@ import {
     ComponentFactoryResolver,
     EmbeddedViewRef,
     ApplicationRef,
+    ViewContainerRef,
     EventEmitter
     // ComponentRef
 } from '@angular/core';
@@ -196,7 +197,7 @@ export class CanvasService {
 
   addCanvas(
     mapType: string,
-    mapTypeToCreate: any, source: EMapSource, mlcfg: MLConfig,
+    mapTypeToCreate: any, source: EMapSource, entry: ViewContainerRef, mlcfg: MLConfig,
     maploc: MapLocOptions): HTMLElement {
       console.log('in canvasService.addCanvas');
       console.log(`mapType: ${mapType}`);
@@ -232,7 +233,7 @@ export class CanvasService {
       }
 
       this.ndx = currIndex;
-      const appendedElem = this.appendNewCanvasToContainer(mapTypeToCreate);
+      const appendedElem = this.appendNewCanvasToContainer(mapTypeToCreate, entry);
 
       console.log(`now incrementMapNumber from index ${currIndex}`);
       this.mapInstanceService.incrementMapNumber();
@@ -246,7 +247,7 @@ export class CanvasService {
   }
 
 
-    appendNewCanvasToContainer(component: any) {
+    appendNewCanvasToContainer(component: any, entry: ViewContainerRef) {
         this.canvases.push(component);
         const mapParent = document.getElementsByClassName('mapcontent')[0];
         // Create a component reference from the component
@@ -255,10 +256,11 @@ export class CanvasService {
         //   .create(MLInjector.injector);
         const r = this.componentFactoryResolver;
         const fac = r.resolveComponentFactory(component);
-        const compRef = fac.create(MLInjector.injector);
+        // const compRef = fac.create(MLInjector.injector);
+        const compRef = entry.createComponent(fac);
 
         // Attach component to the appRef so that it's inside the ng component tree
-        this.appRef.attachView(compRef.hostView);
+        // this.appRef.attachView(compRef.hostView);
 
         // Get DOM element from component
         const domElem = (compRef.hostView as EmbeddedViewRef<any>)

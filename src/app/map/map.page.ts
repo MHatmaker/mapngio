@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ViewContainerRef } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 // import { IonicPage, ModalController, AlertController, AlertOptions } from '@ionic/angular';
 import { IPosition, PositionService } from '../services/position.service';
@@ -21,6 +21,7 @@ import { SlideshareService } from '../services/slideshare.service';
 import { SlideviewService } from '../services/slideview.service';
 import { MenuOptionModel } from '../components/side-menu-content/models/menu-option-model';
 import { PageService } from '../services/page.service';
+import { MapcontentComponent } from '../components/mapcontent/mapcontent.component';
 import { NewsComponent } from '../components/news/news.component';
 import { LinkrhelpComponent } from '../components/linkrhelp/linkrhelp.component';
 import { SharinghelpComponent } from '../components/sharinghelp/sharinghelp.component';
@@ -45,8 +46,7 @@ import { SearchplacesService } from '../services/searchplaces.service';
 })
 export class MapPage implements AfterViewInit {
 
-      @ViewChild(HiddenmapComponent, {static: false}) private hiddenMap:
-        HiddenmapComponent;
+      @ViewChild('mapcontainer', { static: false, read: ViewContainerRef }) entry: ViewContainerRef;
       private outerMapNumber = 0;
       private mlconfig: MLConfig;
       private menuActions = {};
@@ -392,7 +392,7 @@ export class MapPage implements AfterViewInit {
       const mapTypeToCreate = this.mapHosterDict.get('google');
 
       this.canvasService.addCanvas(
-        'google', mapTypeToCreate, opts.source, mlConfig, opts.mapLocOpts);
+        'google', mapTypeToCreate, opts.source, this.entry, mlConfig, opts.mapLocOpts);
     }
 
     async addCanvasArcGIS(opts: IMapShare, mlcfg: MLConfig, ago: string) {
@@ -416,7 +416,7 @@ export class MapPage implements AfterViewInit {
 
         const mapTypeToCreate = this.mapHosterDict.get('arcgis');
         this.canvasService.addCanvas('arcgis', mapTypeToCreate,
-        opts.source, mlConfig, opts.mapLocOpts); // mlcfg, resolve); //appendNewCanvasToContainer(mapTypeToCreate, currIndex);
+        opts.source, this.entry, mlConfig, opts.mapLocOpts); // mlcfg, resolve); //appendNewCanvasToContainer(mapTypeToCreate, currIndex);
 
     }
     async addCanvas(mapType: string, opts: IMapShare, mlcfg: MLConfig, ago: string) {
@@ -530,7 +530,7 @@ export class MapPage implements AfterViewInit {
         const mapTypeToCreate = this.mapHosterDict.get(mapType);
 
         const appendedElem = this.canvasService.addCanvas(mapType, mapTypeToCreate, opts.source,
-          mlConfig, opts.mapLocOpts); // mlcfg, resolve); //appendNewCanvasToContainer(mapTypeToCreate, currIndex);
+          this.entry, mlConfig, opts.mapLocOpts); // mlcfg, resolve); //appendNewCanvasToContainer(mapTypeToCreate, currIndex);
 
     }
 
