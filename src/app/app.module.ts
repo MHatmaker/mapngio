@@ -1,7 +1,7 @@
 import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule, HttpClient, HttpHandler } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -23,13 +23,10 @@ import { CanvasService } from './services/canvas.service';
 import { SlideshareService } from './services/slideshare.service';
 import { SlideviewService } from './services/slideview.service';
 import { PositionupdateService } from './services/positionupdate.service';
-import { PusherclientService } from './services/pusherclient.service';
 import { PageService } from './services/page.service';
 import { SearchplacesService } from './services/searchplaces.service';
 
-import { MultiCanvasGoogle } from './components/multicanvas/multicanvasgoogle.component';
 import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
-import { CarouselComponent} from './components/carousel/carousel.component';
 import { MapPageModule } from './map/map.module';
 
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
@@ -44,13 +41,8 @@ import { MapPageModule } from './map/map.module';
     AppComponent,
     DomchangeDirective,
     SideMenuContentComponent
-    // PlacesSearchComponent,
-    // PositionviewComponent
   ],
   entryComponents: [
-    // MultiCanvasGoogle
-    // PlacesSearchComponent,
-    // PositionviewComponent
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule],
   providers: [

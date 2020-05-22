@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { NativeGeocoder } from '@ionic-native/native-geocoder/ngx';
 
 import { IonicModule } from '@ionic/angular';
 
@@ -15,6 +16,7 @@ import { LocateselfComponent } from '../components/locateself/locateself.compone
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
 import { MapcontentComponent } from '../components/mapcontent/mapcontent.component';
+import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,8 @@ import { MapcontentComponent } from '../components/mapcontent/mapcontent.compone
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
-    MapcontentComponent
+    MapcontentComponent,
+    GoogleMapComponent
   ],
   providers: [
   ],
@@ -41,7 +44,8 @@ import { MapcontentComponent } from '../components/mapcontent/mapcontent.compone
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
-    MapcontentComponent
+    MapcontentComponent,
+    GoogleMapComponent
   ],
 })
 export class MapPageModule {}

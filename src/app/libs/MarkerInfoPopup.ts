@@ -4,7 +4,7 @@ import { PopoverController } from '@ionic/angular';
 // import { PophandlerProvider } from '../../../providers/pophandler/pophandler';
 import { InfopopComponent } from '..//components/infopop/infopop.component';
 import { v4 as uuid } from 'uuid';
-import { AppModule } from '../app.module';
+import { MLInjector } from './MLInjector';
 import { Utils } from './utils';
 import { PusherConfig } from './PusherConfig';
 import { GeocodingService, OSMAddress } from '../services/geocoding.service';
@@ -33,13 +33,13 @@ export class MarkerInfoPopup {
       private placeIconUrl, private mphmap, private userId: string, private mapNumber: number,
       private popupId: string, private labelarg: any,
       private isShared: boolean = false) {
-        this.utils = AppModule.injector.get(Utils);
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
-        this.pusherClientService = AppModule.injector.get(PusherclientService);
+        this.utils = MLInjector.injector.get(Utils);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
+        this.pusherClientService = MLInjector.injector.get(PusherclientService);
         this.popTitle = title;
         this.popContent = content;
-        this.geoCoder = AppModule.injector.get(GeocodingService);
-        this.infopopService = AppModule.injector.get(InfopopService);
+        this.geoCoder = MLInjector.injector.get(GeocodingService);
+        this.infopopService = MLInjector.injector.get(InfopopService);
 
         const image = {
             url: placeIconUrl,

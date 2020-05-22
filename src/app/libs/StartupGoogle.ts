@@ -11,7 +11,8 @@ import { MapinstanceService} from '../services/mapinstance.service';
 import { CurrentmaptypeService } from '../services/currentmaptype.service';
 import { PusherclientService } from '../services/pusherclient.service';
 import { MapLocOptions, MapLocCoords } from '../services/positionupdate.interface';
-import { AppModule } from '../app.module';
+// import { AppModule } from '../app.module';
+import { MLInjector } from '../libs/MLInjector';
 
 // @Injectable()
 export class StartupGoogle extends Startup {
@@ -32,10 +33,10 @@ export class StartupGoogle extends Startup {
         super();
         this.mlconfig = mlconfig;
         this.mlconfig.setMapNumber(mapNumber);
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
-        this.currentMapTypeService = AppModule.injector.get(CurrentmaptypeService);
-        this.mapInstanceService = AppModule.injector.get(MapinstanceService);
-        this.pusherClientService = AppModule.injector.get(PusherclientService);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
+        this.currentMapTypeService = MLInjector.injector.get(CurrentmaptypeService);
+        this.mapInstanceService = MLInjector.injector.get(MapinstanceService);
+        this.pusherClientService = MLInjector.injector.get(PusherclientService);
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + mapNumber);
     }
 

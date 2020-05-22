@@ -26,8 +26,8 @@ import { LocationsService } from '../services/locations.service';
 // import { Popover } from '@ionic/angular';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
 import { v4 as uuid } from 'uuid';
-import { AppModule } from '../app.module';
-import { } from 'googlemaps';
+import { MLInjector } from './MLInjector';
+// import { } from 'googlemaps';
 // import { LatLng, LatLngBounds, SearchplacesService, PlacesService, Marker, events, event, MaxZoomStatus } from 'googlemaps';
 // import { google } from 'googleapis';
 
@@ -131,12 +131,12 @@ export class MapHosterGoogle extends MapHoster {
         super();
         this.mlconfig = mlconfig;
         this.self = this;
-        this.utils = AppModule.injector.get(Utils);
-        this.pusherClientService = AppModule.injector.get(PusherclientService);
-        this.positionUpdateService = AppModule.injector.get(PositionupdateService);
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
-        this.geoCoder = AppModule.injector.get(GeocodingService);
-        this.initialLocations = AppModule.injector.get(LocationsService);
+        this.utils = MLInjector.injector.get(Utils);
+        this.pusherClientService = MLInjector.injector.get(PusherclientService);
+        this.positionUpdateService = MLInjector.injector.get(PositionupdateService);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
+        this.geoCoder = MLInjector.injector.get(GeocodingService);
+        this.initialLocations = MLInjector.injector.get(LocationsService);
     }
 
     updateGlobals(msg: string, cntrx: number, cntry: number, zm: number) {
@@ -157,7 +157,7 @@ export class MapHosterGoogle extends MapHoster {
         this.cntrxG = cntrx;
         this.cntryG = cntry;
         console.log('Updated Globals ' + msg + ' ' + this.cntrxG + ', ' + this.cntryG + ': ' + this.zmG);
-        // AppModule.injector.get(PositionUpdateService).positionData.emit(
+        // MLInjector.injector.get(PositionUpdateService).positionData.emit(
         //     {'key': 'zm',
         //       'val': {
         //         'zm': this.zmG,
@@ -212,7 +212,7 @@ export class MapHosterGoogle extends MapHoster {
                 this.markers.push(mip.getMarker());
                 this.addToPopupSet(mip.getMarker().getPosition().lng(), mip.getMarker().getPosition().lat());
                 // this.popupSet.add(new PointIndex(mip.getMarker().getPosition().lng(), mip.getMarker().getPosition().lat()));
-                // AppModule.injector.get(PophandlerProvider).addPopup(place.name, mip);
+                // MLInjector.injector.get(PophandlerProvider).addPopup(place.name, mip);
 
                 boundsForMarkers.extend(place.geometry.location);
             }
@@ -783,7 +783,7 @@ export class MapHosterGoogle extends MapHoster {
             const mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info', null, // placeholder for image icon url
               this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
             this.markerInfoPopups.set(mip.getId(), mip);
-              // AppModule.injector.get(Pophandlerprovider).addpopup('mapclicked', mip);
+              // MLInjector.injector.get(Pophandlerprovider).addpopup('mapclicked', mip);
               // this.markerInfoPopups[place.name] = mip;
             // this.popDetails.infoWnd.open(this.mphmap, this.popDetails.infoMarker);
             if (this.selfPusherDetails.pusher) {
