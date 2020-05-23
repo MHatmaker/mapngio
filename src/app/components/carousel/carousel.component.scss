@@ -1,0 +1,189 @@
+
+
+    .multi-can-active {
+      position: absolute;
+      display: none;
+      top: 500px;
+      height: 100%;
+    }/*
+    .multi-can-active current {
+      position: relative;
+      display: block;
+      top: 30px;
+    }*/
+    .multi-can-current {
+      position: absolute;
+      display: block;
+      top: 30px;
+    }
+
+    .carouselbox {
+      font-family: helvetica,sans-serif;
+      font-size: 18px;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 1px;
+      margin: 0.2em;
+      border: 1px solid #ccc;
+      box-shadow: 2px 2px 10px #ccc;
+    }
+    .active {
+        height: 480px;
+    }
+    .mapcontent {
+      position: absolute;
+      width: 100%;
+      top: 30px;
+      margin: 0;
+      padding: 0;
+    }
+    @media only screen and (min-width: 700px)  {
+      .mapcontent {
+        position: absolute;
+        width: 100%;
+        top: 3px;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    .buttons {
+      display: none;
+    }
+    .active .buttons {
+      display: block;
+      padding: 5px 0;
+      background: #eee;
+      text-align: center;
+      z-index: 10;
+      position: relative;
+    }
+    .carouselbox button {
+      border: none;
+      /* visibility: hidden;*/
+    }
+    .active button {
+      visibility: visible;
+    }
+    .mapsshowing button {
+      visibility: visible;
+    }
+    .mapshidden button {
+      visibility: hidden;
+    }
+    .mapsshowingtext {
+      visibility: visible;
+    }
+    .mapshiddentext {
+      visibility: hidden;
+    }
+    .offscreen {
+      position: absolute;
+      left: -2000px;
+    }
+
+    .chevron-next {
+        /*clip-path: inset(2px 2px 2px 2px);*/
+        -webkit-clip-path: inset(2px 2px 2px 2px);
+        background-image: url(/assets/imgs/chevron-right.png);
+        background-color: #6E9096;
+        background-size: 100% 100%;
+        width: 30px;
+        height:30px;
+    }
+
+    .chevron-prev {
+        /*clip-path: inset(2px 2px 2px 2px);*/
+        -webkit-clip-path: inset(2px 2px 2px 2px);
+        background-image: url(/assets/imgs/chevron-left.png);
+        background-color: #6E9096;
+        background-size: 100% 100%;
+        width: 30px;
+        height:30px;
+    }
+
+.icon-row {
+     -webkit-align-items: center;
+}
+
+.mapandtools {
+    width: 100%;
+    display: block;
+    position: relative;
+  }
+
+  .maptoolbar {
+     position: absolute;
+     width: 100%;
+     display: grid;
+     grid-template-areas:
+        "mapnavwrapperarea"
+        "searchandposarea";
+  }
+
+  @media only screen and (min-width: 700px)  {
+  .maptoolbar {
+     position: absolute;
+     display: grid;
+     grid-template-columns: 30% auto;
+     grid-template-areas: "mapnavwrapperarea searchandposarea";
+  }
+}
+  .navleft {
+      grid-area: navlefta;
+  }
+  .mapnametext {
+      grid-area: mapnametexta;
+  }
+  .navright {
+      grid-area: navrighta;
+  }
+
+  .mapnavwrapper {
+      grid-area: mapnavwrapperarea;
+      display: grid;
+      grid-template-columns: 30px minmax(min-content, max-content) 30px;
+      grid-template-areas: "navlefta mapnametexta navrighta";
+  }
+  @media only screen and (min-width: 700px)  {
+  .mapnavwrapper {
+      grid-area: mapnavwrapperarea;
+      display: grid;
+      grid-template-columns: 30px minmax(min-content, max-content) 30px;
+      grid-template-areas: "navlefta mapnametexta navrighta";
+  }
+}
+
+  .searchquery {
+      grid-area: searchquerya;
+      height: 25px;
+  }
+  .postext {
+      grid-area: postexta;
+  }
+  .posselect {
+      grid-area: posselecta;
+  }
+  .posviewwrapper {
+      height: 30px;
+      grid-area: posviewwrapperarea;
+      display: grid;
+      grid-template-columns: 200px auto;
+      grid-template-areas: "postexta posselecta";
+  }
+  .searchandpos {
+      /*height: 30px;*/
+      grid-area: searchandposarea;
+      display: grid;
+      grid-template-columns: 100% 0px;
+      grid-template-areas: "searchquerya posviewwrapperarea"
+  }
+  @media only screen and (min-width: 700px) {
+  .searchandpos {
+      /*height: 30px;*/
+      grid-area: searchandposarea;
+      display: grid;
+      grid-template-columns: 50% 50%;
+      grid-template-areas: "searchquerya posviewwrapperarea"
+  }}
