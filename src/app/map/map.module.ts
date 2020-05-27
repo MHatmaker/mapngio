@@ -15,8 +15,8 @@ import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component'
 import { LocateselfComponent } from '../components/locateself/locateself.component';
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
-import { MapcontentComponent } from '../components/mapcontent/mapcontent.component';
 import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
+import { DestselectionComponent } from '../components/destselection/destselection.component';
 
 @NgModule({
   imports: [
@@ -30,8 +30,8 @@ import { GoogleMapComponent } from '../components/googlemap/googlemap.component'
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
-    MapcontentComponent,
-    GoogleMapComponent
+    GoogleMapComponent,
+    DestselectionComponent
   ],
   providers: [
   ],
@@ -44,8 +44,9 @@ import { GoogleMapComponent } from '../components/googlemap/googlemap.component'
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
-    MapcontentComponent,
-    GoogleMapComponent
+    GoogleMapComponent,
+    DestselectionComponent
+
   ],
 })
 export class MapPageModule {}

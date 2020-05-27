@@ -1,3 +1,36 @@
-<p>
-  destselection works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Map Destination</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="cards-bg social-cards">
+    <ion-card id="idDestinationSetupCard">
+      <ion-card-content>
+          <ion-list radio-group [(ngModel)]="selectedDestination">
+              <ion-item *ngFor="let dest of destinations;" class="item item-block item-radio-checked">
+                <ion-label class="item-content" color="{{dest.color}}">{{dest.title}}</ion-label>
+                <ion-radio (click)="checkDestination(dest)" [value]="dest" checked="{{dest.isChecked}}"></ion-radio>
+            </ion-item>
+          </ion-list>
+            <ion-item>
+                <!-- <ion-label>Selected Destination</ion-label> -->
+                <ion-input value="{{useDestination}}" type="text"></ion-input>
+            </ion-item>
+              <ion-row>
+                <ion-col>
+                    <button ion-button color="btn-primary" (click)="accept()">Accept</button>
+                </ion-col>
+                <ion-col>
+                    <button ion-button color="btn-secondary" (click)="cancel()">Cancel</button>
+                </ion-col>
+              </ion-row>
+      </ion-card-content>
+    <ion-card>
+<ion-content>

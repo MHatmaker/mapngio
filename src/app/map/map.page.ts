@@ -21,7 +21,6 @@ import { SlideshareService } from '../services/slideshare.service';
 import { SlideviewService } from '../services/slideview.service';
 import { MenuOptionModel } from '../components/side-menu-content/models/menu-option-model';
 import { PageService } from '../services/page.service';
-import { MapcontentComponent } from '../components/mapcontent/mapcontent.component';
 import { NewsComponent } from '../components/news/news.component';
 import { LinkrhelpComponent } from '../components/linkrhelp/linkrhelp.component';
 import { SharinghelpComponent } from '../components/sharinghelp/sharinghelp.component';

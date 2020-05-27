@@ -16,8 +16,8 @@ import { InfopopService } from '../../services/infopop.service';
 
 @Component({
   selector: 'maplinkr-googlemap',
-  templateUrl: './googlemap.component.html'
-  // styles: [ './googlemap.component.css']
+  templateUrl: './googlemap.component.html',
+  styleUrls: [ './googlemap.component.scss']
 })
 export class GoogleMapComponent implements AfterViewInit, OnInit {
   @Output()
@@ -94,7 +94,8 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
     this.gmap = this.startup.configure('google-map-component' + this.mapNumber,
     this.elementRef.nativeElement.firstChild, mapOptions);
 
-    const infopop = this.infopopService;    this.gmarker = new google.maps.Marker({
+    const infopop = this.infopopService;
+    this.gmarker = new google.maps.Marker({
             position: latLng,
             map: this.gmap,
             title: 'moving marker'
@@ -198,7 +199,7 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
        }
      };
 
-     startOuter().then(() => {
+    startOuter().then(() => {
        console.log('finished outer');
        this.gmarker.setVisible(false);
      });

@@ -463,7 +463,7 @@ export class MapHosterGoogle extends MapHoster {
     }
     configureMap(gMap, mapOptions, goooogle, googPlaces, config) {
         console.log('MapHosterGoogle configureMap');
-        let initZoom = '';
+        let initZoom = mapOptions.zoom;
         let qlat = '';
         let qlon = '';
 

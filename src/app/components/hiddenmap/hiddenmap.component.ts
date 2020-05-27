@@ -10,8 +10,10 @@ import { MapinstanceService } from '../../services/mapinstance.service';
 
 @Component({
   selector: 'hiddenmap',
-  templateUrl: 'hiddenmap.component.html'
+  templateUrl: 'hiddenmap.component.html',
+  styleUrls: ['hiddenmap.component.scss']
 })
+
 export class HiddenmapComponent {
   @ViewChild('hiddenmap',  {static: false}) mapElement: ElementRef;
   map: google.maps.Map;
