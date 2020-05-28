@@ -19,11 +19,11 @@ export class DestselectionComponent implements OnInit {
     public viewCtrl: ModalController, private destinationsProvider: DestinationsService,
     private zone: NgZone) {
     console.log('Hello DestselectionComponent Component');
-    this.destinations = destinationsProvider.getDestinations();
-    this.selectedDestination = destinationsProvider.previousDestination();
   }
 
   ngOnInit() {
+    this.destinations = this.destinationsProvider.getDestinations();
+    this.selectedDestination = this.destinationsProvider.previousDestination();
     // this.useDestination.nativeElement.innerText = this.selectedDestination.title;
     this.useDestination = this.selectedDestination.title;
     // this.destinationsProvider.clearChecks(this.selectedDestination);

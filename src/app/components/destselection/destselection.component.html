@@ -1,4 +1,4 @@
-<ion-header>
+/.<ion-header>
   <ion-toolbar>
     <ion-title>New Map Destination</ion-title>
     <ion-buttons start>
@@ -13,11 +13,13 @@
 <ion-content class="cards-bg social-cards">
     <ion-card id="idDestinationSetupCard">
       <ion-card-content>
-          <ion-list radio-group [(ngModel)]="selectedDestination">
+        <ion-list>
+          <ion-radio-group [value]="selectedDestination.title">
               <ion-item *ngFor="let dest of destinations;" class="item item-block item-radio-checked">
                 <ion-label class="item-content" color="{{dest.color}}">{{dest.title}}</ion-label>
-                <ion-radio (click)="checkDestination(dest)" [value]="dest" checked="{{dest.isChecked}}"></ion-radio>
-            </ion-item>
+                <ion-radio (click)="checkDestination(dest)" [value]="dest.title"></ion-radio>
+              </ion-item>
+            </ion-radio-group>
           </ion-list>
             <ion-item>
                 <!-- <ion-label>Selected Destination</ion-label> -->

@@ -4,15 +4,24 @@ import { SlideviewService } from '../../services/slideview.service';
 
 @Component({
   selector: 'multi-canvas-google',
-  templateUrl: './multicanvasgoogle.component.html',
-  styles: ['./multicanvas.component.css']
+  templateUrl: './multicanvasgoogle.component.html'
 })
 
 export class MultiCanvasGoogle implements OnDestroy, OnInit {
     // private el: string = null;
     private currentSubscription;
     private ndx = 0;
-    public slidevisibility = 'multi-can-current';
+    public slidevisibility = null; // 'multi-can-current';
+    public mcactive = {
+      position: 'absolute',
+      display: 'none',
+      top: '500px',
+      height: '100%'
+    };
+    public mccurrent = {
+      position: 'absolute',
+      display: 'block'
+    };
 
     constructor(private canvasService: CanvasService, private slideViewService: SlideviewService) {
     }
@@ -22,9 +31,9 @@ export class MultiCanvasGoogle implements OnDestroy, OnInit {
         this.currentSubscription = this.canvasService.setCurrent.subscribe((sn: number) => {
             console.log(`subscriber ndx ${this.ndx} received id ${sn}`);
             if (sn === this.ndx) {
-              this.slidevisibility = 'multi-can-current';
+              this.slidevisibility = this.mccurrent;
             } else {
-              this.slidevisibility = 'multi-can-active';
+              this.slidevisibility = this.mcactive;
             }
         });
     }
