@@ -30,3 +30,5 @@ npm-debug.log*
 /plugins
 /www
 gitpass
+package-lock.-bkjson
+src/app/components/multicanvas/multicanvas.component.css
