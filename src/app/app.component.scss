@@ -1,0 +1,47 @@
+// http://ionicframework.com/docs/theming/
+// .custom-icon {
+//   background-image: url('https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/checkmark-24-24.png');
+// }
+
+.padzero {
+    padding: 0px;
+}
+
+.custom-icon {
+  src: '../assets/icon/map-w-marker-icon.png';
+}
+
+.popover-custom .popover-content {
+  width: calc(100vw - 20px);
+  height: max-content;
+  top: 50%!important;
+  left: 10px!important;
+  bottom: 0px!important;
+}
+
+
+.popover-content {
+  width: 100%;
+  top: 70px;
+  left: 10px;
+}
+
+.custom-popover {
+  top: 80px;
+  left: 15px;
+  width: calc(100vw - 20px);
+}
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.

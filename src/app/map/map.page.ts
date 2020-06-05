@@ -20,7 +20,7 @@ import { CanvasService } from '../services/canvas.service';
 import { SlideshareService } from '../services/slideshare.service';
 import { SlideviewService } from '../services/slideview.service';
 import { MenuOptionModel } from '../components/side-menu-content/models/menu-option-model';
-import { PageService } from '../services/page.service';
+import { PageService, MenuOpenEvent } from '../services/page.service';
 import { NewsComponent } from '../components/news/news.component';
 import { LinkrhelpComponent } from '../components/linkrhelp/linkrhelp.component';
 import { SharinghelpComponent } from '../components/sharinghelp/sharinghelp.component';
@@ -58,7 +58,7 @@ export class MapPage implements AfterViewInit {
 
     constructor(
       private mapInstanceService: MapinstanceService, private canvasService: CanvasService,
-      private slideshareService: SlideshareService, pageService: PageService,
+      private slideshareService: SlideshareService, private pageService: PageService,
       private slideViewService: SlideviewService, private modalCtrl: ModalController,
       private agoAlert: AlertController,
       private mapOpener: MapopenerService, private hostConfig: HostConfig, private pusherConfig: PusherConfig,
@@ -100,7 +100,10 @@ export class MapPage implements AfterViewInit {
       }
 
     }
-
+    openMenu(mnu: string) {
+      console.log('fired mlmenu click ' + mnu);
+      this.pageService.menuOpenEvent.emit({menuName: mnu});
+    }
     setupMenuActions(modalCtrl: ModalController) {
       this.menuActions = {
           'Latest News': async () => {

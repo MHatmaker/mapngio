@@ -1,10 +1,16 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar style="min-height: 20px; height: 50px;">
+    <ion-buttons slot="start">
+      <button ion-button menuToggle (click)="openMenu('mlmenu')">
+        <ion-icon name="menu"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title style="background-color: green">MapLinkr Maps</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="padzero">
+
       <app-carousel></app-carousel>
                 <!-- <ol class="MapContainer" [style.height] = "mapcolheight + 'px'" [style.width] = "'100%'"></ol> -->
       <!-- <div #mapcontainer class="mapcontent"> -->

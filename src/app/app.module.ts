@@ -43,6 +43,7 @@ import { MapPageModule } from './map/map.module';
     SideMenuContentComponent
   ],
   entryComponents: [
+    SideMenuContentComponent
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule],
   providers: [

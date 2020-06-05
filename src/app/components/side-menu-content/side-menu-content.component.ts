@@ -125,7 +125,7 @@ export class SideMenuContentComponent {
     private cdRef: ChangeDetectorRef) {
 
       // Handle the redirect event
-      // this.eventsCtrl.subscribe(SideMenuRedirectEvent, (data: SideMenuRedirectEventData) => {
+      // eventsCtrl.subscribe(SideMenuRedirectEvent, (data: SideMenuRedirectEventData) => {
       //   this.updateSelectedOption(data);
       // });
     }

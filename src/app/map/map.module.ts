@@ -17,6 +17,7 @@ import { PushersetupComponent } from '../components/pushersetup/pushersetup.comp
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
 import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
 import { DestselectionComponent } from '../components/destselection/destselection.component';
+import { SideMenuContentComponent } from '../components/side-menu-content/side-menu-content.component';
 
 @NgModule({
   imports: [
@@ -46,7 +47,6 @@ import { DestselectionComponent } from '../components/destselection/destselectio
     MultiCanvasGoogle,
     GoogleMapComponent,
     DestselectionComponent
-
   ],
 })
 export class MapPageModule {}

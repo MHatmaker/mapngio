@@ -1,3 +1,9 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <ion-menu side="start" persistent="true" content-id="mlcontent" menu-id="mlmenu" (ionClose)="collapseMenuOptions()">
+
+  <!-- Side Menu -->
+      <side-menu-content [settings]="sideMenuSettings" [options]="options" (selectOption)="selectOption($event)">
+      </side-menu-content>
+  </ion-menu>
+  <ion-router-outlet id="mlcontent"></ion-router-outlet>
 </ion-app>

@@ -8,7 +8,7 @@ import { MapPage } from './map/map.page';
 
 import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
 import { SideMenuSettings } from './components/side-menu-content/models/side-menu-settings';
-import { PageService } from './services/page.service';
+import { PageService, MenuOpenEvent } from './services/page.service';
 import { MenuOptionModel } from './components/side-menu-content/models/menu-option-model';
 import { PusherConfig } from './libs/PusherConfig';
 // import { Geolocation } from '@ionic-native/geolocation';
@@ -33,6 +33,7 @@ export class AppComponent {
   // Get the instance to call the public methods
   @ViewChild(SideMenuContentComponent, {static: false}) sideMenu: SideMenuContentComponent;
 
+    // Options to show in the SideMenuComponent
   public options: Array<MenuOptionModel>;
   public channel: any;
   private userName: string;
@@ -89,6 +90,15 @@ export class AppComponent {
 
     this.queryForUserName();
     this.queryForPusherKeys();
+    this.menuCtrl.enable(true, 'mlmenu');
+    this.pageService.menuOpenEvent.subscribe((data: MenuOpenEvent) => {
+      this.openMenu(data.menuName);
+    });
+  }
+
+  openMenu(mnu: string) {
+    console.log('fired mlmenu click ' + mnu);
+    this.menuCtrl.open(mnu);
   }
 
   setIDsAndNames() {
@@ -134,8 +144,8 @@ async queryForUserName() {
       // Initialize some options
       this.initializeOptions();
       const sc = document.getElementsByClassName('scroll-content');
-      sc[0].classList.add('padzero');
-      sc[1].classList.add('padzero');
+      // sc[0].classList.add('padzero');
+      // sc[1].classList.add('padzero');
 
       const platforms = this.platform.platforms();
       const isApp = (this.platform.is('mobileweb')) ? false : true;
@@ -249,6 +259,28 @@ async queryForUserName() {
 				}
 			]
 		});*/
+}
+
+  public selectOption(option: MenuOptionModel) {
+    this.menuCtrl.close().then(() => {
+      this.pageService.menuOption.emit(option);
+      // if (option.custom && option.custom.isLogin) {
+      // 	this.presentAlert('You\'ve clicked the login option!');
+      // } else if (option.custom && option.custom.isLogout) {
+      // 	this.presentAlert('You\'ve clicked the logout option!');
+      // } else if (option.custom && option.custom.isExternalLink) {
+      // 	let url = option.custom.externalUrl;
+      // 	window.open(url, '_blank');
+      // } else {
+
+      // Redirect to the selected page
+      // this.navCtrl.setRoot(option.component || MapsPage, { 'title': option.displayName });
+      // this.rootPage = option.component;
+      // }
+    });
   }
 
+  public collapseMenuOptions(): void {
+    this.sideMenu.collapseAllOptions();
+  }
 }
