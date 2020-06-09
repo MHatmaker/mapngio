@@ -10,7 +10,17 @@ import { CanvasService } from '../../services/canvas.service';
 export class MultiCanvasEsri implements OnInit, AfterViewInit {
     // private el: string = null;
     private ndx: number = null;
-    public slidevisibility = 'multi-can-current';
+    public slidevisibility: any;
+    public mcactive = {
+      position: 'absolute',
+      display: 'none',
+      top: '500px',
+      height: '100%'
+    };
+    public mccurrent = {
+      position: 'absolute',
+      display: 'block'
+    };
 
     constructor(private canvasService: CanvasService, private cd: ChangeDetectorRef) {
         this.ndx = this.canvasService.getIndex();
@@ -18,9 +28,9 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
         this.canvasService.setCurrent.subscribe((sn: number) => {
             console.log(`subscriber received id ${sn}`);
             if (sn === this.ndx) {
-              this.slidevisibility = 'multi-can-current';
+              this.slidevisibility = this.mccurrent;
             } else {
-              this.slidevisibility = 'multi-can-active';
+              this.slidevisibility = this.mcactive;
             }
         });
     }

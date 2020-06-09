@@ -11,7 +11,7 @@ export class MultiCanvasGoogle implements OnDestroy, OnInit {
     // private el: string = null;
     private currentSubscription;
     private ndx = 0;
-    public slidevisibility = null; // 'multi-can-current';
+    public slidevisibility: any;
     public mcactive = {
       position: 'absolute',
       display: 'none',
