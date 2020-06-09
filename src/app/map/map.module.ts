@@ -15,9 +15,14 @@ import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component'
 import { LocateselfComponent } from '../components/locateself/locateself.component';
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
+import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
 import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
+import { EsriMapComponent } from '../components/esrimap/esrimap.component';
 import { DestselectionComponent } from '../components/destselection/destselection.component';
 import { SideMenuContentComponent } from '../components/side-menu-content/side-menu-content.component';
+import { AgoitemComponent } from '../components/agoitem/agoitem.component';
+import { AgodetailComponent } from '../components/agodetail/agodetail.component';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
   imports: [
@@ -31,10 +36,15 @@ import { SideMenuContentComponent } from '../components/side-menu-content/side-m
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
+    MultiCanvasEsri,
     GoogleMapComponent,
-    DestselectionComponent
+    EsriMapComponent,
+    DestselectionComponent,
+    AgoitemComponent,
+    AgodetailComponent,
   ],
   providers: [
+    Geolocation
   ],
   declarations: [
     MapPage,
@@ -45,8 +55,12 @@ import { SideMenuContentComponent } from '../components/side-menu-content/side-m
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogle,
+    MultiCanvasEsri,
     GoogleMapComponent,
-    DestselectionComponent
+    EsriMapComponent,
+    DestselectionComponent,
+    AgoitemComponent,
+    AgodetailComponent,
   ],
 })
 export class MapPageModule {}

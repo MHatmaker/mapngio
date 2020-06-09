@@ -1,3 +1,22 @@
-<p>
-  agodetail works!
-</p>
+<ion-header>
+
+  <ion-toolbar>
+    <ion-title>Selected ArcGIS Online Item</ion-title>
+  </ion-toolbar>
+
+</ion-header>
+
+
+<ion-content>
+	<ion-item tappable>
+      <ion-thumbnail item-left>
+        <img src="{{thumbnailUrl}}">
+      </ion-thumbnail>
+      <h2>{{title}}</h2>
+    </ion-item>
+    <ion-item text-wrap>
+            {{snippet}}
+    </ion-item>
+	<button ion-button (click)="loadMapForItem()" type="button">Accept</button>
+	<button ion-button (click)="cancelSelectedItem()" type="button">Cancel</button>
+</ion-content>

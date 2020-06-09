@@ -150,29 +150,33 @@ export class MapPage implements AfterViewInit {
 
     async searchMap() {
         const modal = await this.modalCtrl.create({component: AgoitemComponent});
+        await modal.present();
+        console.log('map.page modal was created, wait for dismiss');
         const { data } = await modal.onDidDismiss();
-        // modal.onDidDismiss(async (data) => {
+        // modal.onDidDismiss().then( async (data) => {
         console.log('Ago dialog dismissed processing');
-        console.log(data);
-        if (data !== 'cancelled') {
-            const xtnt: MlboundsService = data.defaultExtent;
+        console.log(data.data);
+        const itemData = data.data;
+        if (itemData !== 'cancelled') {
+            const xtnt: MlboundsService = itemData.defaultExtent;
             // new MLBounds(data.extent[0][0], data.extent[0][1], data.extent[1][0], data.extent[1][1]);
             const xcntr = await xtnt.getCenter();
             const cntr: IPosition = new PositionService(xcntr.x, xcntr.y, 15);
             const mplocCoords: MapLocCoords = {lat: xcntr.x, lng: xcntr.y};
             const mploc: MapLocOptions = {center: mplocCoords, zoom: 15, places: null, query: null};
-            const mlcfg = new MLConfig({mapId: -1, mapType: 'arcgis', webmapId: data.id,
+            const mlcfg = new MLConfig({mapId: -1, mapType: 'arcgis', webmapId: itemData.id,
               mlposition: cntr, source: EMapSource.srcagonline, bounds: xtnt});
             mlcfg.setBounds(xtnt); // this is'nt the first map oened in this session
             if (! this.mapInstanceService.getHiddenMap() ) {
                 this.mapOpener.addHiddenCanvas.emit();
             }
             const opts: IMapShare = {mapLocOpts: mploc, userName: this.hostConfig.getUserName(), mlBounds: xtnt,
-                source: EMapSource.srcagonline, webmapId: data.id};
-            this.addCanvasArcGIS(opts, mlcfg, data.id);
+                source: EMapSource.srcagonline, webmapId: itemData.id};
+            this.addCanvasArcGIS(opts, mlcfg, itemData.id);
         }
-        modal.present();
-    }
+
+        // return await modal.present();
+  }
 
     ngAfterViewInit() {
       this.pusherEventHandler = new PusherEventHandler(-101);

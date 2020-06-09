@@ -16,7 +16,7 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
         this.ndx = this.canvasService.getIndex();
         console.log('ndx is ' + this.ndx);
         this.canvasService.setCurrent.subscribe((sn: number) => {
-            console.log(`subscriber received id ${sn}`)
+            console.log(`subscriber received id ${sn}`);
             if (sn === this.ndx) {
               this.slidevisibility = 'multi-can-current';
             } else {
