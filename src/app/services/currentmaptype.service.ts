@@ -61,7 +61,7 @@ export class CurrentmaptypeService {
             site: 'Web Site featuring a Google Map',
             content: this.fillContentsText('Google Map', 'a Google map', 'google map content'),
             url: '/partials/google.html',
-            imgSrc: 'img/googlemap.png',
+            imgSrc: 'assets/imgs/googlemap.png',
             imgAlt: 'Google Map',
             active: true,
             disabled: false
@@ -72,7 +72,7 @@ export class CurrentmaptypeService {
             site: 'Web Site featuring an ArcGIS Online Map',
             content: this.fillContentsText('ArcGIS', 'an ArcGIS Web Map', 'ArcGIS Online content'),
             url: '/partials/arcgis.html',
-            imgSrc: 'img/arcgis.png',
+            imgSrc: 'assets/imgs/arcgis.png',
             imgAlt: 'ArcGIS Web Maps',
             active: false,
             disabled: false
@@ -83,7 +83,7 @@ export class CurrentmaptypeService {
             site: 'Web Site featuring a Leaflet Map',
             content: this.fillContentsText('Leaflet/OSM Map',  'a Leaflet/OSM map', 'Leaflet content'),
             url: '/partials/leaflet.html',
-            imgSrc:  'img/Leaflet.png',
+            imgSrc:  'assets/imgs/Leaflet.png',
             imgAlt: 'Leaflet/OSM Maps',
             active: false,
             disabled: false

@@ -1,5 +1,5 @@
 
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, NgZone} from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, ApplicationRef} from '@angular/core';
 import { MapinstanceService } from '../../services/mapinstance.service';
 import { SlideshareService } from '../../services/slideshare.service';
 import { ISlideData } from '../../services/slidedata.interface';
@@ -28,7 +28,8 @@ export class CarouselComponent {
 
   constructor(
     private mapInstanceService: MapinstanceService, private slideshareService: SlideshareService,
-    private canvasService: CanvasService, private ngZone: NgZone, private slideViewService: SlideviewService) {
+    private canvasService: CanvasService, private ngZone: NgZone, private slideViewService: SlideviewService,
+    private cdr: ChangeDetectorRef, public appRef: ApplicationRef) {
         console.log('Carousel ctor');
         this.mapcolheight = slideViewService.getMapColHeight();
         // this.currentSlide = this.items[0] || null;
@@ -70,6 +71,17 @@ export class CarouselComponent {
         this.MapName = this.activeSlide.value.mapName;
         this.canvasService.setCurrent.emit(this.activeSlide.value.slideNumber);
         this.mapInstanceService.setCurrentSlide(this.activeSlide.value.slideNumber);
+        setTimeout(() => {
+        this.ngZone.run(() => {
+          console.log('markForCheck');
+          this.cdr.markForCheck();
+          this.appRef.tick();
+        });
+        }, 1000);
+        setTimeout(() => {
+          console.log('navigate detectChanges');
+          this.cdr.detectChanges();
+        }, 1000);
     }
 
     onAddSlide(slideData: ISlideData) {
@@ -83,6 +95,14 @@ export class CarouselComponent {
         this.slidesCount = this.items.listLength();
         this.showNavButtons = this.slidesCount  > 1;
         this.showMapText = this.slidesCount > 0;
+        setTimeout(() => {
+          console.log('onAddSlide detectChanges');
+          this.ngZone.run(() => {
+            console.log('markForCheck');
+            this.cdr.markForCheck();
+          });
+          this.cdr.detectChanges();
+        }, 1000);
     }
     onRemoveSlide(): number {
         const slideToRemove = this.activeSlide.value.slideNumber,

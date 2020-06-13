@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
 
 @Component({
@@ -10,7 +10,8 @@ import { CanvasService } from '../../services/canvas.service';
 export class MultiCanvasEsri implements OnInit, AfterViewInit {
     // private el: string = null;
     private ndx: number = null;
-    public slidevisibility: any;
+    public slidevisibility = 'multi-can-current';
+    public slideCurrent = true;
     public mcactive = {
       position: 'absolute',
       display: 'none',
@@ -22,17 +23,27 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
       display: 'block'
     };
 
-    constructor(private canvasService: CanvasService, private cd: ChangeDetectorRef) {
+    constructor(private canvasService: CanvasService, private cdr: ChangeDetectorRef, public ngz: NgZone) {
         this.ndx = this.canvasService.getIndex();
         console.log('ndx is ' + this.ndx);
         this.canvasService.setCurrent.subscribe((sn: number) => {
             console.log(`subscriber received id ${sn}`);
             if (sn === this.ndx) {
-              this.slidevisibility = this.mccurrent;
+              this.slidevisibility = 'multi-can-current';
+              this.slideCurrent = true;
             } else {
-              this.slidevisibility = this.mcactive;
+              this.slidevisibility = 'multi-can-active';
+              this.slideCurrent = false;
             }
+            console.log('run ngzone');
+            this.ngz.run(() => {
+            console.log('markForCheck');
+            this.cdr.markForCheck();
+            });
         });
+    }
+    getCanvasClass() {
+      return this.slidevisibility;
     }
     /*
             Canvas.prototype.init = function () {
@@ -50,10 +61,10 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
         // console.log('ndx is ' + this.ndx);
       }
       ngAfterViewInit() {
-        // this.cd.detectChanges();
+        // this.cd.markForCheck();
         // this.ndx = this.canvasService.getIndex();
         // console.log('ndx is ' + this.ndx);
-        // this.cd.detectChanges();
+        // this.cd.markForCheck();
       }
 
     onMouseDown(event) {
