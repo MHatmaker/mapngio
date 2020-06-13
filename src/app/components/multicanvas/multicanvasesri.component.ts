@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
       display: 'block'
     };
 
-    constructor(private canvasService: CanvasService, private cdr: ChangeDetectorRef, public ngz: NgZone) {
+    constructor(private canvasService: CanvasService) {
         this.ndx = this.canvasService.getIndex();
         console.log('ndx is ' + this.ndx);
         this.canvasService.setCurrent.subscribe((sn: number) => {
@@ -35,15 +35,7 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
               this.slidevisibility = this.mcactive;
               this.slideCurrent = false;
             }
-            // console.log('run ngzone');
-            // this.ngz.run(() => {
-            // console.log('markForCheck');
-            // this.cdr.markForCheck();
-            // });
         });
-    }
-    getCanvasClass() {
-      return this.slidevisibility;
     }
     /*
             Canvas.prototype.init = function () {
