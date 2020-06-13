@@ -1,4 +1,4 @@
-<div id="slide{{''+ndx}}"  [ngStyle]="{'display': slideCurrent? block : none}" >
+<div id="slide{{''+ndx}}"  [ngStyle]="slidevisibility" >
     <div (mousemove)="onMouseMove($event)" data-tap-disable="true">
         <maplinkr-googlemap></maplinkr-googlemap>
     </div>

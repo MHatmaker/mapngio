@@ -11,16 +11,16 @@ export class MultiCanvasGoogle implements OnDestroy, OnInit {
     // private el: string = null;
     private currentSubscription;
     private ndx = 0;
-    public slidevisibility = 'multi-can-current';
+    public slidevisibility = null;
     public slideCurrent = true;
     public mcactive = {
-      position: 'absolute',
+      position: 'relative',
       display: 'none',
       top: '500px',
       height: '100%'
     };
     public mccurrent = {
-      position: 'absolute',
+      position: 'relative',
       display: 'block'
     };
 
@@ -34,18 +34,18 @@ export class MultiCanvasGoogle implements OnDestroy, OnInit {
         this.currentSubscription = this.canvasService.setCurrent.subscribe((sn: number) => {
             console.log(`subscriber ndx ${this.ndx} received id ${sn}`);
             if (sn === this.ndx) {
-              this.slidevisibility = 'multi-can-current';
+              this.slidevisibility = this.mccurrent;
               this.slideCurrent = true;
             } else {
-              this.slidevisibility = 'multi-can-active';
+              this.slidevisibility = this.mcactive;
               this.slideCurrent = false;
             }
-            this.cdr.markForCheck();
-            console.log('run ngzone');
-            this.ngz.run(() => {
-              console.log('markForCheck');
-              this.cdr.detectChanges();
-            });
+            // this.cdr.markForCheck();
+            // console.log('run ngzone');
+            // this.ngz.run(() => {
+            //   console.log('markForCheck');
+            //   this.cdr.detectChanges();
+            // });
         });
     }
     getCanvasClass() {

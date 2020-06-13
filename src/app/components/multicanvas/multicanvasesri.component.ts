@@ -10,16 +10,16 @@ import { CanvasService } from '../../services/canvas.service';
 export class MultiCanvasEsri implements OnInit, AfterViewInit {
     // private el: string = null;
     private ndx: number = null;
-    public slidevisibility = 'multi-can-current';
+    public slidevisibility = null;
     public slideCurrent = true;
     public mcactive = {
-      position: 'absolute',
+      position: 'relative',
       display: 'none',
       top: '500px',
       height: '100%'
     };
     public mccurrent = {
-      position: 'absolute',
+      position: 'relative',
       display: 'block'
     };
 
@@ -29,17 +29,17 @@ export class MultiCanvasEsri implements OnInit, AfterViewInit {
         this.canvasService.setCurrent.subscribe((sn: number) => {
             console.log(`subscriber received id ${sn}`);
             if (sn === this.ndx) {
-              this.slidevisibility = 'multi-can-current';
+              this.slidevisibility = this.mccurrent;
               this.slideCurrent = true;
             } else {
-              this.slidevisibility = 'multi-can-active';
+              this.slidevisibility = this.mcactive;
               this.slideCurrent = false;
             }
-            console.log('run ngzone');
-            this.ngz.run(() => {
-            console.log('markForCheck');
-            this.cdr.markForCheck();
-            });
+            // console.log('run ngzone');
+            // this.ngz.run(() => {
+            // console.log('markForCheck');
+            // this.cdr.markForCheck();
+            // });
         });
     }
     getCanvasClass() {

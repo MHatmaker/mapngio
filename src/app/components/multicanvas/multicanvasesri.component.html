@@ -1,4 +1,4 @@
-<div id="slide{{''+ndx}}" [ngStyle]="{'display': slideCurrent? block : none}" >
+<div id="slide{{''+ndx}}" [ngStyle]="slidevisibility" >
     <div (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)">
         <maplinkr-esrimap></maplinkr-esrimap>
     </div>

@@ -70,18 +70,18 @@ export class CarouselComponent {
         console.log('to activeSlideNumber ' + this.activeSlide.value.slideNumber);
         this.MapName = this.activeSlide.value.mapName;
         this.canvasService.setCurrent.emit(this.activeSlide.value.slideNumber);
-        this.mapInstanceService.setCurrentSlide(this.activeSlide.value.slideNumber);
-        setTimeout(() => {
-        this.ngZone.run(() => {
-          console.log('markForCheck');
-          this.cdr.markForCheck();
-          this.appRef.tick();
-        });
-        }, 1000);
-        setTimeout(() => {
-          console.log('navigate detectChanges');
-          this.cdr.detectChanges();
-        }, 1000);
+        // this.mapInstanceService.setCurrentSlide(this.activeSlide.value.slideNumber);
+        // setTimeout(() => {
+        // this.ngZone.run(() => {
+        //   console.log('markForCheck');
+        //   this.cdr.markForCheck();
+        //   this.appRef.tick();
+        // });
+        // }, 1000);
+        // setTimeout(() => {
+        //   console.log('navigate detectChanges');
+        //   this.cdr.detectChanges();
+        // }, 1000);
     }
 
     onAddSlide(slideData: ISlideData) {
@@ -95,14 +95,14 @@ export class CarouselComponent {
         this.slidesCount = this.items.listLength();
         this.showNavButtons = this.slidesCount  > 1;
         this.showMapText = this.slidesCount > 0;
-        setTimeout(() => {
-          console.log('onAddSlide detectChanges');
-          this.ngZone.run(() => {
-            console.log('markForCheck');
-            this.cdr.markForCheck();
-          });
-          this.cdr.detectChanges();
-        }, 1000);
+        // setTimeout(() => {
+        //   console.log('onAddSlide detectChanges');
+        //   this.ngZone.run(() => {
+        //     console.log('markForCheck');
+        //     this.cdr.markForCheck();
+        //   });
+        //   this.cdr.detectChanges();
+        // }, 1000);
     }
     onRemoveSlide(): number {
         const slideToRemove = this.activeSlide.value.slideNumber,
