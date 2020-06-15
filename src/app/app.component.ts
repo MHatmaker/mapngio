@@ -161,7 +161,7 @@ async queryForUserName() {
       displayName: 'Map options',
       subItems: [
         {
-          iconName: 'custom-icon',
+          iconName: 'logo-google',
           displayName: 'google',
           component: MapPage
         },
@@ -182,47 +182,47 @@ async queryForUserName() {
       displayName: 'MapLinkr',
       subItems: [
         {
-          iconName: 'news-icon',
+          iconName: 'newspaper-outline',
           displayName: 'Latest News',
           component: MapPage
         },
         {
-          iconName: 'using-icon',
+          iconName: 'information-outline',
           displayName: 'Using MapLinkr',
           component: MapPage
         },
         {
-          iconName: 'locate-self-icon',
+          iconName: 'locate-outline',
           displayName: 'Locate Self',
           component: MapPage
         },
         {
-          iconName: 'searchgroup-icon',
+          iconName: 'search-outline',
           displayName: 'Search Group',
           component: MapPage
         },
         {
-          iconName: 'searchmap-icon',
+          iconName: 'search-circle-outline',
           displayName: 'Search Map',
           component: MapPage
         },
         {
-          iconName: 'share-inst-icon',
+          iconName: 'information-circle-outline',
           displayName: 'Sharing Instructions',
           component: MapPage
         },
         {
-          iconName: 'sharing-icon',
+          iconName: 'share-social-outline',
           displayName: 'Share Map',
           component: MapPage
         },
         {
-          iconName: 'pusher-icon',
+          iconName: 'push-outline',
           displayName: 'Pusher Setup',
           component: MapPage
         },
         {
-          iconName: 'pusher-icon',
+          iconName: 'remove-circle-outline',
           displayName: 'Remove Map',
           component: MapPage
         }

@@ -9,7 +9,7 @@ import * as _ from 'underscore';
 // import { v4 as uuid } from 'uuid';
 import { MapinstanceService } from './mapinstance.service';
 import { ImlPoint, MlpointService } from './mlbounds.service';
-// import { InfopopComponent } from '../components/infopop/infopop.component';
+import { InfopopComponent } from '../components/infopop/infopop.component';
 
 class PopupItem {
   mapNumber: number;

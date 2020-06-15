@@ -1,3 +1,28 @@
-<p>
-  infopop works!
-</p>
+<ion-card id="{{popoverId}}" *ngIf="popped">
+  <div class="item item-block item-md bar bar-header bar-positive">
+    <div class="infopop-header">
+      <div class="infopoplabel-long">
+        <ion-label class="infopoplabel-long" style="color: steelblue">
+          {{title}}
+        </ion-label>
+      </div>
+      <div class="infopoplabel-short">
+        <ion-label class="infopoplabel-short" style="color: steelblue">
+          {{mrkrlabel}}
+        </ion-label>
+      </div>
+      <button ion-button="" class="infopop-dock">
+        <ion-icon name="contract-sharp" (click)="dockPopup()"></ion-icon>
+      </button>
+      <button ion-button="" class="infopop-close">
+        <ion-icon name="close" (click)="closePopup()"></ion-icon>
+      </button>
+    </div>
+  </div>
+  <ion-item class="item item-block item-md calm" style="color: teal;"><span ion-text="" style="white-space: normal">{{content}}</span></ion-item>
+  <ion-item class="item item-block item-md" *ngIf="show">
+    <button ion-button="" class="item-button button button-md button-default button-default-md" color="btn-primary" id="{{shareBtnId}}" (click)="shareClick()" style="visibility: block; width: 32px; height: 32px; background-image: url('assets/imgs/share-info.png');">
+      <div class="button-effect"></div>
+    </button>
+  </ion-item>
+</ion-card>

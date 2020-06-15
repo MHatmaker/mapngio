@@ -27,6 +27,7 @@ import { PageService } from './services/page.service';
 import { SearchplacesService } from './services/searchplaces.service';
 
 import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
+import { NewsComponent} from './components/news/news.component';
 import { MapPageModule } from './map/map.module';
 
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
@@ -40,10 +41,12 @@ import { MapPageModule } from './map/map.module';
   declarations: [
     AppComponent,
     DomchangeDirective,
-    SideMenuContentComponent
+    SideMenuContentComponent,
+    NewsComponent
   ],
   entryComponents: [
-    SideMenuContentComponent
+    SideMenuContentComponent,
+    NewsComponent
   ],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule],
   providers: [

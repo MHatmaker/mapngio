@@ -22,6 +22,8 @@ import { DestselectionComponent } from '../components/destselection/destselectio
 import { SideMenuContentComponent } from '../components/side-menu-content/side-menu-content.component';
 import { AgoitemComponent } from '../components/agoitem/agoitem.component';
 import { AgodetailComponent } from '../components/agodetail/agodetail.component';
+import { InfopopupComponent } from '../components/infopopup/infopopup.component';
+import { InfopopComponent } from '../components/infopop/infopop.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 
 @NgModule({
@@ -42,8 +44,10 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     DestselectionComponent,
     AgoitemComponent,
     AgodetailComponent,
+    InfopopupComponent,
+    InfopopComponent
   ],
-  providers: [
+providers: [
     Geolocation
   ],
   declarations: [
@@ -61,6 +65,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     DestselectionComponent,
     AgoitemComponent,
     AgodetailComponent,
+    InfopopupComponent,
+    InfopopComponent
   ],
 })
 export class MapPageModule {}
