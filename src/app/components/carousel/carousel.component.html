@@ -4,17 +4,20 @@
             <div class="mapandtools">
                 <div class="maptoolbar">
                     <div class="mapnavwrapper">
-
+                      <ion-buttons slot="start">
                         <div class="navleft">
-                            <button class="chevron-prev" *ngIf="showNavButtons==true" (click)="onClickPrev()">
-                            </button>
+                            <ion-button class="chevron-prev" *ngIf="showNavButtons==true" (click)="onClickPrev()">
+                            </ion-button>
                         </div>
-                        <div class="mapnametext" *ngIf="showMapText">{{MapName}}
-                        </div>
+                      </ion-buttons>
+                      <div class="mapnametext" *ngIf="showMapText">{{MapName}}
+                      </div>
+                      <ion-buttons slot="primary">
                         <div class="navright">
-                            <button class="chevron-next" (click)="onClickNext()" *ngIf="showNavButtons==true">
-                            </button>
+                          <ion-button class="chevron-next" (click)="onClickNext()" *ngIf="showNavButtons==true">
+                          </ion-button>
                         </div>
+                      </ion-buttons>
                     </div>
 
                     <div class="searchandpos">
