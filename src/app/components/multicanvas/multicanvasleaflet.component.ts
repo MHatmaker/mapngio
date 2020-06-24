@@ -4,7 +4,7 @@ import { CanvasService } from '../../services/canvas.service';
 @Component({
   selector: 'multi-canvas-leaflet',
   templateUrl: './multicanvasleaflet.component.html',
-  styles: ['./multicanvas.component.css']
+  styleUrls: ['./multicanvas.component.css']
 })
 
 export class MultiCanvasLeaflet {

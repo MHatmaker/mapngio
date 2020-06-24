@@ -4,7 +4,7 @@ import { CanvasService } from '../../services/canvas.service';
 @Component({
   selector: 'multi-canvas-esri',
   templateUrl: './multicanvasesri.component.html',
-  styles: ['./multicanvas.component.css']
+  styleUrls: ['./multicanvas.component.css']
 })
 
 export class MultiCanvasEsri implements OnInit, AfterViewInit {

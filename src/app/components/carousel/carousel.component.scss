@@ -118,9 +118,8 @@
      position: absolute;
      width: 100%;
      display: grid;
-     grid-template-areas:
-        "mapnavwrapperarea"
-        "searchandposarea";
+     grid-template-columns: 30% auto;
+     grid-template-areas: "mapnavwrapperarea searchandposarea";
   }
 
   @media only screen and (min-width: 700px)  {
@@ -178,7 +177,9 @@
       grid-area: searchandposarea;
       display: grid;
       grid-template-columns: 100% 0px;
-      grid-template-areas: "searchquerya posviewwrapperarea"
+      grid-template-areas:
+        "searchquerya"
+        "posviewwrapperarea"
   }
   @media only screen and (min-width: 700px) {
   .searchandpos {
