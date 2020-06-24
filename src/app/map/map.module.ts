@@ -9,6 +9,7 @@ import { MapPageRoutingModule } from './map-routing.module';
 
 import { MapPage } from './map.page';
 import { CarouselComponent } from '../components/carousel/carousel.component';
+import { SlidenavComponent } from '../components/slidenav/slidenav.component';
 import { PlacesSearchComponent } from '../components/placessearch/placessearch.component';
 import { PositionviewComponent } from '../components/positionview/positionview.component';
 import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component';
@@ -45,7 +46,8 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
     AgoitemComponent,
     AgodetailComponent,
     InfopopupComponent,
-    InfopopComponent
+    InfopopComponent,
+    SlidenavComponent
   ],
 providers: [
     Geolocation
@@ -66,7 +68,8 @@ providers: [
     AgoitemComponent,
     AgodetailComponent,
     InfopopupComponent,
-    InfopopComponent
+    InfopopComponent,
+    SlidenavComponent
   ],
 })
 export class MapPageModule {}

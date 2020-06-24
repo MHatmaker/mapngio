@@ -17,7 +17,7 @@ interface IViewOption  {
 @Component({
   selector: 'position-view',
   templateUrl: './positionview.component.html',
-  styles: [ './positionview.component.scss']
+  styleUrls: [ './positionview.component.scss']
 })
 export class PositionviewComponent  {
     private currentTab: string;

@@ -2,30 +2,14 @@
 
         <div class="carouselbox">
             <div class="mapandtools">
-                <div class="maptoolbar">
-                    <div class="mapnavwrapper">
-                      <ion-buttons slot="start">
-                        <div class="navleft">
-                            <ion-button class="chevron-prev" *ngIf="showNavButtons==true" (click)="onClickPrev()">
-                            </ion-button>
-                        </div>
-                      </ion-buttons>
-                      <div class="mapnametext" *ngIf="showMapText">{{MapName}}
-                      </div>
-                      <ion-buttons slot="primary">
-                        <div class="navright">
-                          <ion-button class="chevron-next" (click)="onClickNext()" *ngIf="showNavButtons==true">
-                          </ion-button>
-                        </div>
-                      </ion-buttons>
-                    </div>
+                <ion-toolbar>
+                  <app-slidenav slot="start" [slideNav]='slideNav'>
+                  </app-slidenav>
 
-                    <div class="searchandpos">
-                        <places-for-maplinkr class="searchquery"></places-for-maplinkr>
-                        <position-view class="posviewwrapper"></position-view>
-                    </div>
+                  <places-for-maplinkr slot="primary"></places-for-maplinkr>
+                  <position-view slot="end"></position-view>
+                </ion-toolbar>
 
-                </div>
                 <div class="mapcontent"></div>
 
             </div>

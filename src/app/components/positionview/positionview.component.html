@@ -1,14 +1,16 @@
 
+<div class="wrapper-pos-view">
+  <ion-input type="text" [value]="positionView" [(ngModel)]="positionView" name="positionView"
+  disabled="disabled" class="pos-view-info posViewVisible postext" ></ion-input>
 
-        <ion-input type="text" [value]="positionView" [(ngModel)]="positionView" name="positionView" disabled="disabled" class="pos-view-info posViewVisible postext" ></ion-input>
-
-      <div class="posViewVisible">
-         <ion-item class="select=group">
-          <!-- <ion-label>Where Am I</ion-label> -->
-          <ion-select [(ngModel)]="selectedOption" class="select-choice" interface="popover">
-            <ion-select-option value="zm" class="pos-option">zoom level</ion-select-option>
-            <ion-select-option value="cntr" class="pos-option">map center</ion-select-option>
-            <ion-select-option checked="true" value="coords" class="pos-option">coordinates</ion-select-option>
-          </ion-select>
-        </ion-item>
-      </div>
+  <div class="posViewVisible">
+     <ion-item class="select-group">
+      <!-- <ion-label>Where Am I</ion-label> -->
+      <ion-select [(ngModel)]="selectedOption" class="select-choice" interface="popover">
+        <ion-select-option value="zm" class="pos-option">zoom level</ion-select-option>
+        <ion-select-option value="cntr" class="pos-option">map center</ion-select-option>
+        <ion-select-option checked="true" value="coords" class="pos-option">coordinates</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </div>
+</div>
