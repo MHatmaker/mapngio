@@ -1,0 +1,12 @@
+<div class="wrapper-slidenav">
+  <div>
+    <ion-button class="chevron-prev" (click)="slideNav.host.onClickPrev()" *ngIf="slideNav.showNavButtons==true">
+    </ion-button>
+  </div>
+  <div *ngIf="slideNav.showMapText">{{slideNav.MapName}}
+  </div>
+  <div>
+    <ion-button class="chevron-next" (click)="slideNav.host.onClickNext()" *ngIf="slideNav.showNavButtons==true">
+    </ion-button>
+  </div>
+</div>

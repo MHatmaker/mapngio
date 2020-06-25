@@ -77,7 +77,7 @@ export class AgoqueryService {
 
     for (let i = 0; i < data.total; i++) {
       const itm = data.results[i];
-      if (itm.type === 'Web Map') {
+      if (itm && itm.type === 'Web Map') {
         const xtnt = itm.extent;
         const bnds = new MlboundsService(xtnt[0][0], xtnt[0][1], xtnt[1][0], xtnt[1][1]);
         console.log(`item name: ${itm.title}, type: ${itm.type}, isLayer: ${itm.isLayer}`);

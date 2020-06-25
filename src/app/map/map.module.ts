@@ -11,6 +11,7 @@ import { MapPage } from './map.page';
 import { CarouselComponent } from '../components/carousel/carousel.component';
 import { PlacesSearchComponent } from '../components/placessearch/placessearch.component';
 import { PositionviewComponent } from '../components/positionview/positionview.component';
+import { SlidenavComponent } from '../components/slidenav/slidenav.component';
 import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component';
 import { LocateselfComponent } from '../components/locateself/locateself.component';
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
@@ -25,6 +26,7 @@ import { AgodetailComponent } from '../components/agodetail/agodetail.component'
 import { InfopopupComponent } from '../components/infopopup/infopopup.component';
 import { InfopopComponent } from '../components/infopop/infopop.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import { SlidenavService } from '../services/slidenav.service';
 
 @NgModule({
   imports: [
@@ -55,6 +57,7 @@ providers: [
     CarouselComponent,
     PlacesSearchComponent,
     PositionviewComponent,
+    SlidenavComponent,
     HiddenmapComponent,
     LocateselfComponent,
     PushersetupComponent,

@@ -3,19 +3,7 @@
         <div class="carouselbox">
             <div class="mapandtools">
                 <div class="maptoolbar">
-                    <div class="mapnavwrapper">
-
-                        <div class="navleft">
-                            <button class="chevron-prev" *ngIf="showNavButtons==true" (click)="onClickPrev()">
-                            </button>
-                        </div>
-                        <div class="mapnametext" *ngIf="showMapText">{{MapName}}
-                        </div>
-                        <div class="navright">
-                            <button class="chevron-next" (click)="onClickNext()" *ngIf="showNavButtons==true">
-                            </button>
-                        </div>
-                    </div>
+                  <app-slidenav [slideNav]='slideNav'></app-slidenav>
 
                     <div class="searchandpos">
                         <places-for-maplinkr class="searchquery"></places-for-maplinkr>
