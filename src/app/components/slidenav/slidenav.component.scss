@@ -11,7 +11,7 @@
 .chevron-prev {
     /*clip-path: inset(2px 2px 2px 2px);*/
     -webkit-clip-path: inset(2px 2px 2px 2px);
-    background-image: url(/assets/imgs/chevron-left.png);
+    background: url(/assets/imgs/chevron-left.png);
     background-color: #6E9096;
     background-size: 100% 100%;
     width: 30px;
@@ -21,7 +21,7 @@
 .chevron-next {
     /*clip-path: inset(2px 2px 2px 2px);*/
     -webkit-clip-path: inset(2px 2px 2px 2px);
-    background-image: url(/assets/imgs/chevron-right.png);
+    background: url(/assets/imgs/chevron-right.png);
     color: red;
     background-color: #6E9096;
     background-size: 100% 100%;

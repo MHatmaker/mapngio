@@ -157,17 +157,17 @@ export class MapHosterGoogle extends MapHoster {
         this.cntrxG = cntrx;
         this.cntryG = cntry;
         console.log('Updated Globals ' + msg + ' ' + this.cntrxG + ', ' + this.cntryG + ': ' + this.zmG);
-        // MLInjector.injector.get(PositionUpdateService).positionData.emit(
-        //     {'key': 'zm',
-        //       'val': {
-        //         'zm': this.zmG,
-        //         'scl': this.scale2Level.length > 0 ? this.scale2Level[this.zmG].scale: 3,
-        //         'cntrlng': this.cntrxG,
-        //         'cntrlat': this.cntryG,
-        //         'evlng': this.cntrxG,
-        //         'evlat': this.cntryG
-        //   }
-        // });
+        MLInjector.injector.get(PositionupdateService).positionData.emit(
+            {key: 'zm',
+              val: {
+                zm: this.zmG,
+                scl: this.scale2Level.length > 0 ? this.scale2Level[this.zmG].scale : 3,
+                cntrlng: this.cntrxG,
+                cntrlat: this.cntryG,
+                evlng: this.cntrxG,
+                evlat: this.cntryG
+          }
+        });
         this.mlconfig.setPosition({lon: this.cntrxG, lat: this.cntryG, zoom: this.zmG});
         this.mlconfig.setBounds(mapLinkrBounds);
     }
