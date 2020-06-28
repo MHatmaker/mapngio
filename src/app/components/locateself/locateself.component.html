@@ -17,15 +17,15 @@
       <ion-card-content>
           <form [formGroup]="locateselfgroup" >
             <ion-item>
-                <ion-label class="locate-question-label" color="secondary">Where do you want your initial map positioned?</ion-label>
+                <ion-label class="locate-question-label" color="primary">Where do you want your initial map positioned?</ion-label>
             </ion-item>
 
                 <ion-item  *ngIf="foundMe">
-                    <ion-label>latitude</ion-label>
-                    <ion-input type="text" formControlName="latitude"></ion-input>
+                    <ion-label color="primary" >latitude</ion-label>
+                    <ion-input type="text" color="secondary" formControlName="latitude"></ion-input>
                 </ion-item>
                 <ion-item  *ngIf="foundMe">
-                    <ion-label>longitude</ion-label>
+                    <ion-label color="primary">longitude</ion-label>
                     <ion-input type="text" color="secondary" formControlName="longitude"></ion-input>
                 </ion-item>
 
@@ -37,8 +37,8 @@
                 </div>
                 <div>
                     <ion-item  *ngIf="foundMe">
-                        <button ion-button color="btn-secondary" (click)="accept()">Accept</button>
-                        <button ion-button color="btn-secondary" (click)="cancel()">Cancel</button>
+                        <button slot="start" ion-button color="btn-secondary" (click)="accept()">Accept</button>
+                        <button slot="end" ion-button color="btn-secondary" (click)="cancel()">Cancel</button>
                     </ion-item>
                 </div>
                 <div  *ngIf="!foundMe">
