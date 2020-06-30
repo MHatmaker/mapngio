@@ -98,7 +98,6 @@ export class PositionviewComponent  {
     }
 
     updatePosition(key: string, val: IPositionParams) {
-        console.log('in updatePosition');
         if (key === 'zm' || key === 'cntr') {
             this.updateDetails.zm(val);
             this.updateDetails.cntr(val);
