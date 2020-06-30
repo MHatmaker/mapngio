@@ -92,17 +92,6 @@ export class PositionviewComponent  {
         // this.expBtnHeight = 1.2; // utils.getButtonHeight(1.5); //'verbageExpandCollapseImgId');
     }
 
-    fmtView() {
-        this.formatView[this.currentViewOption.key](this.curDetails);
-    }
-
-    setPositionDisplayType() {
-        // alert('changed ' + this.selectedOption.value);
-        // this.positionView = this.selectedOption.value;
-        console.log('setPositionDisplayType: ' + this.currentViewOption.key);
-        const curKey = this.currentViewOption.key;
-        this.formatView[curKey](this.curDetails);
-    }
     onChangeSelection(itm: string) {
       this.selectedOption = itm;
       this.formatView[itm](this.curDetails);
@@ -118,14 +107,7 @@ export class PositionviewComponent  {
               this.updateDetails[key](val);
           }
         }
-        // this.fmtView();
         this.formatView[this.selectedOption](this.curDetails);
-        // if (key === this.currentViewOption.key) {
-        //     this.fmtView();
-            // console.log('calling $apply()');
-            // this.safeApply(this.fmtView); // this.formatView[key](val));
-            // angular.element('mppos').scope().$apply();
-        // }
     }
 
 }
