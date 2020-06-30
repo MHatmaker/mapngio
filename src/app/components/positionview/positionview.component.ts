@@ -1,7 +1,6 @@
 
 import { Component } from '@angular/core';
 // import { utils } from '../libs/utils';
-import { PusherConfig } from '../../libs/PusherConfig';
 // import { CurrentMapTypeService } from '../../../services/currentmaptypeservice';
 import { IPositionData, IPositionParams } from '../../services/positionupdate.interface';
 import { PositionupdateService } from '../../services/positionupdate.service';
@@ -20,10 +19,10 @@ interface IViewOption  {
   styleUrls: [ './positionview.component.scss']
 })
 export class PositionviewComponent  {
-    private currentTab: string;
+    // private currentTab: string;
     private currentViewOption: IViewOption;
     public positionView: string;
-    private expBtnHeight: number;
+    // private expBtnHeight: number;
     public selectedOption: string;
     public selectOptions: any;
     public curDetails = {
@@ -35,26 +34,25 @@ export class PositionviewComponent  {
         evlat: 'evlat'
     };
     private updateDetails = {
-        zm:  (opt) => {this.curDetails.zm = opt.zm; this.curDetails.scl = opt.scl; },
-        cntr: (opt) => {this.curDetails.cntrlng = opt.cntrlng; this.curDetails.cntrlat = opt.cntrlat; },
-        coords: (opt) => {this.curDetails.evlng = opt.evlng; this.curDetails.evlat = opt.evlat; }
+        zm:  (opt: IPositionParams) => {this.curDetails.zm = '' + opt.zm; this.curDetails.scl = '' + opt.scl; },
+        cntr: (opt: IPositionParams) => {this.curDetails.cntrlng = opt.cntrlng; this.curDetails.cntrlat = opt.cntrlat; },
+        coords: (opt: IPositionParams) => {this.curDetails.evlng = opt.evlng; this.curDetails.evlat = opt.evlat; }
     };
     private formatView = {
-        zm: (zlevel) =>  {
+        zm: (zlevel: IPositionParams) =>  {
             const formatted = 'Zoom: ' + zlevel.zm + ' Scale: ' + zlevel.scl;
             this.positionView = formatted;
         },
-        cntr: (cntr) => {
+        cntr: (cntr: IPositionParams) => {
             const formatted  = cntr.cntrlng + ', ' + cntr.cntrlat;
             this.positionView = formatted;
         },
-        coords: (evnt) => {
+        coords: (evnt: IPositionParams) => {
             const formatted  = evnt.evlng + ', ' + evnt.evlat;
             // console.log('old: ' + this.positionView + ' new ' + formatted);
             this.positionView = formatted;
         }
     };
-    private self: any;
 
     public viewOptions: IViewOption[] = [
         {
@@ -74,11 +72,10 @@ export class PositionviewComponent  {
         }
     ];
 
-    constructor(pusherConfig: PusherConfig, private positionUpdateService: PositionupdateService) {
+    constructor(private positionUpdateService: PositionupdateService) {
         console.log('PositionViewCtrl - initialize dropdown for position selections');
         // let serv = new CurrentMapTypeService();
         // this.currentTab = serv.getMapTypeKey();
-        this.self = this;
 
         this.positionUpdateService.positionData.subscribe(
           (data: IPositionData) => {
@@ -92,35 +89,43 @@ export class PositionviewComponent  {
           mode: 'Popover'
         };
         this.positionView = 'position info';
-        this.expBtnHeight = 1.2; // utils.getButtonHeight(1.5); //'verbageExpandCollapseImgId');
+        // this.expBtnHeight = 1.2; // utils.getButtonHeight(1.5); //'verbageExpandCollapseImgId');
     }
 
     fmtView() {
         this.formatView[this.currentViewOption.key](this.curDetails);
     }
 
-    setPostionDisplayType() {
+    setPositionDisplayType() {
         // alert('changed ' + this.selectedOption.value);
         // this.positionView = this.selectedOption.value;
-        console.log('setPostionDisplayType: ' + this.currentViewOption.key);
+        console.log('setPositionDisplayType: ' + this.currentViewOption.key);
         const curKey = this.currentViewOption.key;
         this.formatView[curKey](this.curDetails);
     }
+    onChangeSelection(itm: string) {
+      this.selectedOption = itm;
+      this.formatView[itm](this.curDetails);
+    }
 
     updatePosition(key: string, val: IPositionParams) {
-        // console.log('in updatePosition');
+        console.log('in updatePosition');
         if (key === 'zm' || key === 'cntr') {
             this.updateDetails.zm(val);
             this.updateDetails.cntr(val);
         } else {
+          if (this.selectedOption === 'coords') {
               this.updateDetails[key](val);
+          }
         }
-        if (key === this.currentViewOption.key) {
-            this.fmtView();
+        // this.fmtView();
+        this.formatView[this.selectedOption](this.curDetails);
+        // if (key === this.currentViewOption.key) {
+        //     this.fmtView();
             // console.log('calling $apply()');
             // this.safeApply(this.fmtView); // this.formatView[key](val));
             // angular.element('mppos').scope().$apply();
-        }
+        // }
     }
 
 }
