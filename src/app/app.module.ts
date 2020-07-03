@@ -2,6 +2,7 @@ import { NgModule, Injector } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -25,9 +26,14 @@ import { SlideviewService } from './services/slideview.service';
 import { PositionupdateService } from './services/positionupdate.service';
 import { PageService } from './services/page.service';
 import { SearchplacesService } from './services/searchplaces.service';
+import { EmailerService } from './services/emailer.service';
 
 import { SideMenuContentComponent } from './components/side-menu-content/side-menu-content.component';
 import { NewsComponent} from './components/news/news.component';
+import { LinkrhelpComponent } from './components/linkrhelp/linkrhelp.component';
+import { SharinghelpComponent } from './components/sharinghelp/sharinghelp.component';
+import { MsgsetupComponent } from './components/msgsetup/msgsetup.component';
+import { AccordionListComponent } from './components/accordion-list/accordion-list.component';
 import { MapPageModule } from './map/map.module';
 
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
@@ -42,13 +48,21 @@ import { MapPageModule } from './map/map.module';
     AppComponent,
     DomchangeDirective,
     SideMenuContentComponent,
-    NewsComponent
+    NewsComponent,
+    LinkrhelpComponent,
+    SharinghelpComponent,
+    MsgsetupComponent,
+    AccordionListComponent
   ],
   entryComponents: [
     SideMenuContentComponent,
-    NewsComponent
+    NewsComponent,
+    LinkrhelpComponent,
+    SharinghelpComponent,
+    MsgsetupComponent,
+    AccordionListComponent
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule, FormsModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -65,6 +79,7 @@ import { MapPageModule } from './map/map.module';
     PositionupdateService,
     PageService,
     SearchplacesService,
+    EmailerService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

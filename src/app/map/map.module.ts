@@ -22,6 +22,7 @@ import { EsriMapComponent } from '../components/esrimap/esrimap.component';
 import { DestselectionComponent } from '../components/destselection/destselection.component';
 import { SideMenuContentComponent } from '../components/side-menu-content/side-menu-content.component';
 import { AgoitemComponent } from '../components/agoitem/agoitem.component';
+import { AgogroupComponent } from '../components/agogroup/agogroup.component';
 import { AgodetailComponent } from '../components/agodetail/agodetail.component';
 import { InfopopupComponent } from '../components/infopopup/infopopup.component';
 import { InfopopComponent } from '../components/infopop/infopop.component';
@@ -45,6 +46,7 @@ import { SlidenavService } from '../services/slidenav.service';
     EsriMapComponent,
     DestselectionComponent,
     AgoitemComponent,
+    AgogroupComponent,
     AgodetailComponent,
     InfopopupComponent,
     InfopopComponent
@@ -67,6 +69,7 @@ providers: [
     EsriMapComponent,
     DestselectionComponent,
     AgoitemComponent,
+    AgogroupComponent,
     AgodetailComponent,
     InfopopupComponent,
     InfopopComponent

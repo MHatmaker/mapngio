@@ -1,0 +1,62 @@
+msgsetup {
+
+}
+
+hr {
+    display: block;
+    height: 3px;
+    border: 0;
+    border-top: 4px solid #caf;
+    margin: 1em 0;
+    padding: 0;
+}
+
+.instruction-visibility-hidden {
+  visibility: hidden;
+}
+
+.instruction-visibility-showing {
+  visibility: visible;
+}
+.share-heading {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.copypastegrid {
+  display : grid;
+  grid-template-columns : auto 5rem;
+}
+.url-field {
+  grid-row: 1;
+  grid-column: 1;
+  min-height: 8rem;
+}
+.url-copy-label {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+}
+.url-copy-button {
+  grid-column: 2;
+  grid-row: 1;
+  padding-left: 0px;
+  padding-right: 0px;
+  height: 5rem;
+  width: 5rem;
+  background-color: #eeeeee;
+}
+.url-copy-info {
+  grid-column: 1 / span 2;
+  grid-row: 2;
+}
+
+button {
+    align-items: baseline;
+}
+.collapsed {
+    name: arrow-down;
+}
+
+.expanded {
+    name: arrow-left;
+}

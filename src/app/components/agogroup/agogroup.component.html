@@ -1,3 +1,47 @@
-<p>
-  agogroup works!
-</p>
+<ion-header>
+ <ion-toolbar>
+   <ion-title>ArcGIS Online Group</ion-title>
+   <ion-buttons start>
+     <button ion-button (click)="cancel()">
+       <span ion-text color="primary" showWhen="ios">Cancel</span>
+       <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+     </button>
+   </ion-buttons>
+ </ion-toolbar>
+</ion-header>
+
+<ion-content class="cards-bg social-cards">
+   <ion-card id="idAgoGroupSetupCard">
+     <ion-card-content>
+         <form [formGroup]="agogroupgroup" (ngSubmit)="logForm()">
+           <h4>Find group ids based on search term. Sign-in to search for private groups.</h4>
+           <ion-item>
+               <ion-label>Group:</ion-label>
+               <ion-input type="text" formControlName="searchTermGrp"></ion-input>
+           </ion-item>
+           <button ion-button type="button" (click)="groupFinderSubmit()">Submit Query</button>
+           <ion-list fromControlName="agoGroups">
+             <ion-item *ngFor="let g of agoGroups" (click)="selectAgoItem(g)">
+                 <ion-thumbnail item-left>
+                   <img src="{{g.thumbnailUrl}}">
+               </ion-thumbnail>
+                 <h2>{{g.title}}</h2>
+                 <h2>{{g.snippet}}</h2>
+             </ion-item>
+           </ion-list>
+         </form>
+       </ion-card-content>
+   </ion-card>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button color="secondary" fill="solid" (click)="cancel()">
+            Cancel
+          </ion-button>
+          <ion-button color="primary" fill="solid" (click)="accept()">
+            Accept
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+ </ion-content>
