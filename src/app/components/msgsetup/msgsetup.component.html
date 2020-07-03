@@ -39,7 +39,9 @@
                         </ion-label>
                     </ion-item>
                 </div>
-            </app-accordion-list>
+              </app-accordion-list>
+
+            <hr/>
             <button ion-button color="secondary" (click)="setupMapLinkrMail()" icon-end>
                 Setup MapLinkr Mail
                 <ion-icon [name]="items[1].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
@@ -62,6 +64,7 @@
 
               </app-accordion-list>
             </div>
+            <hr/>
             <button ion-button color="secondary" (click)="setupDirectShare()" icon-end>
                 Share with logged-in users
                 <ion-icon [name]="items[2].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
@@ -78,6 +81,7 @@
                   </div>
                 </app-accordion-list>
             </div>
+            <hr/>
         </ion-card-content>
     </ion-card>
     <ion-footer>

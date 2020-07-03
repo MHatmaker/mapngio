@@ -2,6 +2,15 @@ msgsetup {
 
 }
 
+hr {
+    display: block;
+    height: 3px;
+    border: 0;
+    border-top: 4px solid #caf;
+    margin: 1em 0;
+    padding: 0;
+}
+
 .instruction-visibility-hidden {
   visibility: hidden;
 }
