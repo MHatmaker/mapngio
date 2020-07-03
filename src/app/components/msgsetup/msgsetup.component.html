@@ -1,3 +1,92 @@
-<p>
-  msgsetup works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Sharing Setup</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="close()">
+        <span ion-text color="primary" showWhen="ios">Cancel</span>
+        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="cards-bg social-cards">
+    <ion-card id="idMsgSetupCard">
+      <ion-card-content>
+            <h5 style="font-weight: bold; font-size: 1.8rem;    ">Share Your MapLinkr Session</h5>
+            <ion-label style="white-space: normal">Assemble the map configuration to share:</ion-label>
+            <br>
+            <button ion-button color="secondary" (click)="fetchUrl()" icon-end>
+
+              Email from your email account
+              <ion-icon [name]="items[0].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
+
+            </button><br>
+            <app-accordion-list  [expanded]="items[0].expanded">
+                <div class="copypastegrid">
+                    <ion-item class="url-field">
+                        <ion-textarea id="copyTarget" type="url" style="width: 100%; height: 10em" rows="5"
+                            value="url to copy" #urlInput [(ngModel)]="urlCopyField">
+                        </ion-textarea>
+                    </ion-item>
+                    <button  id="cpyBtn" class="url-copy-button" (click)="copyUrlField(urlInput)" data-clipboard-target="#copyTarget">
+                        <img src="assets/imgs/clippy.svg" alt="Copy to clipboard">
+                    </button>
+                    <ion-item class="url-copy-info">
+                        <ion-label style="white-space: normal" color="primary">
+                            Tap the clipboard button.
+                            Then paste the link into an email, text message, or chat session.
+                        </ion-label>
+                    </ion-item>
+                </div>
+            </app-accordion-list>
+            <button ion-button color="secondary" (click)="setupMapLinkrMail()" icon-end>
+                Setup MapLinkr Mail
+                <ion-icon [name]="items[1].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
+            </button><br>
+            <div style="margin-left: 20px">
+              <app-accordion-list  [expanded]="items[1].expanded">
+
+                <ion-label>
+                  Recipient email address:
+                </ion-label>
+                <ion-item style="border: 2px solid #ccc">
+                  <ion-input type="email" placeholder="email address" [(ngModel)]="recipientAdrs">
+                  </ion-input>
+                </ion-item>
+                <ion-label style="white-space: normal" color="primary">
+                  Use the MapLinkr mail system by clicking the send mail button.
+                </ion-label>
+
+                <button  ion-button color="default" (click)="sendMail()" style="margin-left : 20px">Send MapLinkr Mail</button>
+
+              </app-accordion-list>
+            </div>
+            <button ion-button color="secondary" (click)="setupDirectShare()" icon-end>
+                Share with logged-in users
+                <ion-icon [name]="items[2].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
+            </button><br>
+            <div style="margin-left: 20px">
+                <app-accordion-list  [expanded]="items[2].expanded">
+
+                  <div>
+                    <ion-label style="white-space: normal">
+                      Share with all collaborators currently linked in.
+                    </ion-label>
+                    <button style="margin-left: 20px" ion-button color="default" (click)="shareMap()">Share Map</button>
+
+                  </div>
+                </app-accordion-list>
+            </div>
+        </ion-card-content>
+    </ion-card>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button color="primary" fill="solid" (click)="close()">
+            Cancel
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
+  </ion-content>

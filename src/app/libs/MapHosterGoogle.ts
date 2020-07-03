@@ -719,7 +719,6 @@ export class MapHosterGoogle extends MapHoster {
                 // var view = 'Zoom: ' + zm + ' Scale: ' + this.scale2Level[zm].scale +
                 // ' Center: ' + cntrlng + ', ' + cntrlat + ' Current: ' + evlng + ', ' + evlat;
                 // document.getElementById('mppos').value = view;
-                console.log('positionUpdateService emitting at zoom level ' + zm);
                 this.positionUpdateService.positionData.emit({key: 'coords',
                     val: {
                         zm: zm < this.maxZoom ? zm : this.maxZoom - 1,
