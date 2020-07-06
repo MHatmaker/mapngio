@@ -17,8 +17,10 @@ import { LocateselfComponent } from '../components/locateself/locateself.compone
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
 import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
 import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
+import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
 import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
 import { EsriMapComponent } from '../components/esrimap/esrimap.component';
+import { LeafletMapComponent } from '../components/leafletmap/leafletmap.component';
 import { DestselectionComponent } from '../components/destselection/destselection.component';
 import { SideMenuContentComponent } from '../components/side-menu-content/side-menu-content.component';
 import { AgoitemComponent } from '../components/agoitem/agoitem.component';
@@ -42,8 +44,10 @@ import { SlidenavService } from '../services/slidenav.service';
     PushersetupComponent,
     MultiCanvasGoogle,
     MultiCanvasEsri,
+    MultiCanvasLeaflet,
     GoogleMapComponent,
     EsriMapComponent,
+    LeafletMapComponent,
     DestselectionComponent,
     AgoitemComponent,
     AgogroupComponent,
@@ -65,8 +69,10 @@ providers: [
     PushersetupComponent,
     MultiCanvasGoogle,
     MultiCanvasEsri,
+    MultiCanvasLeaflet,
     GoogleMapComponent,
     EsriMapComponent,
+    LeafletMapComponent,
     DestselectionComponent,
     AgoitemComponent,
     AgogroupComponent,

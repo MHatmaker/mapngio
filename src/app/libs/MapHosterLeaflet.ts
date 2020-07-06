@@ -12,7 +12,7 @@ import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
 import { MapLocOptions } from '../services/positionupdate.interface';
-import { AppModule } from '../app.module';
+import { MLInjector } from './MLInjector';
 import { Utils } from './utils';
 
 
@@ -48,8 +48,8 @@ export class MapHosterLeaflet extends MapHoster {
       private geoCoderLflt: GeoCoder) {
         super();
         this.mlconfig = mlconfig;
-        this.utils = AppModule.injector.get(Utils);
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
+        this.utils = MLInjector.injector.get(Utils);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
         this.CustomControl =  L.Control.extend({
             options: {
                 position: 'topright'
@@ -208,7 +208,7 @@ export class MapHosterLeaflet extends MapHoster {
             // cntrlng = fixedCntrLL.lon,
             // cntrlat = fixedCntrLL.lat;
 
-        AppModule.injector.get(PositionupdateService).positionData.emit(
+        MLInjector.injector.get(PositionupdateService).positionData.emit(
           {
             key: 'zm',
             val: {
@@ -292,7 +292,7 @@ export class MapHosterLeaflet extends MapHoster {
 
         if (cmp === false) {
             console.log('MapHoster Leaflet setBounds publishPanEvent');
-            AppModule.injector.get(PusherclientService).publishPanEvent(xtExt);
+            MLInjector.injector.get(PusherclientService).publishPanEvent(xtExt);
             this.updateGlobals('setBounds with cmp false', xtExt.lon, xtExt.lat, xtExt.zoom);
         }
     }
@@ -536,7 +536,7 @@ export class MapHosterLeaflet extends MapHoster {
         const bndsUrl = this.mlconfig.getBoundsForUrl();
         pos.search += bnds;
 
-        AppModule.injector.get(PusherclientService).publishPosition(pos);
+        MLInjector.injector.get(PusherclientService).publishPosition(pos);
     }
 
     getCenter() {
