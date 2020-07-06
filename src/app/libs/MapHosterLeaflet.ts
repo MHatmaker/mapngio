@@ -3,7 +3,7 @@ import { MLConfig } from './MLConfig';
 import { PusherConfig } from './PusherConfig';
 import { PusherclientService } from '../services/pusherclient.service';
 // import { utils } from './utils';
-import { ImlBounds, XtntParams } from '../services/mlbounds.service';
+import { MlboundsService, ImlBounds, XtntParams } from '../services/mlbounds.service';
 // import { ConfigParams } from '../../../services/configparams.service';
 import * as L from 'leaflet';
 import { GeoCoder } from './GeoCoder';
@@ -12,7 +12,7 @@ import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
 import { MapLocOptions } from '../services/positionupdate.interface';
-import { AppModule } from '../app.module';
+import { MLInjector } from './MLInjector';
 import { Utils } from './utils';
 
 
@@ -48,8 +48,8 @@ export class MapHosterLeaflet extends MapHoster {
       private geoCoderLflt: GeoCoder) {
         super();
         this.mlconfig = mlconfig;
-        this.utils = AppModule.injector.get(Utils);
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
+        this.utils = MLInjector.injector.get(Utils);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
         this.CustomControl =  L.Control.extend({
             options: {
                 position: 'topright'
@@ -80,7 +80,7 @@ export class MapHosterLeaflet extends MapHoster {
             lfltBounds.ymin = sw.lat;
             lfltBounds.xmax = ne.lng;
             lfltBounds.ymax = ne.lat;
-            this.mlconfig.setBounds({llx: sw.lng, lly: sw.lat, urx: ne.lng, ury: ne.lat});
+            this.mlconfig.setBounds(new MlboundsService(sw.lng as number, sw.lat as number, ne.lng as number, ne.lat as number));
         }
         this.zmG = zm;
         this.cntrxG = cntrx;
@@ -208,7 +208,7 @@ export class MapHosterLeaflet extends MapHoster {
             // cntrlng = fixedCntrLL.lon,
             // cntrlat = fixedCntrLL.lat;
 
-        AppModule.injector.get(PositionupdateService).positionData.emit(
+        MLInjector.injector.get(PositionupdateService).positionData.emit(
           {
             key: 'zm',
             val: {
@@ -292,7 +292,7 @@ export class MapHosterLeaflet extends MapHoster {
 
         if (cmp === false) {
             console.log('MapHoster Leaflet setBounds publishPanEvent');
-            AppModule.injector.get(PusherclientService).publishPanEvent(xtExt);
+            MLInjector.injector.get(PusherclientService).publishPanEvent(xtExt);
             this.updateGlobals('setBounds with cmp false', xtExt.lon, xtExt.lat, xtExt.zoom);
         }
     }
@@ -536,7 +536,7 @@ export class MapHosterLeaflet extends MapHoster {
         const bndsUrl = this.mlconfig.getBoundsForUrl();
         pos.search += bnds;
 
-        AppModule.injector.get(PusherclientService).publishPosition(pos);
+        MLInjector.injector.get(PusherclientService).publishPosition(pos);
     }
 
     getCenter() {

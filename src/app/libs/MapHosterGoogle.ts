@@ -4,7 +4,7 @@ import { MLConfig } from './MLConfig';
 // import { PusherClientService } from '../services/pusherclient.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { Utils } from './utils';
-import { ImlBoundsParams } from '../services/mlbounds.service';
+import { MlboundsService, ImlBoundsParams } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 // import { GoogleMap, Size, Point, LatLngLiteral, LatLng, LatLngBounds } from '@agm/core/services/google-maps-types';
 // import { createClient, GoogleMapsClient } from '@google/maps';
@@ -143,7 +143,7 @@ export class MapHosterGoogle extends MapHoster {
         console.log('updateGlobals ');
         const gmBounds = this.mphmap.getBounds();
         const
-            mapLinkrBounds: ImlBoundsParams = {urx: -1, ury: -1, llx: -1, lly: -1};
+            mapLinkrBounds = new MlboundsService();
         if (gmBounds) {
             const ne = gmBounds.getNorthEast();
             const sw = gmBounds.getSouthWest();
@@ -668,8 +668,8 @@ export class MapHosterGoogle extends MapHoster {
             if (this.searchBox) {
                 this.searchBox.setBounds(changedBounds);
             }
-            const convertedBounds: ImlBoundsParams = {llx: changedBounds.getSouthWest().lng(), lly: changedBounds.getSouthWest().lat(),
-                         urx: changedBounds.getNorthEast().lng(), ury: changedBounds.getNorthEast().lat()};
+            const convertedBounds = new MlboundsService(changedBounds.getSouthWest().lng(), changedBounds.getSouthWest().lat(),
+                         changedBounds.getNorthEast().lng(), changedBounds.getNorthEast().lat());
             this.mlconfig.setBounds(convertedBounds);
         });
 
@@ -881,7 +881,7 @@ export class MapHosterGoogle extends MapHoster {
     */
 
 
-    setUserName(name) {
+    setUserName(name: string) {
         this.pusherConfig.setUserName(name);
     }
 
@@ -902,13 +902,13 @@ export class MapHosterGoogle extends MapHoster {
         return formatted;
     }
 
-    geoLocate(pos) {
+    geoLocate(pos: google.maps.LatLng) {
         const infoWindow = new google.maps.InfoWindow();
         infoWindow.setPosition(pos);
         infoWindow.setContent(this.formatCoords(pos));
         this.mphmap.setCenter(pos);
         this.mphmap.setZoom(14);
-        this.updateGlobals('geoLocate just happened', pos.lng, pos.lat, 15);
+        this.updateGlobals('geoLocate just happened', pos.lng(), pos.lat(), 15);
     }
 
     publishPosition(pos) {
@@ -947,7 +947,7 @@ export class MapHosterGoogle extends MapHoster {
         this.searchBox = sbox;
     }
 
-    setPlacesFromSearch(places) {
+    setPlacesFromSearch(places: google.maps.places.PlaceResult[]) {
         this.placesFromSearch = places;
         console.log('in setPlacesFromSearch');
         console.log(this.placesFromSearch);

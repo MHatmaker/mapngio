@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+// import { HttpClient } from '@angular/common/http';
 
 // import { createClient } from 'googlemaps'; // '@google/maps';
 // import { } from 'googlemaps';
-import { Observable } from 'rxjs';
-import { map, tap, catchError } from 'rxjs/operators';
+// import { Observable } from 'rxjs';
+// import { map, tap, catchError } from 'rxjs/operators';
 // import 'rxjs/add/operator/map'
 
     /*
@@ -51,7 +51,7 @@ export class GeocodingService {
 
   private geoCoder: google.maps.Geocoder = null;
 
-  public constructor(private http: HttpClient) {
+  public constructor() {
     // this.geoCoder = createClient({
     //   key: 'AIzaSyAwAOGAxY5PZ8MshDtaJFk2KgK7VYxArPA',
     // });

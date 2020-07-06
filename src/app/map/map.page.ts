@@ -281,8 +281,10 @@ export class MapPage implements AfterViewInit {
             source: EMapSource.srcagonline, webmapId: 'nowebmap'};
         if (menuOption.displayName === 'google') {
             this.addCanvasGoogle(opts);
-        }
+        } else {
         // this.addCanvas( menuOption.displayName, srcdct[menuOption.displayName], null, null, 'nowebmap');
+        this.addCanvas( menuOption.displayName, opts, null, 'nowebmap');
+      }
     }
 
     onNewMapPosition(opts: IMapShare) {

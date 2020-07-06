@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CanvasService } from '../../services/canvas.service';
 
 @Component({
-  selector: 'multi-canvas-leaflet',
+  selector: 'maplinkr-leafletmap',
   templateUrl: './multicanvasleaflet.component.html',
   styleUrls: ['./multicanvas.component.css']
 })

@@ -9,7 +9,7 @@ import { GeoCoder } from './GeoCoder';
 // import { utils } from './utils';
 import { PusherclientService } from '../services/pusherclient.service';
 import { Startup } from './Startup';
-import { AppModule } from '../app.module';
+import { MLInjector } from './MLInjector';
 
 // @Injectable()
 export class StartupLeaflet extends Startup {
@@ -24,7 +24,7 @@ export class StartupLeaflet extends Startup {
 
     constructor(private mapNo: number, mlconfig: MLConfig, private geoCoderLflt: GeoCoder) {
         super();
-        this.pusherConfig = AppModule.injector.get(PusherConfig);
+        this.pusherConfig = MLInjector.injector.get(PusherConfig);
         this.mlconfig = mlconfig;
         this.mlconfig.setMapNumber(mapNo);
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + mapNo);
@@ -51,9 +51,9 @@ export class StartupLeaflet extends Startup {
     // },
 
     configure(newMapId, mapLocOpts) {
-        const $inj = this.mlconfig.getInjector(),
-            mapInstanceSvc = $inj.get('MapInstanceService'),
-            mapTypeSvc = $inj.get('CurrentMapTypeService');
+        const inj = MLInjector.injector,
+            mapInstanceSvc = inj.get('MapInstanceService'),
+            mapTypeSvc = inj.get('CurrentMapTypeService');
         this.newSelectedWebMapId = newMapId;
         // mapInstanceSvc.setCurrentMapType('leaflet');
         // window.loading = dojo.byId("loadingImg");
@@ -91,7 +91,7 @@ export class StartupLeaflet extends Startup {
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + this.mapNumber);
         this.pusherChannel = this.pusherConfig.masherChannel(false);
         console.log(this.pusherChannel);
-        this.pusher = AppModule.injector.get(PusherclientService).createPusherClient(
+        this.pusher = MLInjector.injector.get(PusherclientService).createPusherClient(
             this.mlconfig,
             (channel, userName) => {
                 this.pusherConfig.setUserName(userName);

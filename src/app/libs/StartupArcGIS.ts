@@ -137,16 +137,16 @@ export class StartupArcGIS  extends Startup {
       this.aMap.showZoomSlider();
   }
   placeCustomControls() {
-      const $inj = this.mlconfig.getInjector(),
-          ctrlSvc = $inj.get('MapControllerService'),
+      const inj = MLInjector.injector,
+          ctrlSvc = inj.get('MapControllerService'),
           mapCtrl = ctrlSvc.getController();
           // mapCtrl = MapControllerService.getController();
       mapCtrl.placeCustomControls();
   }
 
   setupQueryListener() {
-      const $inj = this.mlconfig.getInjector(),
-          ctrlSvc = $inj.get('MapControllerService'),
+      const inj = MLInjector.injector,
+          ctrlSvc = inj.get('MapControllerService'),
           mapCtrl = ctrlSvc.getController();
       // var mapCtrl = MapControllerService.getController();
       mapCtrl.setupQueryListener();

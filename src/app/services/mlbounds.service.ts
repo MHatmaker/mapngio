@@ -52,7 +52,7 @@ export class MlpointService implements ImlPoint {
 export class MlboundsService implements ImlBounds {
 
 
-    constructor( public llx: number,  public lly: number,  public urx: number, public ury: number) {
+    constructor( public llx: number = -1,  public lly: number = -1,  public urx: number =  -1, public ury: number = -1) {
     }
     public async getCenter(): Promise<{x: number, y: number}> {
       const options = {

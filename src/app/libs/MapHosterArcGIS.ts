@@ -39,7 +39,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     // this.mphmapCenter;
     cntrxG = null;
     cntryG = null;
-    bounds: ImlBounds = null;
+    bounds = new MlboundsService();
     minZoom = null;
     maxZoom = null;
     zoomLevels = null;
