@@ -3,7 +3,7 @@
 // } from '@angular/core';
 import { IPosition, PositionService } from '../services/position.service';
 import { IConfigParams, EMapSource } from '../services/configparams.service';
-import { ImlBoundsParams } from '../services/mlbounds.service';
+import { ImlBoundsParams, MlboundsService } from '../services/mlbounds.service';
 import {Utils } from './utils';
 // import { AppModule } from '../app.module';
 import { MLInjector } from './MLInjector';
@@ -26,15 +26,14 @@ export class MLConfig {
         masherChannel: '',
         query: '',
         places: null,
-        bounds: {llx: -1, lly: -1, urx: -1, ury: -1},
+        bounds: new MlboundsService(), // {llx: -1, lly: -1, urx: -1, ury: -1},
         mapType: 'google',
         rawMap: null,
         mapHosterInstance: null,
-        mapNumber: null,
+        mapNumber: -1,
         mapHoster: null,
         webmapId: 'a4bb8a91ecfb4131aa544eddfbc2f1d0',
         mlposition: null,
-        nginj: null,
         protocol: 'http',
         host: '', // 'http://localhost',
         hostport: '3035',
@@ -74,7 +73,7 @@ export class MLConfig {
     getMapType(): string {
       return this.details.mapType;
     }
-    setMapNumber(mapNo) {
+    setMapNumber(mapNo: number) {
       this.details.mapNumber = mapNo;
     }
     getMapNumber(): number {
@@ -263,7 +262,7 @@ export class MLConfig {
     query(): string {
         return this.utils.getParameterByName('gmquery', this.details.search);
     }
-    setInitialPlaces(p) {
+    setInitialPlaces(p: google.maps.places.PlaceResult[]) {
         this.details.places = p;
     }
     getInitialPlaces() {
@@ -286,7 +285,7 @@ export class MLConfig {
             ltwh = 'top=${d.top}, left=${d.left}, height=${d.height}, width=${d.width}';
         return ltwh;
     }
-    setBounds(bnds: ImlBoundsParams) {
+    setBounds(bnds: MlboundsService) {
         this.details.bounds = bnds;
     }
     getBounds(): ImlBoundsParams {
@@ -298,13 +297,7 @@ export class MLConfig {
     getRawMap()  {
         return this.details.rawMap;
     }
-    setInjector(inj) {
-        this.details.nginj = inj;
-    }
-    getInjector() {
-        return this.details.nginj;
-    }
-    setStartupView(sum, site) {
+    setStartupView(sum: boolean, site: boolean) {
         this.details.startupView.summaryShowing = sum;
         this.details.startupView.websiteDisplayMode = site;
     }

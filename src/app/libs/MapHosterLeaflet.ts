@@ -3,7 +3,7 @@ import { MLConfig } from './MLConfig';
 import { PusherConfig } from './PusherConfig';
 import { PusherclientService } from '../services/pusherclient.service';
 // import { utils } from './utils';
-import { ImlBounds, XtntParams } from '../services/mlbounds.service';
+import { MlboundsService, ImlBounds, XtntParams } from '../services/mlbounds.service';
 // import { ConfigParams } from '../../../services/configparams.service';
 import * as L from 'leaflet';
 import { GeoCoder } from './GeoCoder';
@@ -80,7 +80,7 @@ export class MapHosterLeaflet extends MapHoster {
             lfltBounds.ymin = sw.lat;
             lfltBounds.xmax = ne.lng;
             lfltBounds.ymax = ne.lat;
-            this.mlconfig.setBounds({llx: sw.lng, lly: sw.lat, urx: ne.lng, ury: ne.lat});
+            this.mlconfig.setBounds(new MlboundsService(sw.lng as number, sw.lat as number, ne.lng as number, ne.lat as number));
         }
         this.zmG = zm;
         this.cntrxG = cntrx;
