@@ -1,4 +1,3 @@
-import {Injectable} from '@angular/core';
 import { MLConfig } from './MLConfig';
 import { PusherConfig } from './PusherConfig';
 import { PusherclientService } from '../services/pusherclient.service';
