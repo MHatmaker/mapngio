@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 
 @Component({
   selector: 'app-accordion-list',
@@ -10,7 +10,7 @@ export class AccordionListComponent {
    @ViewChild('expandWrapper', {static: false, read: ElementRef}) expandWrapper: ElementRef;
     @Input('expanded') expanded: boolean;
 
-    constructor(public renderer: Renderer) {
+    constructor(public renderer: Renderer2) {
 
     }
 
