@@ -1,5 +1,5 @@
 
-import {Injectable} from '@angular/core';
+
 import { MLConfig } from './MLConfig';
 import { PusherConfig } from './PusherConfig';
 // import { ConfigParams } from '../../../services/configparams.service';
@@ -14,7 +14,6 @@ import { MLInjector } from './MLInjector';
 // @Injectable()
 export class StartupLeaflet extends Startup {
     private mapHoster = null;
-    private newSelectedWebMapId = '';
     private lMap = null;
     private pusherChannel = null;
     private pusher = null;
@@ -36,7 +35,7 @@ export class StartupLeaflet extends Startup {
     getMapNumber() {
         return this.mapNumber;
     }
-    getMapHosterInstance(ndx) {
+    getMapHosterInstance() {
         return this.mapHoster;
     }
     // openAGOWindow  (channel, userName) {
@@ -54,11 +53,9 @@ export class StartupLeaflet extends Startup {
         const inj = MLInjector.injector,
             mapInstanceSvc = inj.get('MapInstanceService'),
             mapTypeSvc = inj.get('CurrentMapTypeService');
-        this.newSelectedWebMapId = newMapId;
         // mapInstanceSvc.setCurrentMapType('leaflet');
         // window.loading = dojo.byId("loadingImg");
         // console.log(window.loading);
-        console.log('newSelectedWebMapId ' + newMapId);
         // if (this.newSelectedWebMapId !== null) {
         //     if (this.mlconfig.isChannelInitialized() === false) {
         //         // PusherSetupCtrl.setupPusherClient(evtSvc.getEventDct(),
