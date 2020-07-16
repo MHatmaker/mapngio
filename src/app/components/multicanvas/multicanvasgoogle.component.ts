@@ -7,8 +7,7 @@ import { SlideviewService } from '../../services/slideview.service';
   templateUrl: './multicanvasgoogle.component.html'
 })
 
-export class MultiCanvasGoogle implements OnDestroy, OnInit {
-    // private el: string = null;
+export class MultiCanvasGoogleComponent implements OnDestroy, OnInit {
     private currentSubscription;
     private ndx = 0;
     public slidevisibility = null;

@@ -7,7 +7,7 @@ import { CanvasService } from '../../services/canvas.service';
   styleUrls: ['./multicanvas.component.css']
 })
 
-export class MultiCanvasLeaflet {
+export class MultiCanvasLeafletComponent {
     // private el: string = null;
     private ndx = null;
     private mapcolheight = 510;

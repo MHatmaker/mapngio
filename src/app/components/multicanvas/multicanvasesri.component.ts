@@ -7,7 +7,7 @@ import { CanvasService } from '../../services/canvas.service';
   styleUrls: ['./multicanvas.component.css']
 })
 
-export class MultiCanvasEsri implements OnInit, AfterViewInit {
+export class MultiCanvasEsriComponent implements OnInit, AfterViewInit {
     // private el: string = null;
     private ndx: number = null;
     public slidevisibility = null;

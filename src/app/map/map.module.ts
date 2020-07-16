@@ -15,9 +15,9 @@ import { SlidenavComponent } from '../components/slidenav/slidenav.component';
 import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component';
 import { LocateselfComponent } from '../components/locateself/locateself.component';
 import { PushersetupComponent } from '../components/pushersetup/pushersetup.component';
-import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
-import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
-import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
+import { MultiCanvasGoogleComponent } from '../components/multicanvas/multicanvasgoogle.component';
+import { MultiCanvasEsriComponent } from '../components/multicanvas/multicanvasesri.component';
+import { MultiCanvasLeafletComponent } from '../components/multicanvas/multicanvasleaflet.component';
 import { GoogleMapComponent } from '../components/googlemap/googlemap.component';
 import { EsriMapComponent } from '../components/esrimap/esrimap.component';
 import { LeafletMapComponent } from '../components/leafletmap/leafletmap.component';
@@ -42,9 +42,9 @@ import { SlidenavService } from '../services/slidenav.service';
   entryComponents: [
     LocateselfComponent,
     PushersetupComponent,
-    MultiCanvasGoogle,
-    MultiCanvasEsri,
-    MultiCanvasLeaflet,
+    MultiCanvasGoogleComponent,
+    MultiCanvasEsriComponent,
+    MultiCanvasLeafletComponent,
     GoogleMapComponent,
     EsriMapComponent,
     LeafletMapComponent,
@@ -67,9 +67,9 @@ providers: [
     HiddenmapComponent,
     LocateselfComponent,
     PushersetupComponent,
-    MultiCanvasGoogle,
-    MultiCanvasEsri,
-    MultiCanvasLeaflet,
+    MultiCanvasGoogleComponent,
+    MultiCanvasEsriComponent,
+    MultiCanvasLeafletComponent,
     GoogleMapComponent,
     EsriMapComponent,
     LeafletMapComponent,

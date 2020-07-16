@@ -6,14 +6,15 @@ import { CurrentmaptypeService } from '../../services/currentmaptype.service';
 import { MapinstanceService } from '../../services/mapinstance.service';
 import { HostConfig } from '../../libs/HostConfig';
 import { PusherConfig } from '../../libs/PusherConfig';
-import * as Clipboard from 'clipboard/dist/clipboard.min.js';
+// import * as Clipboard from 'clipboard/dist/clipboard.min.js';
 // import * as copy from 'copy-text-to-clipboard';
+import { Clipboard } from '@ionic-native/clipboard/ngx';
 
-import { PusherclientService } from '../../services/pusherclient.service';
-import { MapLocOptions, MapLocCoords, IMapShare } from '../../services/positionupdate.interface';
+// import { PusherclientService } from '../../services/pusherclient.service';
+import { MapLocOptions, IMapShare } from '../../services/positionupdate.interface';
 import { EmailerService, EmailParts, IEmailAddress } from '../../services/emailer.service';
 import { EMapSource } from '../../services/configparams.service';
-import { ImlBounds, ImlBoundsParams } from '../../services/mlbounds.service';
+import { ImlBoundsParams } from '../../services/mlbounds.service';
 import { IPosition } from '../../services/position.service';
 import { MLInjector } from '../../libs/MLInjector';
 
@@ -31,13 +32,14 @@ export class MsgsetupComponent {
   public urlCopyField: string;
   private recipientAdrs: string;
   private items: any = [];
-  private selectedItem: any = null;
+  private selectedItem: any = null; // might still add this fiield in html
   private mapInstanceService: MapinstanceService;
   private currentMapTypeService: CurrentmaptypeService;
 
   constructor(
     public viewCtrl: ModalController, private hostConfig: HostConfig,
-    private pusherConfig: PusherConfig, private emailer: EmailerService) {
+    private pusherConfig: PusherConfig, private emailer: EmailerService,
+    public clipboard: Clipboard) {
     console.log('Hello MsgsetupComponent Component');
 
     this.mapInstanceService = MLInjector.injector.get(MapinstanceService);
@@ -79,7 +81,7 @@ export class MsgsetupComponent {
 
   assembleJson(): IMapShare {
     const mlConfig = this.mapInstanceService.getMapHosterInstanceForCurrentSlide().getmlconfig(),
-        curmapsys: string = this.currentMapTypeService.getMapRestUrl(),
+        // curmapsys: string = this.currentMapTypeService.getMapRestUrl(),
         gmQuery: string = mlConfig.getQuery(),
         bnds: ImlBoundsParams = mlConfig.getBounds(),
         curpos: IPosition = mlConfig.getPosition(),
@@ -107,25 +109,35 @@ export class MsgsetupComponent {
     // inputElement.select();
     // document.execCommand('copy');
     // inputElement.setSelectionRange(0, 0);
+    this.clipboard.copy(this.urlCopyField);
+    this.clipboard.paste().then(
+   (resolve: string) => {
+      alert(resolve);
+    },
+    (reject: string) => {
+      alert('Error: ' + reject);
+    }
+  );
 
-    const clipboard = new Clipboard('#cpyBtn', {
-        text: () => {
-            return this.urlCopyField;
-        }
-    });
 
-    clipboard.on('success', (e) => {
-      // e.clipboardData = this.urlCopyField;
-      console.log('copied to clipboard');
-      console.log('clipboardData', e.clipboardData);
-      console.log('Action:', e.action);
-      console.log('Text:', e.text);
-      console.log('Trigger:', e.trigger);
-    });
-    clipboard.on('error', (e) => {
-      console.error('Action:', e.action);
-      console.error('Trigger:', e.trigger);
-    });
+    // const clipboard = new Clipboard('#cpyBtn', {
+    //     text: () => {
+    //         return this.urlCopyField;
+    //     }
+    // });
+
+    // clipboard.on('success', (e) => {
+    //   // e.clipboardData = this.urlCopyField;
+    //   console.log('copied to clipboard');
+    //   console.log('clipboardData', e.clipboardData);
+    //   console.log('Action:', e.action);
+    //   console.log('Text:', e.text);
+    //   console.log('Trigger:', e.trigger);
+    // });
+    // clipboard.on('error', (e) => {
+    //   console.error('Action:', e.action);
+    //   console.error('Trigger:', e.trigger);
+    // });
   }
   expandItem(item: IexpItem) {
 
@@ -145,7 +157,7 @@ export class MsgsetupComponent {
     }
   }
   fetchUrl() {
-    const mlConfig = this.mapInstanceService.getMapHosterInstanceForCurrentSlide().getmlconfig();
+    // const mlConfig = this.mapInstanceService.getMapHosterInstanceForCurrentSlide().getmlconfig();
 
     this.urlCopyField = this.assembleUrl();
 

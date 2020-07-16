@@ -15,8 +15,8 @@ import { IPosition } from './position.service';
 import { IConfigParams, EMapSource } from './/configparams.service';
 import { MLConfig } from '../libs/MLConfig';
 import { MLInjector } from '../libs/MLInjector';
-// import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
-// import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
+// import { MultiCanvasEsriComponent } from '../components/multicanvas/multicanvasesri.component';
+// import { MultiCanvasGoogleComponent } from '../components/multicanvas/multicanvasgoogle.component';
 // import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
 import { PusherConfig } from '../libs/PusherConfig';
 // import { Geolocation } from '@ionic-native/geolocation';
@@ -27,7 +27,7 @@ import { MapopenerService } from './mapopener.service';
 
 const { Geolocation } = Plugins;
 
-// import {MultiCanvasGoogle} from '../MultiCanvas/multicanvasgoogle.component';
+// import {MultiCanvasGoogleComponent} from '../MultiCanvas/multicanvasgoogle.component';
 interface ICoords {
   latitude: number;
   longitude: number;

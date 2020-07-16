@@ -12,9 +12,9 @@ import { PusherclientService } from '../services/pusherclient.service';
 import { MapinstanceService} from '../services/mapinstance.service';
 import { CarouselComponent} from '../components/carousel/carousel.component';
 
-import { MultiCanvasEsri } from '../components/multicanvas/multicanvasesri.component';
-import { MultiCanvasGoogle } from '../components/multicanvas/multicanvasgoogle.component';
-import { MultiCanvasLeaflet } from '../components/multicanvas/multicanvasleaflet.component';
+import { MultiCanvasEsriComponent } from '../components/multicanvas/multicanvasesri.component';
+import { MultiCanvasGoogleComponent } from '../components/multicanvas/multicanvasgoogle.component';
+import { MultiCanvasLeafletComponent } from '../components/multicanvas/multicanvasleaflet.component';
 import { CanvasService } from '../services/canvas.service';
 // import { ISlideData } from '../services/slidedata.interface';
 import { SlideshareService } from '../services/slideshare.service';
@@ -51,9 +51,9 @@ export class MapPage implements AfterViewInit {
       private menuActions = {};
       private pusherEventHandler: PusherEventHandler;
       private mapHosterDict: Map<string, any> = new Map<string, any>([
-          ['google', MultiCanvasGoogle],
-          ['arcgis', MultiCanvasEsri],
-          ['leaflet', MultiCanvasLeaflet]
+          ['google', MultiCanvasGoogleComponent],
+          ['arcgis', MultiCanvasEsriComponent],
+          ['leaflet', MultiCanvasLeafletComponent]
       ]);
 
     constructor(

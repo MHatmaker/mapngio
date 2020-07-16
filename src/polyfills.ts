@@ -63,4 +63,8 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 
 /***************************************************************************************************
  * APPLICATION IMPORTS
- */
+*/
+
+const w: any = window;
+// Fix "missing __importDefault", as per https://github.com/angular/angular/issues/32215#issuecomment-543459862
+w.__importDefault = (w && w.__importDefault) ||  ((mod: any) =>  (mod && mod.__esModule) ? mod : {default: mod });
