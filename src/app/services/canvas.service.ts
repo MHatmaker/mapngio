@@ -88,6 +88,9 @@ export class CanvasService {
     setPlatform(pltfrm: boolean) {
       this.isApp = pltfrm;
     }
+    isMobileApp(): boolean {
+      return this.isApp;
+    }
 
     public async getCurrentLocationBrowser(): Promise<{coords: ICoords}> {
 

@@ -28,6 +28,7 @@ export class InfopopComponent implements OnDestroy {
         this.worldCoordinates = {lat: 99, lng: 99};
     }
 
+/*
     ngOnInit(): void {
         const modal = this;
         console.log('Component Infopop method: ngOnInit');
@@ -58,6 +59,8 @@ export class InfopopComponent implements OnDestroy {
         console.log(this);
         this.infopopProvider.add(this);
     }
+    */
+
     getId() {
         return this.popoverId;
     }

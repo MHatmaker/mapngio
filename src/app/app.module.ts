@@ -4,6 +4,7 @@ import { RouteReuseStrategy } from '@angular/router';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -63,7 +64,7 @@ import { MapPageModule } from './map/map.module';
     MsgsetupComponent,
     AccordionListComponent
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule, FormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule, FormsModule, ClipboardModule],
   providers: [
     StatusBar,
     SplashScreen,

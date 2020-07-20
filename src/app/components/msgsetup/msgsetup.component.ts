@@ -1,14 +1,15 @@
 
 
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CurrentmaptypeService } from '../../services/currentmaptype.service';
 import { MapinstanceService } from '../../services/mapinstance.service';
 import { HostConfig } from '../../libs/HostConfig';
 import { PusherConfig } from '../../libs/PusherConfig';
-// import * as Clipboard from 'clipboard/dist/clipboard.min.js';
+import * as ClipboardMin from 'clipboard/dist/clipboard.js';
 // import * as copy from 'copy-text-to-clipboard';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
+// import { Clipboard as ClipboardCdk } from '@angular/cdk/clipboard';
 
 // import { PusherclientService } from '../../services/pusherclient.service';
 import { MapLocOptions, IMapShare } from '../../services/positionupdate.interface';
@@ -17,6 +18,7 @@ import { EMapSource } from '../../services/configparams.service';
 import { ImlBoundsParams } from '../../services/mlbounds.service';
 import { IPosition } from '../../services/position.service';
 import { MLInjector } from '../../libs/MLInjector';
+import { CanvasService } from '../../services/canvas.service';
 
 interface IexpItem {
   expanded: boolean;
@@ -39,7 +41,9 @@ export class MsgsetupComponent {
   constructor(
     public viewCtrl: ModalController, private hostConfig: HostConfig,
     private pusherConfig: PusherConfig, private emailer: EmailerService,
-    public clipboard: Clipboard) {
+    public clipboard: Clipboard,
+    // private clipboardCdk: ClipboardCdk,
+    public canvasService: CanvasService) {
     console.log('Hello MsgsetupComponent Component');
 
     this.mapInstanceService = MLInjector.injector.get(MapinstanceService);
@@ -99,25 +103,64 @@ export class MsgsetupComponent {
   }
 
   // copyToClipboard(text) {
-  //   if (window.clipboardData && window.clipboardData.setData) {
-  //       // IE specific code path to prevent textarea being shown while dialog is visible.
-  //       return clipboardData.setData("Text", text);
-  //       Window.cl
-  //     }
+  //   this.clipboardCdk.copy(text);
   // }
-  copyUrlField(inputElement) {
-    // inputElement.select();
-    // document.execCommand('copy');
-    // inputElement.setSelectionRange(0, 0);
-    this.clipboard.copy(this.urlCopyField);
-    this.clipboard.paste().then(
-   (resolve: string) => {
-      alert(resolve);
-    },
-    (reject: string) => {
-      alert('Error: ' + reject);
+
+  async copyUrlField(inputElement: any ) {
+    if (this.canvasService.isMobileApp() === true) {
+
+    // const clipboard = new ClipboardMin('#cpyBtn', {
+    //     text: () => {
+    //         return this.urlCopyField;
+    //     }
+    // });
+    //
+    // clipboard.on('success', (evt) => {
+    //   const cb = window.navigator.clipboard;
+    //   console.log(cb);
+    //   cb.writeText(this.urlCopyField);
+    //   evt.clipboardData = this.urlCopyField;
+    //   console.log('copied to clipboard');
+    //   console.log('clipboardData', evt.clipboardData);
+    //   console.log('Action:', evt.action);
+    //   console.log('Text:', evt.text);
+    //   console.log('Trigger:', evt.trigger);
+    // });
+    // clipboard.on('error', (e) => {
+    //   console.log('Action:', e.action);
+    //   console.log('Trigger:', e.trigger);
+    // });
+    const cb = window.navigator.clipboard;
+    cb.writeText(this.urlCopyField).then(() => {
+      console.log('url copied to clipboard');
+    }).catch((err) => {
+      console.log('clipboard copy failed');
+      console.log(err);
+    });
+      // await inputElement.getInputElement().then((el) => {
+      //   console.log(el);
+      //   el.select();
+      //   document.execCommand('copy');
+      //   el.setSelectionRange(0, 0);
+      // });
+      // const value = inputElement.value;
+
+      // // iputElement.setSelectionRange(0, 0);
+      // this.copyToClipboard(this.urlCopyField);
+      // const ne = inputElement.nativeElement;
+      //
+    } else {
+      this.clipboard.copy(this.urlCopyField);
+      this.clipboard.paste().then(
+        (resolve: string) => {
+          alert(resolve);
+        },
+        (reject: string) => {
+          alert('Error: ' + reject);
+        }
+      );
     }
-  );
+  }
 
 
     // const clipboard = new Clipboard('#cpyBtn', {
@@ -138,7 +181,8 @@ export class MsgsetupComponent {
     //   console.error('Action:', e.action);
     //   console.error('Trigger:', e.trigger);
     // });
-  }
+  // }
+
   expandItem(item: IexpItem) {
 
       if (item.expanded) {
