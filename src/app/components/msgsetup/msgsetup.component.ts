@@ -1,12 +1,12 @@
 
 
-import { Component, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CurrentmaptypeService } from '../../services/currentmaptype.service';
 import { MapinstanceService } from '../../services/mapinstance.service';
 import { HostConfig } from '../../libs/HostConfig';
 import { PusherConfig } from '../../libs/PusherConfig';
-import * as ClipboardMin from 'clipboard/dist/clipboard.js';
+// import * as ClipboardMin from 'clipboard/dist/clipboard.js';
 // import * as copy from 'copy-text-to-clipboard';
 import { Clipboard } from '@ionic-native/clipboard/ngx';
 // import { Clipboard as ClipboardCdk } from '@angular/cdk/clipboard';
@@ -34,7 +34,7 @@ export class MsgsetupComponent {
   public urlCopyField: string;
   private recipientAdrs: string;
   private items: any = [];
-  private selectedItem: any = null; // might still add this fiield in html
+  private selectedItem: any = null;
   private mapInstanceService: MapinstanceService;
   private currentMapTypeService: CurrentmaptypeService;
 
@@ -102,34 +102,8 @@ export class MsgsetupComponent {
 
   }
 
-  // copyToClipboard(text) {
-  //   this.clipboardCdk.copy(text);
-  // }
-
   async copyUrlField(inputElement: any ) {
     if (this.canvasService.isMobileApp() === true) {
-
-    // const clipboard = new ClipboardMin('#cpyBtn', {
-    //     text: () => {
-    //         return this.urlCopyField;
-    //     }
-    // });
-    //
-    // clipboard.on('success', (evt) => {
-    //   const cb = window.navigator.clipboard;
-    //   console.log(cb);
-    //   cb.writeText(this.urlCopyField);
-    //   evt.clipboardData = this.urlCopyField;
-    //   console.log('copied to clipboard');
-    //   console.log('clipboardData', evt.clipboardData);
-    //   console.log('Action:', evt.action);
-    //   console.log('Text:', evt.text);
-    //   console.log('Trigger:', evt.trigger);
-    // });
-    // clipboard.on('error', (e) => {
-    //   console.log('Action:', e.action);
-    //   console.log('Trigger:', e.trigger);
-    // });
     const cb = window.navigator.clipboard;
     cb.writeText(this.urlCopyField).then(() => {
       console.log('url copied to clipboard');
@@ -137,18 +111,6 @@ export class MsgsetupComponent {
       console.log('clipboard copy failed');
       console.log(err);
     });
-      // await inputElement.getInputElement().then((el) => {
-      //   console.log(el);
-      //   el.select();
-      //   document.execCommand('copy');
-      //   el.setSelectionRange(0, 0);
-      // });
-      // const value = inputElement.value;
-
-      // // iputElement.setSelectionRange(0, 0);
-      // this.copyToClipboard(this.urlCopyField);
-      // const ne = inputElement.nativeElement;
-      //
     } else {
       this.clipboard.copy(this.urlCopyField);
       this.clipboard.paste().then(
@@ -161,27 +123,6 @@ export class MsgsetupComponent {
       );
     }
   }
-
-
-    // const clipboard = new Clipboard('#cpyBtn', {
-    //     text: () => {
-    //         return this.urlCopyField;
-    //     }
-    // });
-
-    // clipboard.on('success', (e) => {
-    //   // e.clipboardData = this.urlCopyField;
-    //   console.log('copied to clipboard');
-    //   console.log('clipboardData', e.clipboardData);
-    //   console.log('Action:', e.action);
-    //   console.log('Text:', e.text);
-    //   console.log('Trigger:', e.trigger);
-    // });
-    // clipboard.on('error', (e) => {
-    //   console.error('Action:', e.action);
-    //   console.error('Trigger:', e.trigger);
-    // });
-  // }
 
   expandItem(item: IexpItem) {
 
@@ -212,6 +153,7 @@ export class MsgsetupComponent {
 
   setupMapLinkrMail() {
     this.selectedItem = this.items[1];
+    console.log('selectedItem : ' + this.selectedItem);
     this.expandItem(this.items[1]);
   }
   setupDirectShare() {
