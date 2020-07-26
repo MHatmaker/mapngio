@@ -10,6 +10,7 @@ import { StartupGoogle } from '../../libs/StartupGoogle';
 import { SlideviewService } from '../../services/slideview.service';
 import { CanvasService } from '../../services/canvas.service';
 import { InfopopService } from '../../services/infopop.service';
+import { EMapSource } from '../../services/configparams.service';
 
 // import { PlacesSearch } from '../PlacesSearch/places.component';
 // declare var google;
@@ -75,7 +76,7 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
     // this.geolocation.getCurrentPosition().then((position) => {
     // let position = this.canvasService.getInitialLocation();
     const mlcfg = this.mapInstanceService.getConfigForMap(this.mapNumber);
-    if (this.mapNumber === 0) {
+    if (this.mapNumber === 0 && mlcfg.getSource() !== EMapSource.urlgoogle) {
       const position = this.canvasService.getInitialLocation();
       this.glat = position.center.lat;
       this.glng = position.center.lng;

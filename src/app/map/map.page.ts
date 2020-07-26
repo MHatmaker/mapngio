@@ -180,7 +180,7 @@ export class MapPage implements AfterViewInit {
 
     ngAfterViewInit() {
       this.pusherEventHandler = new PusherEventHandler(-101);
-      if (this.hostConfig.getWebmapId(true) !== '')  {
+      if (this.hostConfig.getWebmapId(true) !== 'nowebmap')  {
             this.mapOpener.openMap.emit({
                 mapLocOpts: null,
                 userName: null,
@@ -188,6 +188,9 @@ export class MapPage implements AfterViewInit {
                 source: EMapSource.urlagonline,
                 webmapId: ''
               });
+        } else { // if (this.hostConfig.gethost() === 'google') {
+          const startupOpts = this.hostConfig.assembleStartupQuery();
+          this.mapOpener.openMap.emit(startupOpts);
         }
     }
 
@@ -312,7 +315,7 @@ export class MapPage implements AfterViewInit {
     }
 
     async addCanvasGoogle(opts: IMapShare) {
-      let ipos: IPosition = null,
+      let ipos = new PositionService(),
       mlConfig: MLConfig;
       const currIndex: number = this.mapInstanceService.getNextSlideNumber();
       const cfg = this.mapInstanceService.getRecentConfig(); // is this  the first map opened on startup
@@ -350,6 +353,7 @@ export class MapPage implements AfterViewInit {
               webmapId: null, mlposition: ipos, source: opts.source, bounds: opts.mlBounds} as IConfigParams;
           console.log(cfgparams);
           mlConfig = new MLConfig(cfgparams);
+          mlConfig.setMapHost('google');
         } else { // this is'nt the first map oened in this session
             if (! this.mapInstanceService.getHiddenMap() ) {
                 this.mapOpener.openMap.emit(null);
@@ -423,6 +427,7 @@ export class MapPage implements AfterViewInit {
         }
 
         const mapTypeToCreate = this.mapHosterDict.get('arcgis');
+        mlConfig.setMapHost('arcgis');
         this.canvasService.addCanvas('arcgis', mapTypeToCreate,
         opts.source, this.entry, mlConfig, opts.mapLocOpts); // mlcfg, resolve); //appendNewCanvasToContainer(mapTypeToCreate, currIndex);
 

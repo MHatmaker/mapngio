@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterContentInit } from '@angular/core';
 
 import { Platform, MenuController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -28,7 +28,7 @@ import { CanvasService } from './services/canvas.service';
   // templateUrl: './map/map.page.html',
   // styleUrls: ['./map/map.page.scss'],
 })
-export class AppComponent {
+export class AppComponent implements AfterContentInit {
   @ViewChild('mlcontent', {static: false}) nav: NavController; // <--- Reference to the Nav
   // Get the instance to call the public methods
   @ViewChild(SideMenuContentComponent, {static: false}) sideMenu: SideMenuContentComponent;
@@ -88,12 +88,17 @@ export class AppComponent {
       gmpopoverSvc: this.gmpopoverSvc,
       infopopSvc: this.infopopSvc} );
 
-    this.queryForUserName();
-    this.queryForPusherKeys();
     this.menuCtrl.enable(true, 'mlmenu');
     this.pageService.menuOpenEvent.subscribe((data: MenuOpenEvent) => {
       this.openMenu(data.menuName);
     });
+  }
+
+  ngAfterContentInit() {
+    console.log('query server for user name and pusher keys');
+    this.queryForUserName();
+    this.queryForPusherKeys();
+    console.log('finished user name and pusher key query');
   }
 
   openMenu(mnu: string) {
@@ -133,7 +138,8 @@ async queryForUserName() {
 
   async queryForPusherKeys() {
     console.log('ready to await in queryForPusherKeys');
-    await this.hostConfig.getPusherKeys();
+    const ret = await this.hostConfig.getPusherKeys();
+    await ret;
     console.log('finished await in queryForPusherKeys');
   }
 

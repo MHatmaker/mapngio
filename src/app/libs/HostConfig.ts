@@ -23,6 +23,7 @@ interface IPusherkeys {
     appid: string;
     appkey: string;
     appsecret: string;
+    cluster: string;
   };
 }
 
@@ -58,7 +59,7 @@ export interface IHostConfigDetails {
         mapType: string;
         query: string;
         startupQuery: IMapShare;
-        mapHost: any;
+        mapHost: string;
     };
 }
 
@@ -237,18 +238,15 @@ export class HostConfig implements IHostConfigDetails {
       console.log('await in hostConfig.getPusherKeys');
       const timeStamp = Date.now();
 
-      this.http.get<IPusherkeys>(this.pusherConfig.getPusherPath() +
-      '/pusherkeys' + '?tsp=' + timeStamp).subscribe(data  => {
-        const pks = data;
-        //   appid: data.appid,
-        //   appkey: data.appkey,
-        //   appsecret: data.appsecret
-        // }
-        console.log(pks.pusherkeys);
-        console.log('return from hostConfig.getPusherKeys');
-        this.pusherConfig.setPusherKeys(pks.pusherkeys);
-        return pks;
-      });
+      const promise = await this.http.get<IPusherkeys>(this.pusherConfig.getPusherPath() +
+      '/pusherkeys' + '?tsp=' + timeStamp).toPromise();
+      const pks = await promise;
+      pks.pusherkeys.cluster = 'us3';
+      console.log(pks.pusherkeys);
+      console.log('return from hostConfig.getPusherKeys');
+      this.pusherConfig.setPusherKeys(pks.pusherkeys);
+      return pks;
+
     }
 
     // getUserNameFromServer($http, opts): void {

@@ -79,7 +79,13 @@ export class MLConfig {
     getMapNumber(): number {
       return this.details.mapNumber;
     }
-    setMapHosterInstance(inst) {
+    setMapHost(mphost: string) {
+      this.details.maphost = mphost;
+    }
+    getMapHost(): string {
+      return this.details.maphost;
+    }
+    setMapHosterInstance(inst: any) {
       this.details.mapHosterInstance = inst;
       if (!inst) {
         console.log('attempting to setMapHosterInstance to null/undefined');
@@ -201,17 +207,17 @@ export class MLConfig {
 
     hasCoordinates(): boolean {
       let result = '';
-      result = this.details.mlposition.zoom || this.utils.getParameterByName('zoom', this.details.mlposition);
+      result = this.details.mlposition.zoom || this.utils.getParameterByName('zoom', this.details.search);
       return result === '' ? false : true;
     }
     lon(): string {
-        return this.utils.getParameterByName('lon', this.details.mlposition);
+        return this.utils.getParameterByName('lon', this.details.search);
     }
     lat(): string {
-        return this.utils.getParameterByName('lat', this.details.mlposition);
+        return this.utils.getParameterByName('lat', this.details.search);
     }
     zoom(): string {
-        return this.utils.getParameterByName('zoom', this.details.mlposition);
+        return this.utils.getParameterByName('zoom', this.details.search);
     }
     setConfigParams(config: IConfigParams) {
         this.details.mlposition.lon = config.mlposition.lon;
@@ -291,7 +297,7 @@ export class MLConfig {
     getBounds(): ImlBoundsParams {
         return this.details.bounds;
     }
-    setRawMap(rawMap) {
+    setRawMap(rawMap: any) {
         this.details.rawMap = rawMap;
     }
     getRawMap()  {
