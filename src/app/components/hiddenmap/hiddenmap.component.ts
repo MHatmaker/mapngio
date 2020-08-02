@@ -1,10 +1,11 @@
-import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { MapopenerService } from '../../services/mapopener.service';
 import { MapLocOptions } from '../../services/positionupdate.interface';
 import { CanvasService } from '../../services/canvas.service';
 import { PusherclientService } from '../../services/pusherclient.service';
 import { PusherEventHandler } from '../../libs/PusherEventHandler';
 import { MapinstanceService } from '../../services/mapinstance.service';
+import { HostConfig } from '../../libs/HostConfig';
 
 // declare var google;
 
@@ -14,8 +15,9 @@ import { MapinstanceService } from '../../services/mapinstance.service';
   styleUrls: ['hiddenmap.component.scss']
 })
 
-export class HiddenmapComponent {
+export class HiddenmapComponent implements AfterViewInit {
   @ViewChild('hiddenmap',  {static: false}) mapElement: ElementRef;
+  @Input() hasPusherKeys: any;
   map: google.maps.Map;
   pusherEventHandler: PusherEventHandler;
   private hiddenMapCreated = false;
@@ -23,15 +25,20 @@ export class HiddenmapComponent {
   constructor(
     private mapOpener: MapopenerService, private canvasService: CanvasService,
     private pusherClientService: PusherclientService,
-    private mapInstanceService: MapinstanceService) {
+    private mapInstanceService: MapinstanceService,
+    private hostConfig: HostConfig) {
     console.log('Hello HiddenmapComponent Component');
-    mapOpener.openMap.subscribe(
+    // this.queryForPusherKeys();
+  }
+
+  ngAfterViewInit() {
+    this.mapOpener.openMap.subscribe(
         (data: MapLocOptions) => {
           if (this.hiddenMapCreated === false) {
             this.addHiddenCanvas();
           }
     });
-    mapOpener.addHiddenCanvas.subscribe(() => {
+    this.mapOpener.addHiddenCanvas.subscribe(() => {
         this.addHiddenCanvas();
     });
   }
@@ -58,4 +65,10 @@ export class HiddenmapComponent {
     this.map.setZoom(xj.zoom);
   }
 
+  async queryForPusherKeys() {
+    console.log('ready to await in queryForPusherKeys');
+    const ret = await this.hostConfig.getPusherKeys();
+    console.log('finished await in queryForPusherKeys');
+    return ret;
+  }
 }

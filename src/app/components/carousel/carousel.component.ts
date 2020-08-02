@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MapinstanceService } from '../../services/mapinstance.service';
 import { SlideshareService } from '../../services/slideshare.service';
 import { ISlideData } from '../../services/slidedata.interface';
@@ -16,6 +16,7 @@ import { Islidenav, SlidenavService } from '../../services/slidenav.service';
 })
 export class CarouselComponent {
     // console.log('Carousel : ready to set up Carousel');
+    @Input() hasPusherKeys: any;
     private items: DoublyLinkedList<ISlideData> = new DoublyLinkedList<ISlideData>();
     private activeSlide: DoublyLinkedListNode<ISlideData> = null;
     public slideNav = new SlidenavService('no maps yet', false, false, this);

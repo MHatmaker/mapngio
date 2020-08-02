@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterContentInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterContentInit, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 
 import { Platform, MenuController, NavController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -28,15 +28,17 @@ import { CanvasService } from './services/canvas.service';
   // templateUrl: './map/map.page.html',
   // styleUrls: ['./map/map.page.scss'],
 })
-export class AppComponent implements AfterContentInit {
+export class AppComponent implements AfterContentInit, OnInit {
   @ViewChild('mlcontent', {static: false}) nav: NavController; // <--- Reference to the Nav
   // Get the instance to call the public methods
   @ViewChild(SideMenuContentComponent, {static: false}) sideMenu: SideMenuContentComponent;
+  @ViewChild(MapPage, {static: false}) mapPage: MapPage;
 
     // Options to show in the SideMenuComponent
   public options: Array<MenuOptionModel>;
   public channel: any;
   private userName: string;
+  public hasPusherKeys = null;
   rootPage = MapPage;
 
   // Settings for the SideMenuComponent
@@ -60,9 +62,10 @@ export class AppComponent implements AfterContentInit {
     private shareMapInfoSvc: SharemapService, private gmpopoverSvc: GmpopoverService,
     private infopopSvc: InfopopService, private mapInstanceService: MapinstanceService,
     private pusherConfig: PusherConfig, private canvasService: CanvasService,
-    private hostConfig: HostConfig
+    private hostConfig: HostConfig,
+    private appRef: ApplicationRef,
+    private chdetRef: ChangeDetectorRef
   ) {
-    this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
@@ -93,11 +96,15 @@ export class AppComponent implements AfterContentInit {
       this.openMenu(data.menuName);
     });
   }
+  ngOnInit() {
+  }
 
-  ngAfterContentInit() {
+  async ngAfterContentInit() {
     console.log('query server for user name and pusher keys');
     this.queryForUserName();
-    this.queryForPusherKeys();
+    await this.queryForPusherKeys().then(data => {
+      this.initializeApp();
+    });
     console.log('finished user name and pusher key query');
   }
 
@@ -138,12 +145,18 @@ async queryForUserName() {
 
   async queryForPusherKeys() {
     console.log('ready to await in queryForPusherKeys');
-    const ret = await this.hostConfig.getPusherKeys();
-    await ret;
-    console.log('finished await in queryForPusherKeys');
+
+    const ret = await this.hostConfig.getPusherKeys().then(data => {
+      console.log('finished await in queryForPusherKeys');
+      console.log(data);
+      this.chdetRef.detectChanges();
+      // this.mapPage.togglePusherKeysSet();
+      this.appRef.tick();
+    });
   }
 
   initializeApp() {
+    console.log('app.component ... initializeApp');
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();

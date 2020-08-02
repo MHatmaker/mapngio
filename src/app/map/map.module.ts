@@ -9,6 +9,7 @@ import { MapPageRoutingModule } from './map-routing.module';
 
 import { MapPage } from './map.page';
 import { CarouselComponent } from '../components/carousel/carousel.component';
+import { MapcontentComponent } from '../components/mapcontent/mapcontent.component';
 import { PlacesSearchComponent } from '../components/placessearch/placessearch.component';
 import { PositionviewComponent } from '../components/positionview/positionview.component';
 import { SlidenavComponent } from '../components/slidenav/slidenav.component';
@@ -40,6 +41,7 @@ import { SlidenavService } from '../services/slidenav.service';
     ReactiveFormsModule
   ],
   entryComponents: [
+    MapcontentComponent,
     LocateselfComponent,
     PushersetupComponent,
     MultiCanvasGoogleComponent,
@@ -61,6 +63,7 @@ providers: [
   declarations: [
     MapPage,
     CarouselComponent,
+    MapcontentComponent,
     PlacesSearchComponent,
     PositionviewComponent,
     SlidenavComponent,

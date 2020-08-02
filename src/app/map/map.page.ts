@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ViewContainerRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ViewContainerRef, Input, ApplicationRef } from '@angular/core';
 import { AlertController, ModalController } from '@ionic/angular';
 // import { IonicPage, ModalController, AlertController, AlertOptions } from '@ionic/angular';
 import { IPosition, PositionService } from '../services/position.service';
@@ -46,6 +46,7 @@ import { SearchplacesService } from '../services/searchplaces.service';
 export class MapPage implements AfterViewInit {
 
       @ViewChild('mapcontainer', { static: false, read: ViewContainerRef }) entry: ViewContainerRef;
+      @Input() hasPusherKeys: any;
       private outerMapNumber = 0;
       private mlconfig: MLConfig;
       private menuActions = {};
@@ -62,7 +63,8 @@ export class MapPage implements AfterViewInit {
       private slideViewService: SlideviewService, private modalCtrl: ModalController,
       private agoAlert: AlertController,
       private mapOpener: MapopenerService, private hostConfig: HostConfig, private pusherConfig: PusherConfig,
-      private pusherClientService: PusherclientService) {
+      private pusherClientService: PusherclientService,
+      private appRef: ApplicationRef) {
       // If we navigated to this page, we will have an item available as a nav param
       // this.selectedMapType = navParams.subItems.length === 0 ?  'google': navParams.subItems[0].displayName; //get('title');
       this.setupMenuActions(modalCtrl);
@@ -76,7 +78,11 @@ export class MapPage implements AfterViewInit {
               this.menuActions[data.displayName]();
           }
         });
-      mapOpener.openMap.subscribe(
+      if (this.hostConfig.getWebmapId(true) === '') {
+          console.log('does not appear to be a webmap');
+          this.showLocate(true);
+      }
+      this.mapOpener.openMap.subscribe(
           (data: IMapShare) => {
             console.log('mapOpener.openMap subscriber entered');
             console.log(`source is ${data.source}`);
@@ -94,12 +100,9 @@ export class MapPage implements AfterViewInit {
                 console.log('invalid EMapSource');
             }
       });
-      if (this.hostConfig.getWebmapId(true) === '') {
-          console.log('does not appear to be a webmap');
-          this.showLocate(true);
-      }
 
     }
+
     openMenu(mnu: string) {
       console.log('fired mlmenu click ' + mnu);
       this.pageService.menuOpenEvent.emit({menuName: mnu});
@@ -192,6 +195,10 @@ export class MapPage implements AfterViewInit {
           const startupOpts = this.hostConfig.assembleStartupQuery();
           this.mapOpener.openMap.emit(startupOpts);
         }
+    }
+    togglePusherKeysSet() {
+      this.hasPusherKeys = {};
+      this.appRef.tick();
     }
 
     ionViewDidLoad() {

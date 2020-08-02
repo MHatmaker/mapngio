@@ -234,13 +234,12 @@ export class HostConfig implements IHostConfigDetails {
       return retval;
     }
 
-    async getPusherKeys() {
+    async getPusherKeys(): Promise<IPusherkeys> {
       console.log('await in hostConfig.getPusherKeys');
       const timeStamp = Date.now();
+      const getParams = this.pusherConfig.getPusherPath() + '/pusherkeys' + '?tsp=' + timeStamp;
 
-      const promise = await this.http.get<IPusherkeys>(this.pusherConfig.getPusherPath() +
-      '/pusherkeys' + '?tsp=' + timeStamp).toPromise();
-      const pks = await promise;
+      const pks = await this.http.get<IPusherkeys>(getParams).toPromise();
       pks.pusherkeys.cluster = 'us3';
       console.log(pks.pusherkeys);
       console.log('return from hostConfig.getPusherKeys');
