@@ -32,15 +32,16 @@ export class HiddenmapComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.mapOpener.openMap.subscribe(
-        (data: MapLocOptions) => {
-          if (this.hiddenMapCreated === false) {
-            this.addHiddenCanvas();
-          }
-    });
-    this.mapOpener.addHiddenCanvas.subscribe(() => {
-        this.addHiddenCanvas();
-    });
+    this.addHiddenCanvas();
+    // this.mapOpener.openMap.subscribe(
+    //     (data: MapLocOptions) => {
+    //       if (this.hiddenMapCreated === false) {
+    //         this.addHiddenCanvas();
+    //       }
+    // });
+    // this.mapOpener.addHiddenCanvas.subscribe(() => {
+    //     this.addHiddenCanvas();
+    // });
   }
 
   addHiddenCanvas() {
@@ -57,7 +58,10 @@ export class HiddenmapComponent implements AfterViewInit {
     this.pusherEventHandler = new PusherEventHandler(-1);
     this.pusherEventHandler.addEvent('client-MapXtntEvent', (xj) => this.onPan(xj));
     this.pusherEventHandler.addEvent('client-MapClickEvent', (pt) => {});
-    this.pusherClientService.createHiddenPusherClient(this.pusherEventHandler.getEventDct());
+
+    this.hostConfig.getPusherKeys().then(() => {
+      this.pusherClientService.createHiddenPusherClient(this.pusherEventHandler.getEventDct());
+    });
   }
   onPan(xj) {
     const cntr = new google.maps.LatLng(xj.lat, xj.lon);

@@ -103,7 +103,7 @@ export class MsgsetupComponent {
   }
 
   async copyUrlField(inputElement: any ) {
-    if (this.canvasService.isMobileApp() === true) {
+    if (this.canvasService.isMobileApp() === false) {
     const cb = window.navigator.clipboard;
     cb.writeText(this.urlCopyField).then(() => {
       console.log('url copied to clipboard');

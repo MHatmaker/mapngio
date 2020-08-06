@@ -102,9 +102,10 @@ export class AppComponent implements AfterContentInit, OnInit {
   async ngAfterContentInit() {
     console.log('query server for user name and pusher keys');
     this.queryForUserName();
-    await this.queryForPusherKeys().then(data => {
-      this.initializeApp();
-    });
+    // await this.queryForPusherKeys().then(data => {
+    //   this.initializeApp();
+    // });
+    this.initializeApp();
     console.log('finished user name and pusher key query');
   }
 
@@ -167,7 +168,7 @@ async queryForUserName() {
       // sc[1].classList.add('padzero');
 
       const platforms = this.platform.platforms();
-      const isApp = (this.platform.is('mobileweb')) ? false : true;
+      const isApp = (this.platform.is('mobileweb')) ? true : false;
       this.canvasService.setPlatform(isApp);
     });
   }

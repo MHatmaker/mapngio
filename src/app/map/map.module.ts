@@ -43,6 +43,7 @@ import { SlidenavService } from '../services/slidenav.service';
   entryComponents: [
     MapcontentComponent,
     LocateselfComponent,
+    HiddenmapComponent,
     PushersetupComponent,
     MultiCanvasGoogleComponent,
     MultiCanvasEsriComponent,

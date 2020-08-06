@@ -200,8 +200,7 @@ export class CanvasService {
 
   addCanvas(
     mapType: string,
-    mapTypeToCreate: any, source: EMapSource, entry: ViewContainerRef, mlcfg: MLConfig,
-    maploc: MapLocOptions): HTMLElement {
+    mapTypeToCreate: any, source: EMapSource, entry: ViewContainerRef, mlcfg: MLConfig): HTMLElement {
       console.log('in canvasService.addCanvas');
       console.log(`mapType: ${mapType}`);
       console.log(mapTypeToCreate);
@@ -236,7 +235,7 @@ export class CanvasService {
       }
 
       this.ndx = currIndex;
-      const appendedElem = this.appendNewCanvasToContainer(mapTypeToCreate, entry);
+      const appendedElem = this.appendNewCanvasToContainer(mapTypeToCreate, entry, 'mapcontent');
 
       console.log(`now incrementMapNumber from index ${currIndex}`);
       this.mapInstanceService.incrementMapNumber();
@@ -246,13 +245,17 @@ export class CanvasService {
                   slideNumber: currIndex,
                   mapName: 'Map ' + currIndex
               });
-      return;
-  }
+      return appendedElem;
+    }
 
+    addHiddenCanvas(mapTypeToCreate: any, entry: ViewContainerRef) {
+      const appendedElem = this.appendNewCanvasToContainer(mapTypeToCreate, entry, 'carouselhost');
+      return appendedElem;
+    }
 
-    appendNewCanvasToContainer(component: any, entry: ViewContainerRef) {
+    appendNewCanvasToContainer(component: any, entry: ViewContainerRef, parentName: string): HTMLElement {
         this.canvases.push(component);
-        const mapParent = document.getElementsByClassName('mapcontent')[0];
+        const mapParent = document.getElementsByClassName(parentName)[0];
         // Create a component reference from the component
         const componentRef = this.componentFactoryResolver
           .resolveComponentFactory(component)
@@ -271,7 +274,7 @@ export class CanvasService {
 
         // Append DOM element to the body
         mapParent.appendChild(domElem);
-        return;
+        return domElem;
     }
     /*
     makeCanvasSlideListItem (ndx) {

@@ -45,6 +45,7 @@ export class PusherConfig implements IPusherConfig {
     private APP_ID: string;
     private APP_KEY: string;
     private APP_SECRET: string;
+    private hasPusherKeys = false;
     constructor(private utils: Utils) {
         console.log('entering PusherConfig');
     }
@@ -117,10 +118,10 @@ export class PusherConfig implements IPusherConfig {
         this.details.query = this.getQueryFromUrl();
     }
     setPusherKeys(keys) {
-
       this.APP_ID = keys.appid;
       this.APP_KEY = keys.appkey;
       this.APP_SECRET = keys.appsecret;
+      this.hasPusherKeys = true;
     }
 
     getAppKey(): string {
@@ -128,5 +129,8 @@ export class PusherConfig implements IPusherConfig {
     }
     getSecretKey(): string {
         return this.APP_SECRET;
+    }
+    pusherKeysAvailable(): boolean {
+      return this.hasPusherKeys;
     }
 }

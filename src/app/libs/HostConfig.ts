@@ -18,7 +18,7 @@ interface IUserName {
   id: string;
   name: string;
 }
-interface IPusherkeys {
+export interface IPusherkeys {
   pusherkeys: {
     appid: string;
     appkey: string;
@@ -66,7 +66,7 @@ export interface IHostConfigDetails {
 @Injectable()
 export class HostConfig implements IHostConfigDetails {
     public details = {
-        webmapId: '',
+        webmapId: 'nowebmap',
         lat: '',
         lon: '',
         zoom: '',
@@ -359,9 +359,10 @@ export class HostConfig implements IHostConfigDetails {
       const lng = +this.lon();
       const lat = +this.lat();
       const zoom = +this.zoom();
+      const src = (lat === 0 && lng === 0) ? EMapSource.srcgoogle : EMapSource.urlgoogle;
       const opts = {center: {lng, lat}, zoom, places: null, query: this.getQuery()} as MapLocOptions;
       this.details.startupQuery = {mapLocOpts: opts, userName: this.getUserName(), mlBounds: bnds,
-          source: EMapSource.urlgoogle, webmapId: '-99'} as IMapShare;
+          source: src, webmapId: 'nowebmap'} as IMapShare;
       return this.details.startupQuery;
     }
 
