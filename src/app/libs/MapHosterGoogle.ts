@@ -223,7 +223,7 @@ export class MapHosterGoogle extends MapHoster {
         const popPt = new google.maps.LatLng(lat, lng);
         const label = this.labels[this.labelIndex++ % this.labels.length];
         const mip = new MarkerInfoPopup(popPt, text,
-          hint, null, this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
+          hint, 'assets/icon/ltblu-stars.png', this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
         this.markerInfoPopups.set(mip.getId(), mip);
     }
 

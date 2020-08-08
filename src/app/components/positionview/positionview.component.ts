@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 // import { utils } from '../libs/utils';
 // import { CurrentMapTypeService } from '../../../services/currentmaptypeservice';
 import { IPositionData, IPositionParams } from '../../services/positionupdate.interface';
@@ -18,7 +18,7 @@ interface IViewOption  {
   templateUrl: './positionview.component.html',
   styleUrls: [ './positionview.component.scss']
 })
-export class PositionviewComponent  {
+export class PositionviewComponent implements AfterViewInit {
     // private currentTab: string;
     private currentViewOption: IViewOption;
     public positionView: string;
@@ -72,7 +72,7 @@ export class PositionviewComponent  {
         }
     ];
 
-    constructor(private positionUpdateService: PositionupdateService) {
+    constructor(private positionUpdateService: PositionupdateService, private cdref: ChangeDetectorRef) {
         console.log('PositionViewCtrl - initialize dropdown for position selections');
         // let serv = new CurrentMapTypeService();
         // this.currentTab = serv.getMapTypeKey();
@@ -83,13 +83,17 @@ export class PositionviewComponent  {
             this.updatePosition(data.key, data.val);
           });
 
+        // this.expBtnHeight = 1.2; // utils.getButtonHeight(1.5); //'verbageExpandCollapseImgId');
+    }
+
+    ngAfterViewInit() {
         this.currentViewOption = this.viewOptions[2];
         this.selectedOption = this.viewOptions[2].key;
         this.selectOptions = {
           mode: 'Popover'
         };
-        this.positionView = 'position info';
-        // this.expBtnHeight = 1.2; // utils.getButtonHeight(1.5); //'verbageExpandCollapseImgId');
+        // this.positionView = 'evlng, evlat';
+        this.cdref.detectChanges();
     }
 
     onChangeSelection(itm: string) {
