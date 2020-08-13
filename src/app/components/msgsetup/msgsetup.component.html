@@ -1,10 +1,10 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-title>Sharing Setup</ion-title>
-    <ion-buttons slot="start">
+    <ion-buttons slot="end">
       <ion-button (click)="close()">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
-        <ion-icon name="close" showWhen="android, windows"></ion-icon>
+        <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+        <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
@@ -16,12 +16,12 @@
             <h5 style="font-weight: bold; font-size: 1.8rem;    ">Share Your MapLinkr Session</h5>
             <ion-label style="white-space: normal">Assemble the map configuration to share:</ion-label>
             <br>
-            <button ion-button color="secondary" (click)="fetchUrl()" icon-end>
+            <ion-button color="secondary" (click)="fetchUrl()" icon-end>
 
               Email from your email account
               <ion-icon [name]="items[0].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
 
-            </button><br>
+            </ion-button><br>
             <app-accordion-list  [expanded]="items[0].expanded">
                 <div class="copypastegrid">
                     <ion-item class="url-field">
@@ -29,9 +29,9 @@
                             value="url to copy" #urlInput [(ngModel)]="urlCopyField">
                         </ion-textarea>
                     </ion-item>
-                    <button  id="cpyBtn" class="url-copy-button" (click)="copyUrlField(urlInput)" data-clipboard-target="#copyTarget">
+                    <ion-button  id="cpyBtn" class="url-copy-button" color="primary" (click)="copyUrlField(urlInput)" data-clipboard-target="#copyTarget">
                         <img src="assets/imgs/clippy.svg" alt="Copy to clipboard">
-                    </button>
+                    </ion-button>
                     <ion-item class="url-copy-info">
                         <ion-label style="white-space: normal" color="primary">
                             Tap the clipboard button.
@@ -42,10 +42,10 @@
               </app-accordion-list>
 
             <hr/>
-            <button ion-button color="secondary" (click)="setupMapLinkrMail()" icon-end>
+            <ion-button color="secondary" (click)="setupMapLinkrMail()" icon-end>
                 Setup MapLinkr Mail
                 <ion-icon [name]="items[1].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
-            </button><br>
+            </ion-button><br>
             <div style="margin-left: 20px">
               <app-accordion-list  [expanded]="items[1].expanded">
 
@@ -56,27 +56,28 @@
                   <ion-input type="email" placeholder="email address" [(ngModel)]="recipientAdrs">
                   </ion-input>
                 </ion-item>
-                <ion-label style="white-space: normal" color="primary">
-                  Use the MapLinkr mail system by clicking the send mail button.
-                </ion-label>
+                <div>
+                  <ion-label style="white-space: normal" color="primary">
+                    Use the MapLinkr mail option.
+                  </ion-label>
 
-                <button  ion-button color="default" (click)="sendMail()" style="margin-left : 20px">Send MapLinkr Mail</button>
-
+                  <ion-button color="primary" (click)="sendMail()" style="margin-left : 20px">Send Mail</ion-button>
+                </div>
               </app-accordion-list>
             </div>
             <hr/>
-            <button ion-button color="secondary" (click)="setupDirectShare()" icon-end>
+            <ion-button color="secondary" (click)="setupDirectShare()" icon-end>
                 Share with logged-in users
                 <ion-icon [name]="items[2].expanded ? 'arrow-back' : 'arrow-down'"></ion-icon>
-            </button><br>
+            </ion-button><br>
             <div style="margin-left: 20px">
                 <app-accordion-list  [expanded]="items[2].expanded">
 
                   <div>
-                    <ion-label style="white-space: normal">
+                    <ion-label style="white-space: normal" color="primary">
                       Share with all collaborators currently linked in.
                     </ion-label>
-                    <button style="margin-left: 20px" ion-button color="default" (click)="shareMap()">Share Map</button>
+                    <ion-button style="margin-left: 20px" color="primary" (click)="shareMap()">Share Map</ion-button>
 
                   </div>
                 </app-accordion-list>

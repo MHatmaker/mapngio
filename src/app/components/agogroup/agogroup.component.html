@@ -1,11 +1,11 @@
 <ion-header>
- <ion-toolbar>
+ <ion-toolbar color="light">
    <ion-title>ArcGIS Online Group</ion-title>
-   <ion-buttons start>
-     <button ion-button (click)="cancel()">
-       <span ion-text color="primary" showWhen="ios">Cancel</span>
-       <ion-icon name="close" showWhen="android, windows"></ion-icon>
-     </button>
+   <ion-buttons slot="end">
+     <ion-button (click)="cancel()">
+       <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+       <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+     </ion-button>
    </ion-buttons>
  </ion-toolbar>
 </ion-header>
@@ -19,7 +19,7 @@
                <ion-label>Group:</ion-label>
                <ion-input type="text" formControlName="searchTermGrp"></ion-input>
            </ion-item>
-           <button ion-button type="button" (click)="groupFinderSubmit()">Submit Query</button>
+           <ion-button (click)="groupFinderSubmit()">Submit Query</ion-button>
            <ion-list fromControlName="agoGroups">
              <ion-item *ngFor="let g of agoGroups" (click)="selectAgoItem(g)">
                  <ion-thumbnail item-left>

@@ -1,6 +1,12 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-title>MapLinkr Help</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+        <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -11,10 +17,15 @@
               <h4 style="color:red">MapLinkr Instructions</h4>
               <h5 style="color:red">Helpful instructions for finding and sharing map content</h5>
             </div>
-            <h4>OTHER GREAT STUFF</h4>
-            <br>
-            <h5>Wallace and Gromit Use MapLinkr.</h5>
-            <br>
+            <ion-item>
+              <h4>OTHER GREAT STUFF</h4>
+            </ion-item>
+            <ion-item>
+              <h5>Wallace and Gromit Use MapLinkr.</h5>
+            </ion-item>
+            <ion-item>
+              <<img src="assets/imgs/WindowWashers.png" alt="">
+            </ion-item>
         </ion-card-content>
     </ion-card>
 

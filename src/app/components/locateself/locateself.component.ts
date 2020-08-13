@@ -9,7 +9,8 @@ import { CanvasService } from '../../services/canvas.service';
 
 @Component({
   selector: 'locateself',
-  templateUrl: 'locateself.component.html'
+  templateUrl: 'locateself.component.html',
+  styleUrls: ['locateself.component.scss']
 })
 export class LocateselfComponent {
   private locateselfgroup: FormGroup;

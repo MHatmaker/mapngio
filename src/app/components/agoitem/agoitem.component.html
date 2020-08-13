@@ -1,11 +1,11 @@
 <ion-header>
- <ion-toolbar>
+ <ion-toolbar color="light">
    <ion-title>ArcGIS Online Item</ion-title>
-   <ion-buttons start>
-     <button ion-button (click)="cancel()">
-       <span ion-text color="primary" showWhen="ios">Cancel</span>
-       <ion-icon name="close" showWhen="android, windows"></ion-icon>
-     </button>
+   <ion-buttons slot="end">
+     <ion-button (click)="cancel()">
+       <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+       <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+     </ion-button>
    </ion-buttons>
  </ion-toolbar>
 </ion-header>
@@ -19,7 +19,7 @@
                <ion-label>Item:</ion-label>
                <ion-input type="text" formControlName="searchTermItem" (keypress)="checkEnter(event)"></ion-input>
            </ion-item>
-           <button ion-button type="button" (click)="itemFinderSubmit()">Submit Query</button>
+           <ion-button  (click)="itemFinderSubmit()">Submit Query</ion-button>
            <ion-list fromControlName="agoItems">
              <ion-item *ngFor="let g of agoItems" (click)="selectAgoItem(g)" tappable>
                  <ion-thumbnail item-left>
@@ -31,10 +31,10 @@
            </ion-list>
            <ion-row>
              <ion-col>
-               <button *ngIf="selectedItem!=''" ion-button color="btn-primary" (click)="accept()">Accept</button>
+               <ion-button *ngIf="selectedItem!=''" color="primary" (click)="accept()">Accept</ion-button>
              </ion-col>
              <ion-col>
-               <button ion-button color="btn-secondary" (click)="cancel()">Cancel</button>
+               <ion-button color="secondary" (click)="cancel()">Cancel</ion-button>
              </ion-col>
            </ion-row>
          </form>

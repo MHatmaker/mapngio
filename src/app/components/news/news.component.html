@@ -1,34 +1,59 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="light">
     <ion-title>Latest News</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+        <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="cards-bg social-cards">
     <ion-card id="idLatestNewsCard" role="tabpanel" aria-labelledby="idLatestNews">
         <ion-card-content>
-            <div style="font-size:1.25em;border:2px solid red;margin:1px;padding:2px;">
-              <h4 style="color:red">Latest Release</h4>
-              <h5 style="color:red">Release notes will appear here as new features are added to the MapLinkr plug-in.</h5>
-              <h5>Select the MapLinkr Instructions memu item for step-by-step help.</h5>
-            </div>
-            <h4>OTHER GREAT STUFF</h4>
-            <br>
+          <ion-item>
+            <ion-label class="ion-text-wrap">
+              <ion-text color="danger">
+                Latest Release
+              </ion-text>
+              <br>
+              <ion-text color="primary">
+                Release notes will appear here as new features are added to the MapLinkr plug-in.
+              </ion-text>
+              <br>
+              <br>
+              <p>
+                <ion-text color="secondary">
+                  Select the MapLinkr Instructions menu item for step-by-step help.
+                </ion-text>
+              </p>
+            </ion-label>
+          </ion-item>
+          <ion-item color="primary">
+            OTHER GREAT STUFF
+          </ion-item>
+          <ion-item>
             <img src="assets/imgs/WindowWashers.png" width="95%" height="95%"><br>
-            <h5>Wallace and Gromit Use MapLinkr.</h5>
-            <p style="font-size: 1.2em;color: #333333; border:2px solid green;margin:1px;padding:2px;">
-              Wallace and Gromit have improved the efficiency of their window washing service by incorporating community maps of reported dirty windows.
-            </p>
-            <br>
+          </ion-item>
+          <ion-item color="primary">
+            Wallace and Gromit Use MapLinkr.
+          </ion-item>
+          <ion-item>
+            <ion-text color="secondary">
+            Wallace and Gromit have improved the efficiency of their window washing service by incorporating community maps of reported dirty windows.
+            </ion-text>
+          </ion-item>
         </ion-card-content>
     </ion-card>
 
-    <ion-buttons start>
-      <button ion-button (click)="dismiss()">dismiss
-    <!--
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
-        <ion-icon name="close" showWhen="android, windows"></ion-icon>
-    -->
-      </button>
-    </ion-buttons>
+    <ion-footer>
+      <ion-toolbar>
+        <ion-buttons slot="end">
+          <ion-button color="primary" fill="solid" (click)="dismiss()">dismiss
+          </ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-footer>
 </ion-content>

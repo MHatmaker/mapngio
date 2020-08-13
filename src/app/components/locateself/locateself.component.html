@@ -1,13 +1,13 @@
 <ion-header>
-  <ion-toolbar>
-     <ion-item color="primary">
+  <ion-toolbar color="light">
+     <ion-item color="light">
         <ion-title>MapLinkr is Ready to Go</ion-title>
     </ion-item>
-    <ion-buttons start>
-      <button ion-button (click)="cancel()">
-        <span ion-text color="primary" showWhen="ios">Cancel</span>
-        <ion-icon name="close" showWhen="android, windows"></ion-icon>
-      </button>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">
+        <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+        <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+      </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
@@ -31,20 +31,28 @@
 
                 <div  *ngIf='findMe'>
                     <ion-row>
+                      <ion-col class="ion-align-self-start">
                         <ion-label class="locate-start-label" color="primary">Show my location on a Google base map</ion-label>
-                        <button ion-button color="btn-primary" (click)="getCurrentLocation()">Find Me</button>
+                      </ion-col>
+                      <ion-col class="ion-align-self-end" size="3">
+                        <ion-button color="primary" (click)="getCurrentLocation()">Find Me</ion-button>
+                      </ion-col>
                     </ion-row>
                 </div>
                 <div>
                     <ion-item  *ngIf="foundMe">
-                        <button slot="start" ion-button color="btn-secondary" (click)="accept()">Accept</button>
-                        <button slot="end" ion-button color="btn-secondary" (click)="cancel()">Cancel</button>
+                        <ion-button slot="start" class="locself-button" color="primary" (click)="accept()">Accept</ion-button>
+                        <ion-button slot="end" class="locself-button" color="primary" (click)="cancel()">Cancel</ion-button>
                     </ion-item>
                 </div>
                 <div  *ngIf="!foundMe">
                     <ion-row>
+                      <ion-col class="ion-align-self-start">
                         <ion-label class="ion-text-left" class="locate-start-label" color="primary">I want to enter a location in search bar</ion-label>
-                        <button ion-button color="btn-secondary" (click)="cancel()">Dismiss</button>
+                      </ion-col>
+                      <ion-col class="ion-align-self-end" size="3">
+                        <ion-button color="primary" (click)="cancel()">Dismiss</ion-button>
+                      </ion-col>
                     </ion-row>
                 </div>
 
