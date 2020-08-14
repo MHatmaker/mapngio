@@ -198,7 +198,7 @@ export class MLConfig {
           testId = this.details.webmapId ? this.details.webmapId : 'nowebmap',
           n = this.details.webmapId ? this.details.webmapId.length : 0;
       this.details.webmapId = testId;
-      const id = testId === 'nowebmap' ? 'nowebmap' : this.details.webmapId.substr(0, n - 1),
+      const id = testId === 'nowebmap' ? 'nowebmap' : this.details.webmapId.substr(0, n),
           updatedUrl = '?id=' + id + '&lon=' + this.details.mlposition.lon + '&lat=' + this.details.mlposition.lat +
               '&zoom=' + this.details.mlposition.zoom + '&channel=' + channel;
       console.log(updatedUrl);

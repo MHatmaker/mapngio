@@ -275,6 +275,7 @@ export class StartupArcGIS  extends Startup {
               // basemap: 'streets'
           });
       console.log(`Hopefully created new esriWebMap with id ${this.mlconfig.getWebmapId(false)}`);
+      this.selectedWebMapId = this.mlconfig.getWebmapId(false);
 
           // webMap.add(layer);  // adds the layer to the map
           // viewCreated;
