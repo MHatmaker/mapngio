@@ -3,17 +3,6 @@ import { NavParams, ModalController } from '@ionic/angular';
 
 
 @Component({
-  selector: 'app-agodetail',
-  templateUrl: './agodetail.component.html',
-  styleUrls: ['./agodetail.component.scss'],
-})
-/**
- * Generated class for the AgodetailComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-@Component({
   selector: 'agodetail',
   templateUrl: 'agodetail.component.html'
 })
