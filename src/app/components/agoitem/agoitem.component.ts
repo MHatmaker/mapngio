@@ -15,7 +15,8 @@ export class AgoitemComponent {
   private agoitemgroup: FormGroup;
   private agoItems: any;
   private items: any;
-  private selectedItem = ' ';
+  private selectedItem: IAgoItem;
+  private detailAccepted = false;
   private agodtl: HTMLIonModalElement;
 
   constructor(
@@ -49,21 +50,22 @@ export class AgoitemComponent {
   }
 
   async itemFinderSubmit() {
-      const itm = this.agoitemgroup.getRawValue();
-      const searchRes = await this.agoqp.findArcGISItem(itm.searchTermItem);
-      console.log(searchRes);
-      this.agoItems = searchRes;
-        //  this.agoItems = searchRes.toArray();
+    this.detailAccepted = false;
+    const itm = this.agoitemgroup.getRawValue();
+    const searchRes = await this.agoqp.findArcGISItem(itm.searchTermItem);
+    console.log(searchRes);
+    this.agoItems = searchRes;
+      //  this.agoItems = searchRes.toArray();
 /*          data => {
-            let d: any = data;
-            this.agoItems = d.results;
-          },
-          err => console.error(err),
-            //  the third argument is a function which runs on completion
-          () => console.log('done loading items')
-        );
+          let d: any = data;
+          this.agoItems = d.results;
+        },
+        err => console.error(err),
+          //  the third argument is a function which runs on completion
+        () => console.log('done loading items')
+      );
 */
-      console.log(this.agoItems);
+    console.log(this.agoItems);
   }
   async selectAgoItem(itm) {
       console.log(`selected map item ${itm.title}`);
@@ -81,6 +83,7 @@ export class AgoitemComponent {
   }
   async accept() {
     console.log('agoitem component accept');
+    this.detailAccepted = true;
     console.log(this.selectedItem);
     this.modalCtrl.dismiss({data: this.selectedItem});
   }

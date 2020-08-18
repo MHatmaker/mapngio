@@ -20,18 +20,26 @@
                <ion-input type="text" formControlName="searchTermItem" (keypress)="checkEnter(event)"></ion-input>
            </ion-item>
            <ion-button  (click)="itemFinderSubmit()">Submit Query</ion-button>
-           <ion-list fromControlName="agoItems">
+
+           <ion-list fromControlName="agoItems" *ngIf="detailAccepted==false">
              <ion-item *ngFor="let g of agoItems" (click)="selectAgoItem(g)" tappable>
                  <ion-thumbnail item-left>
                    <img src="{{g.thumbnailUrl}}">
                </ion-thumbnail>
-                 <h2>{{g.title}}</h2>
+                 <h2>{{g.title+'... '}}</h2>
                  <h2>{{g.snippet}}</h2>
              </ion-item>
            </ion-list>
+           <ion-item *ngIf="detailAccepted==true">
+             <ion-thumbnail item-left>
+               <img src="{{selectedItem.thumbnailUrl}}">
+           </ion-thumbnail>
+             <h2>{{selectedItem.title+'... '}}</h2>
+             <h2>{{selectedItem.snippet}}</h2>
+           </ion-item>
            <ion-row>
              <ion-col>
-               <ion-button *ngIf="selectedItem!=''" color="primary" (click)="accept()">Accept</ion-button>
+               <ion-button *ngIf="selectedItem!=null" color="primary" (click)="accept()">Accept</ion-button>
              </ion-col>
              <ion-col>
                <ion-button color="secondary" (click)="cancel()">Cancel</ion-button>
