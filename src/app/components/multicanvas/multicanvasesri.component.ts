@@ -68,7 +68,7 @@ export class MultiCanvasEsriComponent implements OnInit, AfterViewInit {
     onMouseMove(event) {
         // console.log('onMouseMove: ', this.el);
         event.preventDefault();
-        // event.cancelBubble=true;
+        // event.cancelBubble = true;
         // event.stopPropagation();
     }
 }

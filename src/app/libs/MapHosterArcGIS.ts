@@ -66,6 +66,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     pusherEventHandler: PusherEventHandler;
     pusherConfig: PusherConfig;
     utils: any;
+    esriwebMercatorUtils: any;
 
     agoOptions: {
         url: 'agourl',
@@ -112,6 +113,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
             'esri/geometry/Geometry', 'esri/tasks/Locator', 'esri/geometry/support/webMercatorUtils',
             'esri/views/MapView'
           ], this.agoOptions);
+        this.esriwebMercatorUtils = esriwebMercatorUtils;
       } catch (error) {
         console.log('We have an error: ' + error);
       }
@@ -637,6 +639,10 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       });
 
       watchUtils.whenTrue(this.mphmap, 'stationary', async (evt) => {
+        if (this.mphmap.center) {
+          console.log('x' + this.mphmap.center.x +  ', y' + this.mphmap.center.y);
+          this.prepareToUpdateBounds();
+        }
         if (this.mphmap.extent) {
           if (this.userZoom === true) {
               const bnds = await this.extractBounds(this.mphmap.zoom, this.mphmap.center, 'zoom');
@@ -644,27 +650,15 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           }
         }
       });
-
+/*
       this.mphmap.on('pan-start',  (evt) => {
           // event.stop(evt);
           console.log('pan-start');
       });
 
       this.mphmap.on('drag', (evt) => {
+        console.log('drag state', evt.action);
         if (evt.action === 'end') {
-          if (this.userZoom === true) {
-            // let mapPt = this.mphmap.toMap({x: evt.x, y: evt.y});
-            const mapPt = this.mphmap.extent.center;
-            const lld = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
-            const urd = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
-            this.bounds = new MlboundsService(lld[0], lld[1], urd[0], urd[1]);
-            // this.bounds = this.mphmap.extent;
-            this.mlconfig.setBounds(this.bounds);
-            const xtExt = this.extractBounds(this.mphmap.zoom, mapPt, 'pan');
-            xtExt.then( () => {
-              this.setBounds(xtExt);
-            });
-          }
         }
       });
 
@@ -673,9 +667,8 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
               this.setBounds(this.extractBounds(this.mphmap.zoom, evt.extent.getCenter(), 'pan'));
           }
       });
+*/
       this.mphmap.on('pointer-move', (evt) => {
-
-
       const // pnt = new Point({longitude: evt.mapPoint.x, latitude: evt.mapPoint.y}),
           ltln = this.mphmap.toMap({x: evt.x, y: evt.y}),
           // ltln = esriwebMercatorUtils.xyToLngLat(evt.mapPoint.x, evt.mapPoint.y),
@@ -717,6 +710,26 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       // mpCan = document.getElementById('map_' + this.mlconfig.getMapNumber());
       // mpCanRoot = document.getElementById('map' + this.mlconfig.getMapNumber() + '_root');
     }
+
+    async prepareToUpdateBounds() {// newMapId, mapOpts
+      // const [ esriwebMercatorUtils] = await loadModules([
+      //       'esri/geometry/support/webMercatorUtils'
+      //     ], this.agoOptions);
+      if (this.userZoom === true) {
+        // let mapPt = this.mphmap.toMap({x: evt.x, y: evt.y});
+        const mapPt = this.mphmap.extent.center;
+        const lld = this.esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
+        const urd = this.esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
+        this.bounds = new MlboundsService(lld[0], lld[1], urd[0], urd[1]);
+        // this.bounds = this.mphmap.extent;
+        this.mlconfig.setBounds(this.bounds);
+        const xtExt = this.extractBounds(this.mphmap.zoom, mapPt, 'pan');
+        xtExt.then( () => {
+          this.setBounds(xtExt);
+        });
+      }
+    }
+
     getSearchBounds() {
             console.log('MapHosterArcGIS getSearchBounds');
             const bounds = this.mphmap.extent;
