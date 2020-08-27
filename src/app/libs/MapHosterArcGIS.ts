@@ -712,14 +712,14 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     }
 
     async prepareToUpdateBounds() {// newMapId, mapOpts
-      // const [ esriwebMercatorUtils] = await loadModules([
-      //       'esri/geometry/support/webMercatorUtils'
-      //     ], this.agoOptions);
+      const [ esriwebMercatorUtils] = await loadModules([
+            'esri/geometry/support/webMercatorUtils'
+          ], this.agoOptions);
       if (this.userZoom === true) {
         // let mapPt = this.mphmap.toMap({x: evt.x, y: evt.y});
         const mapPt = this.mphmap.extent.center;
-        const lld = this.esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
-        const urd = this.esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
+        const lld = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
+        const urd = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
         this.bounds = new MlboundsService(lld[0], lld[1], urd[0], urd[1]);
         // this.bounds = this.mphmap.extent;
         this.mlconfig.setBounds(this.bounds);

@@ -779,7 +779,8 @@ export class MapHosterGoogle extends MapHoster {
             //     this.popDetails.infoMarker.setMap(null);
             // }
             const label = this.labels[this.labelIndex++ % this.labels.length];
-            const mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info', null, // placeholder for image icon url
+            const mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info',
+            'assets/icon/ltblu-stars.png', // placeholder for image icon url
               this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
             this.markerInfoPopups.set(mip.getId(), mip);
               // MLInjector.injector.get(Pophandlerprovider).addpopup('mapclicked', mip);

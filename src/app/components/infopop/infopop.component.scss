@@ -2,6 +2,9 @@ infopop {
 
 }
 
+ion-icon {
+  font-size: 32px;
+}
 .infopop-dimensions {
   bottom : auto;
 }
@@ -13,11 +16,11 @@ infopop {
 }
 
 .infopop-label-short {
-  grid-column: 1;
+  grid-column: 2;
 }
 
 .infopop-label-long {
-  grid-column: 2;
+  grid-column: 1;
 }
 
 .infopop-dock {

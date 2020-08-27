@@ -63,9 +63,12 @@ export class InfopopService {
         this.pos = new MlpointService(gpos.x, gpos.y);
 
         const componentRef = this.componentFactoryResolver
-          .resolveComponentFactory(component)
+          .resolveComponentFactory<InfopopComponent>(component)
           .create(this.injector);
 
+        componentRef.instance.title = title;  // open(content, title);
+        componentRef.instance.content = content;
+        componentRef.instance.mrkrlabel = lbl;
         // Attach component to the appRef so that it's inside the ng component tree
         this.appRef.attachView(componentRef.hostView);
 

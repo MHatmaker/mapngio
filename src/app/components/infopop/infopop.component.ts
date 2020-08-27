@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, OnDestroy } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { v4 as uuid } from 'uuid';
 
 import { InfopopService } from '../../services/infopop.service';
@@ -7,19 +7,20 @@ import { InfopopService } from '../../services/infopop.service';
 
 @Component({
   selector: 'infopop',
-  templateUrl: 'infopop.component.html'
+  templateUrl: 'infopop.component.html',
+  styleUrls: ['infopop.component.scss']
 })
-export class InfopopComponent implements OnDestroy {
+export class InfopopComponent implements OnDestroy, OnInit {
 
     private popoverId: string;
     private element: Element;
     private parentElem: Element;
     private minimized = false;
-    private title: string;
-    private content: string;
+    public title: string;
+    public content: string;
     public show: boolean;
     private popped: boolean;
-    private mrkrlabel: string;
+    public mrkrlabel: string;
     public worldCoordinates: {'lat': number, 'lng': number};
 
     constructor(private infopopProvider: InfopopService, private el: ElementRef) {
@@ -28,7 +29,7 @@ export class InfopopComponent implements OnDestroy {
         this.worldCoordinates = {lat: 99, lng: 99};
     }
 
-/*
+
     ngOnInit(): void {
         const modal = this;
         console.log('Component Infopop method: ngOnInit');
@@ -59,7 +60,7 @@ export class InfopopComponent implements OnDestroy {
         console.log(this);
         this.infopopProvider.add(this);
     }
-    */
+
 
     getId() {
         return this.popoverId;
