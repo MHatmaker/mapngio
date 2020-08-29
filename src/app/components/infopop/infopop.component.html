@@ -6,15 +6,16 @@
           <ion-label class="infopop-label-long">
             {{title}}
           </ion-label>
-          <ion-label class="infopop-label-short">
+          <ion-label class="infopop-label-short" color="primary">
             {{mrkrlabel}}
           </ion-label>
+          <ion-icon name='share-social' color="primary" (click)="shareClick()" class="infopop-share"></ion-icon>
           <!-- <ion-button (click)="dockPopup()" class="infopop-dock" fill="outline" size="default"> -->
-            <ion-icon slot="icon-only" name="contract-sharp" (click)="dockPopup()" class="infopop-dock"></ion-icon>
+            <ion-icon name="contract-sharp" color="primary" (click)="dockPopup()" class="infopop-dock"></ion-icon>
             <!-- <ion-icon slot="icon-only" name="contract-sharp" color="danger"></ion-icon> -->
           <!-- </ion-button> -->
           <!-- <div (click)="closePopup()" class="infopop-close" fill="outline" size="small"> -->
-            <ion-icon name="close" color="danger" (click)="closePopup()" class="infopop-close"></ion-icon>
+            <ion-icon name="close" color="primary" (click)="closePopup()" class="infopop-close"></ion-icon>
           <!-- </div> -->
       </div>
     </ion-card-header>
@@ -24,9 +25,9 @@
           {{content}}
         </ion-text>
       </ion-item>
-      <ion-item>
+      <!-- <ion-item>
           <ion-icon name='share-social' (click)="shareClick()"></ion-icon>
-      </ion-item>
+      </ion-item> -->
     </ion-card-content>
     <!-- <ion-footer *ngIf="show">
       <ion-buttons slot="start">
