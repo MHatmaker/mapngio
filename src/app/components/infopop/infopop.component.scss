@@ -3,7 +3,7 @@ infopop {
 }
 
 ion-icon {
-  font-size: 32px;
+  font-size: 28px;
 }
 .infopop-dimensions {
   bottom : auto;
@@ -11,8 +11,8 @@ ion-icon {
 
 .infopop-header {
   display: grid;
-  grid-gap: 10px;
-  grid-template-columns: minmax(200px, 1fr) 24px 32px 32px 32px;
+  grid-gap: 5px;
+  grid-template-columns: minmax(160px, 0.75fr) 24px 24px 24px 24px;
 }
 
 .infopop-label-short {

@@ -9,14 +9,17 @@
           <ion-label class="infopop-label-short" color="primary">
             {{mrkrlabel}}
           </ion-label>
-          <ion-icon name='share-social' color="primary" (click)="shareClick()" class="infopop-share"></ion-icon>
-          <!-- <ion-button (click)="dockPopup()" class="infopop-dock" fill="outline" size="default"> -->
-            <ion-icon name="contract-sharp" color="primary" (click)="dockPopup()" class="infopop-dock"></ion-icon>
-            <!-- <ion-icon slot="icon-only" name="contract-sharp" color="danger"></ion-icon> -->
-          <!-- </ion-button> -->
-          <!-- <div (click)="closePopup()" class="infopop-close" fill="outline" size="small"> -->
-            <ion-icon name="close" color="primary" (click)="closePopup()" class="infopop-close"></ion-icon>
-          <!-- </div> -->
+          <ion-buttons>
+          <ion-button (click)="shareClick()" class="infopop-share" fill="outline" size="default">
+            <ion-icon name='share-social' color="primary"></ion-icon>
+          </ion-button>
+          <ion-button (click)="dockPopup()" class="infopop-dock" fill="outline" size="default">
+            <ion-icon name="contract-sharp" color="primary"></ion-icon>
+          </ion-button>
+          <ion-button (click)="closePopup()" class="infopop-close" fill="outline" size="default">
+            <ion-icon name="close" color="primary"></ion-icon>
+          </ion-button>
+          </ion-buttons>
       </div>
     </ion-card-header>
     <ion-card-content>
