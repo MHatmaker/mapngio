@@ -578,8 +578,8 @@ export class MapHosterGoogle extends MapHoster {
                         // alert('getMaxZoomAtLatLng service returned status other than OK');
                         console.log('getMaxZoomAtLatLng service returned status other than OK');
                         console.log(response.status);
-                        console.log('zoom level returned ' + response.zoom);
-                        this.maxZoom = response.zoom || this.mphmap.getZoom();
+                        console.log('zoom level returned ' + response.status);
+                        this.maxZoom = this.mphmap.getZoom();
                         console.log('used zoom level ' + this.mphmap.getZoom());
                         this.zoomLevels = this.maxZoom - this.minZoom;
                         this.collectScales(this.zoomLevels);
