@@ -9,6 +9,9 @@ import { MapLocOptions } from '../services/positionupdate.interface';
 import { IMapShare } from '../services/positionupdate.interface';
 import { EMapSource } from '../services/configparams.service';
 import { HttpClient } from '@angular/common/http';
+import '@capacitor-community/http';
+
+import { Plugins } from '@capacitor/core';
 // import { MapLocOptions, MapLocCoords } from '../../../services/positionupdate.interface';
 // import { IPosition } from '../../../services/position.service'
 
@@ -218,20 +221,31 @@ export class HostConfig implements IHostConfigDetails {
     }
     async getUserNameFromServer() {
       console.log('await in hostConfig.getUserNameFromServer');
-      const response = await this.http.get<IUserName>(this.pusherConfig.getPusherPath() + '/username').toPromise();
-      const retval = response; // .  json();
+      const { Http } = Plugins;
+      const ret = await Http.request({
+        method: 'GET',
+        url: this.pusherConfig.getPusherPath() + '/username',
+        // headers: {
+        //   'X-Fake-Header': 'Max was here'
+        // },
+        params: {
+          size: 'XL'
+        }
+      });
+      // const response = await this.http.get<IUserName>(this.pusherConfig.getPusherPath() + '/username').toPromise();
+      // const retval = response; // .  json();
       console.log('simpleserver returns');
-      const userName = retval.name;
+      const userName = ret.data.name;
       console.log(userName);
       this.pusherConfig.setUserName(userName);
       this.setUserName(userName);
-      const userId = retval.id;
+      const userId = ret.data.id;
       console.log(userId);
       this.pusherConfig.setUserId(userId);
       // this.setIDsAndNames();
 
       console.log('return from hostConfig.getUserNameFromServer');
-      return retval;
+      return ret;
     }
 
     async getPusherKeys(): Promise<IPusherkeys> {
@@ -239,11 +253,23 @@ export class HostConfig implements IHostConfigDetails {
       const timeStamp = Date.now();
       const getParams = this.pusherConfig.getPusherPath() + '/pusherkeys' + '?tsp=' + timeStamp;
 
-      const pks = await this.http.get<IPusherkeys>(getParams).toPromise();
-      pks.pusherkeys.cluster = 'us3';
-      console.log(pks.pusherkeys);
+      const { Http } = Plugins;
+      const pks = await Http.request({
+        method: 'GET',
+        url: getParams,
+        // headers: {
+        //   'X-Fake-Header': 'Max was here'
+        // },
+        params: {
+          size: 'XL'
+        }
+      });
+
+      // const pks = await this.http.get<IPusherkeys>(getParams).toPromise();
+      pks.data.pusherkeys.cluster = 'us3';
+      console.log(pks.data.pusherkeys);
       console.log('return from hostConfig.getPusherKeys');
-      this.pusherConfig.setPusherKeys(pks.pusherkeys);
+      this.pusherConfig.setPusherKeys(pks.data.pusherkeys);
       return pks;
 
     }
