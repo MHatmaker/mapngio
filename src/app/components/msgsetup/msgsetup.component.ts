@@ -181,7 +181,7 @@ export class MsgsetupComponent {
   }
   shareMap() {
     // pusherClientService.publishPosition(this.urlCopyField);
-    this.viewCtrl.dismiss('usepush', JSON.stringify(this.assembleJson()));
+    this.viewCtrl.dismiss({mode: 'usepush', results: JSON.stringify(this.assembleJson())});
   }
 
 }

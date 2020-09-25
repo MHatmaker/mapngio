@@ -152,7 +152,7 @@ export class MapPage implements AfterViewInit, AfterContentInit {
             if (data.mode === 'usepush') {
                 // const pusherClientService = AppModule.injector.get(PusherclientService);
                 // publish stringifyed IMapShare
-                this.pusherClientService.publishPosition(data);
+                this.pusherClientService.publishPosition(data.results);
                 // this.onNewMapPosition(data);
           }
 
