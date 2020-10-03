@@ -47,6 +47,7 @@ export class PusherclientService {
       private eventHandlers: Map<string, IEventDct>;
       private mapNumber: number;
       private clientName: string;
+      private tourClients: Set<string> = new Set<string>();
 
       private statedata = {
           privateChannelMashover: null, // PusherConfig.masherChannel(),
@@ -168,6 +169,16 @@ export class PusherclientService {
               // this.testShare.testShare.emit(frame);
           });
 
+          this.channel.bind('client-PollTourClients', (frame) => {
+            console.log('received request for client-PollTourClients');
+            this.respondTourClientPoll();
+          });
+
+          this.channel.bind('client-RefreshTourClients', (frame) => {
+            console.log('frame for client-RefreshTourClients is ', frame);
+            this.refreshTourClients(frame);
+          });
+
           console.log('BIND to client-MapXtntEvent');
 
           this.channel.bind('client-MapXtntEvent',  (frame) => {
@@ -207,6 +218,7 @@ export class PusherclientService {
           });
           this.channel.bind('pusher:subscription_succeeded',  () => {
               console.log('Successfully subscribed to ' + this.CHANNELNAME); // + 'r'');
+              this.pollTourClients();
           });
       // this.PusherChannel(this.pusherConfig.getPusherChannel());
 
@@ -229,6 +241,7 @@ export class PusherclientService {
           console.log('createPusherClient for map ' + clientName);
           this.clients[clientName] = new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber);
           this.PusherChannel(this.CHANNELNAME);
+          this.tourClients.add(this.userName);
 
           return this.clients[clientName];
       }
@@ -263,6 +276,40 @@ export class PusherclientService {
           console.log('getPusherChannel returns ' + result);
       });
       return promise;
+  }
+
+  pollTourClients() {
+    console.log('trigger client-PollTourClients');
+    const frame = new Set<string>();
+    const jts = JSON.stringify([...frame.values()]);
+    this.channel.trigger('client-PollTourClients', jts);
+    // this.respondTourClientPoll();
+  }
+
+  respondTourClientPoll() {
+    console.log('respondTourClients: trigger client-RefreshTourClients');
+    console.log(this.tourClients);
+    const tc = JSON.stringify([...this.tourClients.values()]);
+    console.log(tc);
+    this.channel.trigger('client-RefreshTourClients', tc);
+  }
+
+  refreshTourClients(tc) {
+    console.log('refreshTourClients');
+    console.log(tc);
+    const ts = new Set<string>(tc);
+    // const tc = JSON.parse(tcs);
+    // tc.forEach((value: string) => {
+    for (const value of ts) {
+      this.tourClients.add(value);
+      console.log(value);
+    }
+    console.log('refreshed ...');
+    console.log(this.tourClients);
+  }
+
+  getTouristList(): IterableIterator<string> {
+    return this.tourClients.values();
   }
 
   publishPanEvent(frame) {

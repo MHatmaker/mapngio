@@ -237,6 +237,11 @@ async queryForUserName() {
           component: MapPage
         },
         {
+          iconName: 'share-social-outline',
+          displayName: 'Select Tour Guide',
+          component: MapPage
+        },
+        {
           iconName: 'push-outline',
           displayName: 'Pusher Setup',
           component: MapPage

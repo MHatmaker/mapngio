@@ -29,6 +29,7 @@ import { PushersetupComponent } from '../components/pushersetup/pushersetup.comp
 import { MsgsetupComponent } from '../components/msgsetup/msgsetup.component';
 import { AgogroupComponent } from '../components/agogroup/agogroup.component';
 import { AgoitemComponent } from '../components/agoitem/agoitem.component';
+import { TourguideComponent } from '../components/tourguide/tourguide.component';
 import { HiddenmapComponent } from '../components/hiddenmap/hiddenmap.component';
 import { MapopenerService } from '../services/mapopener.service';
 import { MapLocOptions, MapLocCoords, IMapShare } from '../services/positionupdate.interface';
@@ -154,8 +155,12 @@ export class MapPage implements AfterViewInit, AfterContentInit {
                 // publish stringifyed IMapShare
                 this.pusherClientService.publishPosition(data.results);
                 // this.onNewMapPosition(data);
-          }
+              }
 
+          },
+          'Select Tour Guide': async () => {
+            const modal = await modalCtrl.create({component: TourguideComponent});
+            modal.present();
           },
           'Pusher Setup': async () => {
             const modal = await modalCtrl.create({component: PushersetupComponent});

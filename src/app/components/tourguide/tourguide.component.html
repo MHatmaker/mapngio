@@ -1,0 +1,36 @@
+<ion-header>
+ <ion-toolbar color="light">
+   <ion-title>Tourists</ion-title>
+   <ion-buttons slot="end">
+     <ion-button (click)="cancel()">
+       <!-- <span ion-text color="primary" showWhen="ios">Cancel</span> -->
+       <ion-icon slot="icon-only" name="close" showWhen="android, windows"></ion-icon>
+     </ion-button>
+   </ion-buttons>
+ </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="cards-bg social-cards">
+   <ion-card id="idTouristListCard">
+     <ion-card-content>
+         <form [formGroup]="touristgroup" (ngSubmit)="logForm()">
+           <h4>Tourists</h4>
+
+           <ion-list>
+             <ion-item *ngFor="let t of tourists" (click)="selectTourGuide(t)" tappable>
+                 <h2>{{t}}</h2>
+             </ion-item>
+           </ion-list>
+           <ion-row>
+             <ion-col>
+               <ion-button color="primary" (click)="accept()">Accept</ion-button>
+             </ion-col>
+             <ion-col>
+               <ion-button color="secondary" (click)="cancel()">Cancel</ion-button>
+             </ion-col>
+           </ion-row>
+         </form>
+       </ion-card-content>
+   </ion-card>
+ </ion-content>

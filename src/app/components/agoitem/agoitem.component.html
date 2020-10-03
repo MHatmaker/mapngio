@@ -21,7 +21,7 @@
            </ion-item>
            <ion-button  (click)="itemFinderSubmit()">Submit Query</ion-button>
 
-           <ion-list fromControlName="agoItems" *ngIf="detailAccepted==false">
+           <ion-list *ngIf="detailAccepted==false">
              <ion-item *ngFor="let g of agoItems" (click)="selectAgoItem(g)" tappable>
                  <ion-thumbnail item-left>
                    <img src="{{g.thumbnailUrl}}">
