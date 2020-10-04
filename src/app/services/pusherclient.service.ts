@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 import {  PusherConfig } from '../libs/PusherConfig';
 import { MapinstanceService } from './mapinstance.service';
@@ -48,6 +48,7 @@ export class PusherclientService {
       private mapNumber: number;
       private clientName: string;
       private tourClients: Set<string> = new Set<string>();
+      public touristsUpdated = new EventEmitter();
 
       private statedata = {
           privateChannelMashover: null, // PusherConfig.masherChannel(),
@@ -306,6 +307,7 @@ export class PusherclientService {
     }
     console.log('refreshed ...');
     console.log(this.tourClients);
+    this.touristsUpdated.emit(this.tourClients);
   }
 
   getTouristList(): IterableIterator<string> {
