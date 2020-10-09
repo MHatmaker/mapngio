@@ -1,5 +1,6 @@
-import { Component, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { Component, AfterViewInit, AfterContentInit, forwardRef, ChangeDetectorRef } from '@angular/core';
+import { FormGroup, FormBuilder, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { ModalController } from '@ionic/angular';
 import { PusherclientService } from '../../services/pusherclient.service';
 
@@ -7,9 +8,16 @@ import { PusherclientService } from '../../services/pusherclient.service';
   selector: 'app-tourguide',
   templateUrl: './tourguide.component.html',
   styleUrls: ['./tourguide.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => TourguideComponent),
+      multi: true
+    }
+  ]
 })
-export class TourguideComponent implements AfterViewInit {
-  public tourists: IterableIterator<string>;
+export class TourguideComponent implements AfterContentInit, ControlValueAccessor {
+  // public tourists: IterableIterator<string>;
   private touristgroup: FormGroup;
 
   constructor(
@@ -19,21 +27,38 @@ export class TourguideComponent implements AfterViewInit {
     this.touristgroup = this.formBuilder.group({
       tourists: Array<string> ()
     });
-    pushsvc.touristsUpdated.subscribe((tourClients: IterableIterator<string>) => {
+  }
+
+  ngAfterContentInit() {
+    this.pushsvc.touristsUpdated.subscribe((tourClients: IterableIterator<string>) => {
       console.log('got touristsUpdated Event');
-      this.tourists = tourClients;
+      // console.log(this.tourists);
+      console.log(tourClients);
+      this.ref.detectChanges();
+      this.touristgroup.setValue({tourists: tourClients});
+      // this.tourists = tourClients;
+      // console.log(this.tourists);
       this.ref.detectChanges();
     });
-  }
-
-  ngAfterViewInit() {
     // this.ref.detectChanges();
-    this.tourists = this.pushsvc.getTouristList();
+    this.pushsvc.getTouristList();
     // this.ref.detectChanges();
   }
+  writeValue(): void {
+      // this.selectedItems = items || [];
+      // this.onChange(this.selectedItems);
+    }
 
+    registerOnChange(fn: any): void {
+      // this.onChange = fn;
+    }
+
+    registerOnTouched(fn: any): void {
+      // this.onTouch = fn;
+    }
   selectTourGuide(t: string) {
     console.log('TourGuide selected is ' + t);
+    this.pushsvc.updateCurrentTourGuide(t);
   }
 
   async accept() {

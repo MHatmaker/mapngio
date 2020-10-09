@@ -49,6 +49,7 @@ export class PusherclientService {
       private clientName: string;
       private tourClients: Set<string> = new Set<string>();
       public touristsUpdated = new EventEmitter();
+      private currentTourGuide: string;
 
       private statedata = {
           privateChannelMashover: null, // PusherConfig.masherChannel(),
@@ -180,6 +181,11 @@ export class PusherclientService {
             this.refreshTourClients(frame);
           });
 
+          this.channel.bind('client-SetTourGuide', (frame) => {
+            console.log('frame for client-SetTourClients is ', frame);
+            this.updateCurrentTourGuide(frame);
+          });
+
           console.log('BIND to client-MapXtntEvent');
 
           this.channel.bind('client-MapXtntEvent',  (frame) => {
@@ -292,26 +298,43 @@ export class PusherclientService {
     console.log(this.tourClients);
     const tc = JSON.stringify([...this.tourClients.values()]);
     console.log(tc);
-    this.channel.trigger('client-RefreshTourClients', tc);
+    if (this.tourClients.values().next()) {
+      this.channel.trigger('client-RefreshTourClients', tc);
+    }
   }
 
   refreshTourClients(tc) {
     console.log('refreshTourClients');
+    console.log(this.tourClients);
     console.log(tc);
     const ts = new Set<string>(tc);
     // const tc = JSON.parse(tcs);
     // tc.forEach((value: string) => {
-    for (const value of ts) {
-      this.tourClients.add(value);
-      console.log(value);
+    if (ts.size) {
+      for (const value of ts) {
+        this.tourClients.add(value);
+        console.log(value);
+      }
+      console.log('refreshed ...');
+      console.log(this.tourClients);
     }
-    console.log('refreshed ...');
-    console.log(this.tourClients);
     this.touristsUpdated.emit(this.tourClients);
   }
 
   getTouristList(): IterableIterator<string> {
+    this.touristsUpdated.emit(this.tourClients);
     return this.tourClients.values();
+  }
+
+  setCurrentTourGuide(tourist: string) {
+    this.currentTourGuide = tourist;
+    this.channel.trigger('client-SetTourGuide', tourist);
+  }
+
+  updateCurrentTourGuide(frame) {
+    console.log('updateCurrentTourGuide, frame is ' + frame);
+    this.currentTourGuide = frame;
+    alert(frame);
   }
 
   publishPanEvent(frame) {

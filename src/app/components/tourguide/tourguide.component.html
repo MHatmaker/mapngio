@@ -17,11 +17,13 @@
          <form [formGroup]="touristgroup" (ngSubmit)="logForm()">
            <h4>Tourists</h4>
 
-           <ion-list>
-             <ion-item *ngFor="let t of tourists" (click)="selectTourGuide(t)" tappable>
+           <div formControlName="tourists">
+             <ion-list>
+               <ion-item *ngFor="let t of tourists" (click)="selectTourGuide(t)" tappable>
                  <h2>{{t}}</h2>
-             </ion-item>
-           </ion-list>
+               </ion-item>
+             </ion-list>
+           </div>
            <ion-row>
              <ion-col>
                <ion-button color="primary" (click)="accept()">Accept</ion-button>
