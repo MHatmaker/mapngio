@@ -17,16 +17,11 @@ import { PusherclientService } from '../../services/pusherclient.service';
   ]
 })
 export class TourguideComponent implements AfterContentInit, ControlValueAccessor {
-  // public tourists: IterableIterator<string>;
-  private touristgroup: FormGroup;
+  public tourists: IterableIterator<string>;
 
   constructor(
     private pushsvc: PusherclientService,
-    private formBuilder: FormBuilder,
     public modalCtrl: ModalController, private ref: ChangeDetectorRef) {
-    this.touristgroup = this.formBuilder.group({
-      tourists: Array<string> ()
-    });
   }
 
   ngAfterContentInit() {
@@ -35,8 +30,7 @@ export class TourguideComponent implements AfterContentInit, ControlValueAccesso
       // console.log(this.tourists);
       console.log(tourClients);
       this.ref.detectChanges();
-      this.touristgroup.setValue({tourists: tourClients});
-      // this.tourists = tourClients;
+      this.tourists = tourClients;
       // console.log(this.tourists);
       this.ref.detectChanges();
     });
@@ -51,6 +45,8 @@ export class TourguideComponent implements AfterContentInit, ControlValueAccesso
 
     registerOnChange(fn: any): void {
       // this.onChange = fn;
+      console.log('registerOnChange');
+      console.log(fn);
     }
 
     registerOnTouched(fn: any): void {
@@ -64,9 +60,6 @@ export class TourguideComponent implements AfterContentInit, ControlValueAccesso
   async accept() {
     console.log('agoitem component accept');
     this.modalCtrl.dismiss();
-  }
-  logForm() {
-    console.log(this.touristgroup.value);
   }
   cancel() {
         //  this.modalCtrl.dismiss();

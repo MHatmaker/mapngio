@@ -14,10 +14,9 @@
 <ion-content class="cards-bg social-cards">
    <ion-card id="idTouristListCard">
      <ion-card-content>
-         <form [formGroup]="touristgroup" (ngSubmit)="logForm()">
            <h4>Tourists</h4>
 
-           <div formControlName="tourists">
+           <div>
              <ion-list>
                <ion-item *ngFor="let t of tourists" (click)="selectTourGuide(t)" tappable>
                  <h2>{{t}}</h2>
@@ -32,7 +31,6 @@
                <ion-button color="secondary" (click)="cancel()">Cancel</ion-button>
              </ion-col>
            </ion-row>
-         </form>
        </ion-card-content>
    </ion-card>
  </ion-content>
