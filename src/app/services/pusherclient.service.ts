@@ -12,6 +12,11 @@ import { IMapShare } from './positionupdate.interface';
 import * as _ from 'underscore';
 declare const Pusher: any;
 
+interface ITourGuide {
+  name: string;
+  myname: string;
+  thisClient: boolean;
+}
 
 class PusherClient {
     public eventHandlers: IEventDct; // = new Map<string, IEventDct>();
@@ -181,9 +186,9 @@ export class PusherclientService {
             this.refreshTourClients(frame);
           });
 
-          this.channel.bind('client-SetTourGuide', (frame) => {
+          this.channel.bind('client-SetTourGuide', (frame: ITourGuide) => {
             console.log('frame for client-SetTourClients is ', frame);
-            this.updateCurrentTourGuide(frame);
+            this.setCurrentTourGuide(frame);
           });
 
           console.log('BIND to client-MapXtntEvent');
@@ -304,8 +309,9 @@ export class PusherclientService {
   }
 
   refreshTourClients(tc) {
-    console.log('refreshTourClients');
+    console.log('refreshTourClients from ');
     console.log(this.tourClients);
+    console.log('add new tourist ');
     console.log(tc);
     const ts = new Set<string>(tc);
     // const tc = JSON.parse(tcs);
@@ -313,7 +319,7 @@ export class PusherclientService {
     if (ts.size) {
       for (const value of ts) {
         this.tourClients.add(value);
-        console.log(value);
+        // console.log(value);
       }
       console.log('refreshed ...');
       console.log(this.tourClients);
@@ -326,15 +332,22 @@ export class PusherclientService {
     return this.tourClients.values();
   }
 
-  setCurrentTourGuide(tourist: string) {
-    this.currentTourGuide = tourist;
-    this.channel.trigger('client-SetTourGuide', tourist);
+  setCurrentTourGuide(tourist: ITourGuide) {
+    this.currentTourGuide = tourist.name;
+    if (tourist.thisClient) {
+      if (tourist.thisClient === true) {
+        tourist.thisClient = false;
+        this.channel.trigger('client-SetTourGuide', tourist);
+      }
+    }
+    alert('Tour guide is now ' + tourist.name);
   }
 
-  updateCurrentTourGuide(frame) {
-    console.log('updateCurrentTourGuide, frame is ' + frame);
-    this.currentTourGuide = frame;
-    alert(frame);
+  updateCurrentTourGuide(name: string) {
+    console.log('updateCurrentTourGuide, frame is ' + name);
+    this.currentTourGuide = name;
+    // alert(name);
+    this.setCurrentTourGuide({name, myname: this.userName, thisClient: true});
   }
 
   publishPanEvent(frame) {
@@ -363,7 +376,9 @@ export class PusherclientService {
         //     }
         // }
       }}
-      this.channel.trigger('client-MapXtntEvent', frame);
+      if (this.userName === this.currentTourGuide ) {
+        this.channel.trigger('client-MapXtntEvent', frame);
+      }
       // this.pusher.channels[this.CHANNELNAME].trigger('client-MapXtntEvent', frame);
   }
   publishClickEvent(frame) {
@@ -407,7 +422,9 @@ export class PusherclientService {
       //         }
       //   }
       // }
-      this.channel.trigger('client-MapClickEvent', frame);
+      if (this.userName === this.currentTourGuide ) {
+        this.channel.trigger('client-MapClickEvent', frame);
+    }
       // this.pusher.channels(this.CHANNELNAME).trigger('client-MapClickEvent', frame);
   }
 

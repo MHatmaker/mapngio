@@ -1,4 +1,4 @@
-import { Component, AfterContentInit, ChangeDetectorRef } from '@angular/core';
+import { Component, AfterContentInit } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
 import { ModalController } from '@ionic/angular';
@@ -11,10 +11,11 @@ import { PusherclientService } from '../../services/pusherclient.service';
 })
 export class TourguideComponent implements AfterContentInit, ControlValueAccessor {
   public tourists: IterableIterator<string>;
+  private selected: string;
 
   constructor(
     private pushsvc: PusherclientService,
-    public modalCtrl: ModalController, private ref: ChangeDetectorRef) {
+    public modalCtrl: ModalController) {
   }
 
   ngAfterContentInit() {
@@ -44,12 +45,13 @@ export class TourguideComponent implements AfterContentInit, ControlValueAccesso
   }
   selectTourGuide(t: string) {
     console.log('TourGuide selected is ' + t);
-    this.pushsvc.updateCurrentTourGuide(t);
+    this.selected = t;
+    // this.pushsvc.updateCurrentTourGuide(t);
   }
 
-  async accept() {
+  accept() {
     console.log('TourguideComponent component accept');
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss({tourguide: this.selected});
   }
   cancel() {
         //  this.modalCtrl.dismiss();
