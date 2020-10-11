@@ -334,13 +334,13 @@ export class PusherclientService {
 
   setCurrentTourGuide(tourist: ITourGuide) {
     this.currentTourGuide = tourist.name;
-    if (tourist.thisClient) {
-      if (tourist.thisClient === true) {
-        tourist.thisClient = false;
-        this.channel.trigger('client-SetTourGuide', tourist);
-      }
+    if (tourist.thisClient === true) {
+      tourist.thisClient = false;
+      this.channel.trigger('client-SetTourGuide', tourist);
+      alert('Tour guide is now ' + tourist.name);
+    } else {
+      alert('Tour guide is now ' + tourist.name);
     }
-    alert('Tour guide is now ' + tourist.name);
   }
 
   updateCurrentTourGuide(name: string) {

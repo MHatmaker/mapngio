@@ -11,7 +11,7 @@ import { PusherclientService } from '../../services/pusherclient.service';
 })
 export class TourguideComponent implements AfterContentInit, ControlValueAccessor {
   public tourists: IterableIterator<string>;
-  private selected: string;
+  private selected = '';
 
   constructor(
     private pushsvc: PusherclientService,
