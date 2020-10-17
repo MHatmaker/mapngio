@@ -15,7 +15,7 @@
    <ion-card id="idTouristListCard">
      <ion-card-content>
        <ion-item>
-           <h4>Tourists</h4>
+           <h2>Tourists currently in the session</h2>
        </ion-item>
            <div>
              <ion-list>
@@ -25,11 +25,11 @@
              </ion-list>
            </div>
            <ion-item *ngIf="selected!=''">
-             <h2>current tour guide is now {{selected}}</h2>
+             <h2>Current tour guide is now {{selected}}</h2>
            </ion-item>
            <ion-row>
              <ion-col>
-               <ion-button color="primary" (click)="accept()">Accept</ion-button>
+               <ion-button color="primary" (click)="accept()" *ngIf="selected!=''">Accept</ion-button>
              </ion-col>
              <ion-col>
                <ion-button color="secondary" (click)="cancel()">Cancel</ion-button>

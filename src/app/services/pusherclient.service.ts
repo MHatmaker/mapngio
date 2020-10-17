@@ -303,12 +303,12 @@ export class PusherclientService {
     console.log(this.tourClients);
     const tc = JSON.stringify([...this.tourClients.values()]);
     console.log(tc);
-    if (this.tourClients.values().next()) {
+    if (this.tourClients.size) {
       this.channel.trigger('client-RefreshTourClients', tc);
     }
   }
 
-  refreshTourClients(tc) {
+  refreshTourClients(tc: IterableIterator<string>) {
     console.log('refreshTourClients from ');
     console.log(this.tourClients);
     console.log('add new tourist ');
@@ -337,14 +337,13 @@ export class PusherclientService {
     if (tourist.thisClient === true) {
       tourist.thisClient = false;
       this.channel.trigger('client-SetTourGuide', tourist);
-      alert('Tour guide is now ' + tourist.name);
     } else {
       alert('Tour guide is now ' + tourist.name);
     }
   }
 
   updateCurrentTourGuide(name: string) {
-    console.log('updateCurrentTourGuide, frame is ' + name);
+    console.log('updateCurrentTourGuide, name is ' + name);
     this.currentTourGuide = name;
     // alert(name);
     this.setCurrentTourGuide({name, myname: this.userName, thisClient: true});
