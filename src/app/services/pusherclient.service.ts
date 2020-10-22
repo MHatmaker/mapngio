@@ -42,7 +42,6 @@ export class PusherclientService {
       private CHANNELNAME = '';
       // private mph: null;
       // private pusher: Pusher;
-      private callbackFunction: null;
       private info: null;
       // private isInitialized: false;
       // private pusherClient: null;
@@ -176,14 +175,14 @@ export class PusherclientService {
               // this.testShare.testShare.emit(frame);
           });
 
-          this.channel.bind('client-PollTourClients', (frame) => {
+          this.channel.bind('client-PollTourClients', (name: string) => {
             console.log('received request for client-PollTourClients');
-            this.respondTourClientPoll();
+            this.respondTourClientPoll(name);
           });
 
-          this.channel.bind('client-RefreshTourClients', (frame) => {
-            console.log('frame for client-RefreshTourClients is ', frame);
-            this.refreshTourClients(frame);
+          this.channel.bind('client-RefreshTourClients', (name: string) => {
+            console.log('frame for client-RefreshTourClients is ', name);
+            this.refreshTourClients(name);
           });
 
           this.channel.bind('client-SetTourGuide', (frame: ITourGuide) => {
@@ -238,7 +237,7 @@ export class PusherclientService {
       //     this.eventHandlers[clientName] = evtDct;
       // }
       }
-      createPusherClient(mlcfg, cbfn, nfo): PusherClient {
+      createPusherClient(mlcfg: MLConfig, nfo): PusherClient {
           console.log('pusherClientService.createPusherClient');
           const
               mapHoster = mlcfg.getMapHosterInstance(),
@@ -248,12 +247,11 @@ export class PusherclientService {
           this.userName = this.pusherConfig.getUserName();
           this.mapNumber = mlcfg.getMapNumber();
 
-          this.callbackFunction = cbfn;
           this.info = nfo;
           console.log('createPusherClient for map ' + clientName);
           this.clients[clientName] = new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber);
           this.PusherChannel(this.CHANNELNAME);
-          this.tourClients.add(this.userName);
+          // this.tourClients.add(this.userName);
 
           return this.clients[clientName];
       }
@@ -292,39 +290,33 @@ export class PusherclientService {
 
   pollTourClients() {
     console.log('trigger client-PollTourClients');
-    const frame = new Set<string>();
-    const jts = JSON.stringify([...frame.values()]);
-    this.channel.trigger('client-PollTourClients', jts);
-    // this.respondTourClientPoll();
+    this.channel.trigger('client-PollTourClients', this.userName);
   }
 
-  respondTourClientPoll() {
-    console.log('respondTourClients: trigger client-RefreshTourClients');
+  respondTourClientPoll(name: string) {
+    console.log('respondTourClients: trigger client-RefreshTourClients with new name ' + name);
     console.log(this.tourClients);
-    const tc = JSON.stringify([...this.tourClients.values()]);
-    console.log(tc);
+    if (name !== '') {
+      this.tourClients.add(name);
+    }
+    console.log(this.tourClients);
     if (this.tourClients.size) {
-      this.channel.trigger('client-RefreshTourClients', tc);
+      this.channel.trigger('client-RefreshTourClients', this.userName);
     }
   }
 
-  refreshTourClients(tc: IterableIterator<string>) {
+  refreshTourClients(name: string) {
     console.log('refreshTourClients from ');
     console.log(this.tourClients);
     console.log('add new tourist ');
-    console.log(tc);
-    const ts = new Set<string>(tc);
-    // const tc = JSON.parse(tcs);
-    // tc.forEach((value: string) => {
-    if (ts.size) {
-      for (const value of ts) {
-        this.tourClients.add(value);
-        // console.log(value);
-      }
+    console.log(name);
+
+    if (name !== '') {
+      this.tourClients.add(name);
+      // console.log(value);
       console.log('refreshed ...');
-      console.log(this.tourClients);
+      this.touristsUpdated.emit(this.tourClients);
     }
-    this.touristsUpdated.emit(this.tourClients);
   }
 
   getTouristList(): IterableIterator<string> {

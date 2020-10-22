@@ -90,9 +90,6 @@ export class StartupLeaflet extends Startup {
         console.log(this.pusherChannel);
         this.pusher = MLInjector.injector.get(PusherclientService).createPusherClient(
             this.mlconfig,
-            (channel, userName) => {
-                this.pusherConfig.setUserName(userName);
-            },
             null
             // {'destination': displayDestination, 'currentMapHolder': curmph, 'newWindowId': newSelectedWebMapId}
         );

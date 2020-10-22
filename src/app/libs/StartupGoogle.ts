@@ -91,9 +91,6 @@ export class StartupGoogle extends Startup {
 
         this.pusher = this.pusherClientService.createPusherClient(
             this.mlconfig,
-            function(channel, userName) {
-                this.pusherConfig.setUserName(userName);
-            },
             null
         );
         if (!this.pusher) {

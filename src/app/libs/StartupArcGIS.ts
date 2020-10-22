@@ -206,12 +206,6 @@ export class StartupArcGIS  extends Startup {
 
           this.pusher = MLInjector.injector.get(PusherclientService).createPusherClient(
               this.mlconfig,
-              function(callbackChannel, userName) {
-                  console.log('callback - no need to setPusherClient');
-                  console.log('It was a side effect of the createPusherClient:PusherClient process');
-                  this.pusherClientService.setUserName(userName);
-                  // MapHosterArcGIS.prototype.setPusherClient(pusher, callbackChannel);
-              },
               {destination: 'destPlaceHolder', currentMapHolder: this.mapHoster, newWindowId: 'windowIdPlaceholder'}
           );
           if (!this.pusher) {
@@ -230,12 +224,6 @@ export class StartupArcGIS  extends Startup {
           this.pusherChannel = this.pusherConfig.masherChannel(false);
           this.pusher = MLInjector.injector.get(PusherclientService).createPusherClient(
               this.mlconfig,
-              function(callbackChannel, userName) {
-                  console.log('callback - no need to setPusherClient');
-                  console.log('It was a side effect of the createPusherClient:PusherClient process');
-                  this.pusherConfig.setUserName(userName);
-                  // MapHosterArcGIS.prototype.setPusherClient(pusher, callbackChannel);
-              },
               {destination: 'destPlaceHolder', currentMapHolder: curmph, newWindowId: 'windowIdPlaceholder'}
           );
           const currentPusher = this.pusher;
