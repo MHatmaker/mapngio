@@ -11,7 +11,7 @@ import { PusherclientService } from '../../services/pusherclient.service';
 export class PushersetupComponent {
 
   // userName: string;
-  // privateChannelMashover : string;
+  // channelMashover : string;
   private pushergroup: FormGroup;
 
   constructor(
@@ -19,17 +19,17 @@ export class PushersetupComponent {
     private pusherClientService: PusherclientService,
     private pusherConfig: PusherConfig) {
     console.log('Hello PushersetupComponent Component');
-    // this.privateChannelMashover = 'Hello World';
+    // this.channelMashover = 'Hello World';
     this.pushergroup = this.formBuilder.group({
-      privateChannelMashover: [pusherConfig.getPusherChannel()], // , Validators.required],
+      channelMashover: [pusherConfig.getPusherChannel()], // , Validators.required],
       userName: [pusherConfig.getUserName()],
     });
   }
 
   accept() {
       this.viewCtrl.dismiss();
-      const chnl = this.pushergroup.value.privateChannelMashover;  //  ['privateChannelMashover'];
-      this.pusherConfig.setChannel(chnl); // this.pushergroup.value['privateChannelMashover']);
+      const chnl = this.pushergroup.value.channelMashover;  //  ['channelMashover'];
+      this.pusherConfig.setChannel(chnl); // this.pushergroup.value['channelMashover']);
       const uname = this.pushergroup.value.userName;
       this.pusherConfig.setUserName(uname);
       this.viewCtrl.dismiss();

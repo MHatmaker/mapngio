@@ -4,7 +4,7 @@ import {
 import { Utils } from './utils';
 
 export interface IPusherConfigParams {
-      privateChannelMashover: string;
+      channelMashover: string;
       prevChannel: string;
       userName: string;
       prevUserName: string;
@@ -18,10 +18,10 @@ export interface IPusherConfig {
         nameChannelAccepted: boolean,
         userName: string,
         userId: string,
-        pusherPathPre: string,
-        // pusherPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
-        pusherPathNgrok: string,
-        pusherPathPost: string,
+        mapLinkrSvrPathPre: string,
+        // mapLinkrSvrPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
+        mapLinkrSvrPathNgrok: string,
+        mapLinkrSvrPathPost: string,
         search: string,
         query: string
     };
@@ -30,15 +30,15 @@ export interface IPusherConfig {
 @Injectable()
 export class PusherConfig implements IPusherConfig {
     details = {
-        masherChannel: 'private-channel-mashchannel',
+        masherChannel: 'presence-channel-mashchannel',
         masherChannelInitialized: false,
         nameChannelAccepted: false,
         userName: 'defaultuser',
         userId: 'uidnone',
-        pusherPathPre: 'https://',
-        // pusherPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
-        pusherPathNgrok: 'smppushmaplinkrsrv.herokuapp.com',
-        pusherPathPost: '', // '.ngrok.io',
+        mapLinkrSvrPathPre: 'https://',
+        // mapLinkrSvrPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
+        mapLinkrSvrPathNgrok: '4b0d9f9979b5.ngrok.io', // 'smppushmaplinkrsrv.herokuapp.com',
+        mapLinkrSvrPathPost: '', // '.ngrok.io',
         search: '/',
         query: ''
     };
@@ -101,8 +101,8 @@ export class PusherConfig implements IPusherConfig {
             ury = this.utils.getParameterByName('ury', this.details.search);
         return {llx, lly, urx, ury};
     }
-    getPusherPath(): string {
-        const path = this.details.pusherPathPre + this.details.pusherPathNgrok + this.details.pusherPathPost;
+    getMapLinkrSvrPath(): string {
+        const path = this.details.mapLinkrSvrPathPre + this.details.mapLinkrSvrPathNgrok + this.details.mapLinkrSvrPathPost;
         console.log('Pusher ngrok path is ' + path);
         return path;
     }

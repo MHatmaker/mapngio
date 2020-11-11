@@ -1,6 +1,6 @@
 import { Injectable, EventEmitter } from '@angular/core';
 
-import {  PusherConfig } from '../libs/PusherConfig';
+import { PusherConfig } from '../libs/PusherConfig';
 import { MapinstanceService } from './mapinstance.service';
 import { MLConfig } from '../libs/MLConfig';
 // import { Pusher } from 'pusher-client';
@@ -56,7 +56,7 @@ export class PusherclientService {
       private currentTourGuide: string;
 
       private statedata = {
-          privateChannelMashover: null, // PusherConfig.masherChannel(),
+          channelMashover: null, // PusherConfig.masherChannel(),
           prevChannel: 'mashchannel',
           userName: this.userName,
           prevUserName: this.userName,
@@ -74,8 +74,8 @@ export class PusherclientService {
       preserveState() {
           console.log('preserveState');
           // $scope.data.whichDismiss = 'Cancel';
-          this.statedata.prevChannel = this.statedata.privateChannelMashover;
-          console.log('preserve ' + this.statedata.prevChannel + ' from ' + this.statedata.privateChannelMashover);
+          this.statedata.prevChannel = this.statedata.channelMashover;
+          console.log('preserve ' + this.statedata.prevChannel + ' from ' + this.statedata.channelMashover);
           this.statedata.userName = this.statedata.userName;
           console.log('preserve ' + this.statedata.prevUserName + ' from ' + this.statedata.userName);
       }
@@ -83,18 +83,18 @@ export class PusherclientService {
       restoreState() {
           console.log('restoreState');
           // this.statedata.whichDismiss = 'Accept';
-          console.log('restore ' + this.statedata.privateChannelMashover + ' from ' + this.statedata.prevChannel);
-          this.statedata.privateChannelMashover = this.statedata.prevChannel;
+          console.log('restore ' + this.statedata.channelMashover + ' from ' + this.statedata.prevChannel);
+          this.statedata.channelMashover = this.statedata.prevChannel;
           console.log('restore ' + this.statedata.userName + ' from ' + this.statedata.prevChannel);
           this.statedata.userName = this.statedata.prevUserName;
       }
 
       onAcceptChannel() {
-          console.log('onAcceptChannel ' + this.statedata.privateChannelMashover);
+          console.log('onAcceptChannel ' + this.statedata.channelMashover);
           this.userName = this.statedata.userName;
-          this.CHANNELNAME = this.statedata.privateChannelMashover;
+          this.CHANNELNAME = this.statedata.channelMashover;
           this.statedata.clientName = this.clientName = 'map' + this.mapInstanceService.getNextSlideNumber();
-          this.pusherConfig.setChannel(this.statedata.privateChannelMashover);
+          this.pusherConfig.setChannel(this.statedata.channelMashover);
           this.pusherConfig.setNameChannelAccepted(true);
           this.pusherConfig.setUserName(this.userName);
           // this.clients[this.clientName] = new PusherClient(null, this.clientName);
@@ -135,19 +135,26 @@ export class PusherclientService {
               channel = channelsub;
           }
 
-          this.CHANNELNAME = channel.indexOf('private-channel-') > -1 ? channel : 'private-channel-' + channel;
+          this.CHANNELNAME = channel.indexOf('presence-channel-') > -1 ? channel : 'presence-channel-' + channel;
           console.log('with channel ' + this.CHANNELNAME);
 
-          console.log('PusherPath is ' + this.pusherConfig.getPusherPath() + '/pusher/auth');
+          console.log('getMapLinkrSvrPath is ' + this.pusherConfig.getMapLinkrSvrPath() + '/pusher/auth');
           const pusher = new Pusher(APP_KEY, {
               authTransport: 'jsonp',
-              authEndpoint: this.pusherConfig.getPusherPath() + '/pusher/auth', // 'http://linkr622-arcadian.rhcloud.com/',
+              // cluster: 'mt1',
+              authEndpoint: this.pusherConfig.getMapLinkrSvrPath() + '/pusher/auth', //  + '&channeldata={username: foo}',
+              // authEndpoint: this.pusherConfig.getMapLinkrSvrPath() + '/pusher/auth', // 'http://linkr622-arcadian.rhcloud.com/',
               clientAuth: {
                   key: APP_KEY,
-                  secret: APP_SECRET,
+                  secret: APP_SECRET
                   // user_id: USER_ID,
                   // user_info: {}
-              }
+              },
+              auth: {params: {user_id: this.userName,
+              channel_data: 'foo'}} // {user_id: this.userName}}}
+              // params: {user_id: this.userName,
+              // channel_data:  {user_id: this.userName}}
+              // channel_data:  {"user_id": this.userName}
           });
 
           pusher.connection.bind('state_change', (state) => {
@@ -174,17 +181,17 @@ export class PusherclientService {
               this.mapOpener.openMap.emit(frame);
               // this.testShare.testShare.emit(frame);
           });
-
+/*
           this.channel.bind('client-PollTourClients', (name: string) => {
             console.log('received request for client-PollTourClients');
             this.respondTourClientPoll(name);
           });
 
+*/
           this.channel.bind('client-RefreshTourClients', (name: string) => {
             console.log('frame for client-RefreshTourClients is ', name);
             this.refreshTourClients(name);
           });
-
           this.channel.bind('client-SetTourGuide', (frame: ITourGuide) => {
             console.log('frame for client-SetTourClients is ', frame);
             this.setCurrentTourGuide(frame);
@@ -225,11 +232,17 @@ export class PusherclientService {
 
           this.channel.bind('pusher:subscription_error', (statusCode) => {
               // alert('Problem subscribing to 'private-channel': ' + statusCode);
-              console.log('Problem subscribing to "private-channel": ' + statusCode);
+              console.log('Problem subscribing to "channel": ' + statusCode);
           });
-          this.channel.bind('pusher:subscription_succeeded',  () => {
+          this.channel.bind('pusher:subscription_succeeded',  (data) => {
               console.log('Successfully subscribed to ' + this.CHANNELNAME); // + 'r'');
-              this.pollTourClients();
+              console.log(data);
+              // this.pollTourClients();
+          });
+          this.channel.bind('pusher:member_added', member => {
+              // alert('Problem subscribing to 'private-channel': ' + statusCode);
+              console.log('Pusher: add new member: ' + member);
+              this.addToTouristList(member.id);
           });
       // this.PusherChannel(this.pusherConfig.getPusherChannel());
 
@@ -288,6 +301,11 @@ export class PusherclientService {
       return promise;
   }
 
+  addToTouristList(member: string) {
+    this.tourClients.add(member);
+    this.channel.trigger('client-RefreshTourClients', this.userName);
+  }
+
   pollTourClients() {
     console.log('trigger client-PollTourClients');
     this.channel.trigger('client-PollTourClients', this.userName);
@@ -320,6 +338,11 @@ export class PusherclientService {
   }
 
   getTouristList(): IterableIterator<string> {
+    // this.touristsUpdated.emit(this.tourClients);
+    this.channel.members.each((member) => {
+      this.tourClients.add(member.info.name);
+    });
+    this.tourClients.add(this.channel.members.me.id);
     this.touristsUpdated.emit(this.tourClients);
     return this.tourClients.values();
   }

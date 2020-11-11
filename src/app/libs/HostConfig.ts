@@ -44,8 +44,6 @@ export interface IHostConfigDetails {
         lat: string;
         lon: string;
         zoom: string;
-        masherChannel: string;
-        masherChannelInitialized: boolean;
         nameChannelAccepted: boolean;
         protocol: string;
         host: string;
@@ -74,8 +72,6 @@ export class HostConfig implements IHostConfigDetails {
         lon: '',
         zoom: '',
         nginj: null,
-        masherChannel: 'private-channel-mashchannel',
-        masherChannelInitialized: false,
         nameChannelAccepted: false,
         protocol: 'http',
         host: '', // 'http://localhost';
@@ -101,36 +97,6 @@ export class HostConfig implements IHostConfigDetails {
             console.log('HostConfig ctor');
     }
 
-    masherChannel(newWindow: boolean): string {
-        // alert(this.getParameterByName('channel'));
-        // alert(this.details.masherChannel);
-        return newWindow ? this.utils.getParameterByName('channel', this.details.masherChannel) :
-        this.details.masherChannel;
-    }
-    getChannelFromUrl(): string {
-        this.details.masherChannel = this.utils.getParameterByName('channel', this.details.search);
-        this.details.masherChannelInitialized = true;
-        return this.details.masherChannel;
-    }
-    setChannel(chnl: string) {
-        if (this.details.masherChannelInitialized === false) {
-            this.details.masherChannelInitialized = true;
-        }
-        this.details.masherChannel = chnl;
-    }
-    isChannelInitialized(): boolean {
-        return this.details.masherChannelInitialized;
-    }
-
-    setNameChannelAccepted(tf: boolean) {
-        if (this.details.nameChannelAccepted === false) {
-            this.details.nameChannelAccepted = true;
-        }
-        this.details.nameChannelAccepted = tf;
-    }
-    isNameChannelAccepted(): boolean {
-        return this.details.nameChannelAccepted;
-    }
     getWebmapId(newWindow: boolean): string {
         let result = '';
         if (newWindow === true) {
@@ -224,7 +190,7 @@ export class HostConfig implements IHostConfigDetails {
       const { Http } = Plugins;
       const ret = await Http.request({
         method: 'GET',
-        url: this.pusherConfig.getPusherPath() + '/username',
+        url: this.pusherConfig.getMapLinkrSvrPath() + '/username',
         // headers: {
         //   'X-Fake-Header': 'Max was here'
         // },
@@ -232,7 +198,7 @@ export class HostConfig implements IHostConfigDetails {
           size: 'XL'
         }
       });
-      // const response = await this.http.get<IUserName>(this.pusherConfig.getPusherPath() + '/username').toPromise();
+      // const response = await this.http.get<IUserName>(this.pusherConfig.getMapLinkrSvrPath() + '/username').toPromise();
       // const retval = response; // .  json();
       console.log('simpleserver returns');
       const userName = ret.data.name;
@@ -251,15 +217,15 @@ export class HostConfig implements IHostConfigDetails {
     async getPusherKeys(): Promise<IPusherkeys> {
       console.log('await in hostConfig.getPusherKeys');
       const timeStamp = Date.now();
-      const getParams = this.pusherConfig.getPusherPath() + '/pusherkeys' + '?tsp=' + timeStamp;
+      const getParams = this.pusherConfig.getMapLinkrSvrPath() + '/pusherkeys' + '?tsp=' + timeStamp;
 
       const { Http } = Plugins;
       const pks = await Http.request({
         method: 'GET',
         url: getParams,
-        // headers: {
-        //   'X-Fake-Header': 'Max was here'
-        // },
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        },
         params: {
           size: 'XL'
         }
@@ -275,8 +241,8 @@ export class HostConfig implements IHostConfigDetails {
     }
 
     // getUserNameFromServer($http, opts): void {
-    //     console.log(this.pusherConfig.getPusherPath());
-    //     var pusherPath = this.pusherConfig.getPusherPath() + '/username';
+    //     console.log(this.pusherConfig.getMapLinkrSvrPath());
+    //     var pusherPath = this.pusherConfig.getMapLinkrSvrPath() + '/username';
     //     console.log('pusherPath in getUserNameFromServer');
     //     console.log(pusherPath);
     //     $http(
