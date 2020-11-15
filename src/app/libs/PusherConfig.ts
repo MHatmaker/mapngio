@@ -37,7 +37,7 @@ export class PusherConfig implements IPusherConfig {
         userId: 'uidnone',
         mapLinkrSvrPathPre: 'https://',
         // mapLinkrSvrPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
-        mapLinkrSvrPathNgrok: '4b0d9f9979b5.ngrok.io', // 'smppushmaplinkrsrv.herokuapp.com',
+        mapLinkrSvrPathNgrok: 'c5d33cd44ac4.ngrok.io', // 'smppushmaplinkrsrv.herokuapp.com',
         mapLinkrSvrPathPost: '', // '.ngrok.io',
         search: '/',
         query: ''

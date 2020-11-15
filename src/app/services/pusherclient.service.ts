@@ -18,6 +18,15 @@ interface ITourGuide {
   thisClient: boolean;
 }
 
+export class PusherDetails {
+  public pusher: any;
+  public channelName: string;
+  constructor(pusher: any, channelName: string){
+    this.pusher = pusher;
+    this.channelName = channelName;
+  }
+}
+
 class PusherClient {
     public eventHandlers: IEventDct; // = new Map<string, IEventDct>();
     public clientName: string;
@@ -40,6 +49,7 @@ export class PusherclientService {
       private userName = '';
       private channel: any = null;
       private CHANNELNAME = '';
+      private pusherDetails : PusherDetails;
       // private mph: null;
       // private pusher: Pusher;
       private info: null;
@@ -105,38 +115,76 @@ export class PusherclientService {
       }
 
       traverseClients(evt, frame) {
-          for (const clientName in this.clients) {
-            if (this.clients[clientName]) {
-                  const client = this.clients[clientName];
-                  if (client.eventHandlers.hasOwnProperty(evt)) {
-                      client.eventHandlers[evt](frame);
-                  }
+          // for (const clientName in this.clients) {
+          this.clients.forEach((client: PusherClient, clientName:string) => {
+              if (client.eventHandlers.hasOwnProperty(evt)) {
+                  client.eventHandlers[evt](frame);
               }
-          }
+          });
       }
 
-      PusherChannel(chnl) {
+      getPusherDetails() : PusherDetails {
+        return this.pusherDetails;
+      }
+
+      bindEvents(channel) {
+          console.log('BIND to client-MapXtntEvent');
+
+          channel.bind('client-MapXtntEvent',  (frame) => {
+              console.log('frame is', frame);
+              // frame might already have lat, lon, zoom, rather than x, y, z properties
+              if (frame.hasOwnProperty('x')) {
+                  frame.lat = frame.y;
+                  frame.lon = frame.x;
+                  frame.zoom = frame.z;
+              }
+              this.traverseClients('client-MapXtntEvent', frame);
+
+              console.log('back from boundsRetriever');
+          });
+
+          channel.bind('client-MapClickEvent', (frame) => {
+              console.log('frame is', frame);
+              // frame might already have lat, lon, zoom, rather than x, y, z properties
+              if (frame.hasOwnProperty('x')) {
+                  frame.lat = frame.y;
+                  frame.lon = frame.x;
+                  frame.zoom = frame.z;
+              }
+              this.traverseClients('client-MapClickEvent', frame);
+              // for (handlerkey in this.eventHandlers) {
+              //     if (this.eventHandlers.hasOwnProperty(handlerkey)) {
+              //         obj = this.eventHandlers[handlerkey];
+              //         obj['client-MapClickEvent'](frame);
+              //     }
+              // }
+              console.log('back from clickRetriever');
+          });
+
+      }
+
+      PusherChannel() {
           const // pusher,
               // APP_ID = '40938',
               APP_KEY = this.pusherConfig.getAppKey(),
               APP_SECRET = this.pusherConfig.getSecretKey();
           let
-              channel = chnl,
-              chlength = channel.length,
-              channelsub = channel.substring(1);
+              channelName = this.pusherConfig.getPusherChannel(),
+              chlength = channelName.length,
+              channelsub = channelName.substring(1);
           console.log('PusherChannel ready to create channel');
           console.log(`AppKey: ${APP_KEY}, APP_SECRET ${APP_SECRET}`);
           // this.eventDct = eventDct;
 
-          if (channel[0] === '/') {
-              chlength = channel.length;
-              channelsub = channel.substring(1);
+          if (channelName[0] === '/') {
+              chlength = channelName.length;
+              channelsub = channelName.substring(1);
               channelsub = channelsub.substring(0, chlength - 2);
-              channel = channelsub;
+              channelName = channelsub;
           }
 
-          this.CHANNELNAME = channel.indexOf('presence-channel-') > -1 ? channel : 'presence-channel-' + channel;
-          console.log('with channel ' + this.CHANNELNAME);
+          this.CHANNELNAME = channelName.indexOf('presence-channel-') > -1 ? channelName : 'presence-channel-' + channelName;
+          console.log('with channel name ' + this.CHANNELNAME);
 
           console.log('getMapLinkrSvrPath is ' + this.pusherConfig.getMapLinkrSvrPath() + '/pusher/auth');
           const pusher = new Pusher(APP_KEY, {
@@ -150,11 +198,7 @@ export class PusherclientService {
                   // user_id: USER_ID,
                   // user_info: {}
               },
-              auth: {params: {user_id: this.userName,
-              channel_data: 'foo'}} // {user_id: this.userName}}}
-              // params: {user_id: this.userName,
-              // channel_data:  {user_id: this.userName}}
-              // channel_data:  {"user_id": this.userName}
+              // auth: {params: {user_id: this.userName}}
           });
 
           pusher.connection.bind('state_change', (state) => {
@@ -168,6 +212,8 @@ export class PusherclientService {
           });
           console.log('Pusher subscribe to channel ' + this.CHANNELNAME);
           this.channel = pusher.subscribe(this.CHANNELNAME);
+
+          this.pusherDetails = new PusherDetails(pusher, this.CHANNELNAME);
 
           this.channel.bind('client-NewUrlEvent', (frame) => {
               console.log('frame is', frame);
@@ -197,39 +243,6 @@ export class PusherclientService {
             this.setCurrentTourGuide(frame);
           });
 
-          console.log('BIND to client-MapXtntEvent');
-
-          this.channel.bind('client-MapXtntEvent',  (frame) => {
-              console.log('frame is', frame);
-              // frame might already have lat, lon, zoom, rather than x, y, z properties
-              if (frame.hasOwnProperty('x')) {
-                  frame.lat = frame.y;
-                  frame.lon = frame.x;
-                  frame.zoom = frame.z;
-              }
-              this.traverseClients('client-MapXtntEvent', frame);
-
-              console.log('back from boundsRetriever');
-          });
-
-          this.channel.bind('client-MapClickEvent', (frame) => {
-              console.log('frame is', frame);
-              // frame might already have lat, lon, zoom, rather than x, y, z properties
-              if (frame.hasOwnProperty('x')) {
-                  frame.lat = frame.y;
-                  frame.lon = frame.x;
-                  frame.zoom = frame.z;
-              }
-              this.traverseClients('client-MapClickEvent', frame);
-              // for (handlerkey in this.eventHandlers) {
-              //     if (this.eventHandlers.hasOwnProperty(handlerkey)) {
-              //         obj = this.eventHandlers[handlerkey];
-              //         obj['client-MapClickEvent'](frame);
-              //     }
-              // }
-              console.log('back from clickRetriever');
-          });
-
           this.channel.bind('pusher:subscription_error', (statusCode) => {
               // alert('Problem subscribing to 'private-channel': ' + statusCode);
               console.log('Problem subscribing to "channel": ' + statusCode);
@@ -237,18 +250,9 @@ export class PusherclientService {
           this.channel.bind('pusher:subscription_succeeded',  (data) => {
               console.log('Successfully subscribed to ' + this.CHANNELNAME); // + 'r'');
               console.log(data);
+              this.userName = data.myID;
               // this.pollTourClients();
           });
-          this.channel.bind('pusher:member_added', member => {
-              // alert('Problem subscribing to 'private-channel': ' + statusCode);
-              console.log('Pusher: add new member: ' + member);
-              this.addToTouristList(member.id);
-          });
-      // this.PusherChannel(this.pusherConfig.getPusherChannel());
-
-      // PusherClient(evtDct, clientName) {
-      //     this.eventHandlers[clientName] = evtDct;
-      // }
       }
       createPusherClient(mlcfg: MLConfig, nfo): PusherClient {
           console.log('pusherClientService.createPusherClient');
@@ -256,23 +260,22 @@ export class PusherclientService {
               mapHoster = mlcfg.getMapHosterInstance(),
               clientName = 'map' + this.pusherConfig.getUserName() + mlcfg.getMapNumber();
 
-          this.CHANNELNAME = this.pusherConfig.getPusherChannel();
-          this.userName = this.pusherConfig.getUserName();
           this.mapNumber = mlcfg.getMapNumber();
 
           this.info = nfo;
           console.log('createPusherClient for map ' + clientName);
-          this.clients[clientName] = new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber);
-          this.PusherChannel(this.CHANNELNAME);
+          this.clients.set(clientName,new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber));
+
+          this.bindEvents(this.channel);
           // this.tourClients.add(this.userName);
 
           return this.clients[clientName];
       }
 
       createHiddenPusherClient(evtDct: IEventDct) {
-          this.CHANNELNAME = this.pusherConfig.getPusherChannel();
           this.clients.set('hiddenmap', new PusherClient(evtDct, 'hiddenmap', 'hiddenmap', 99));
-          this.PusherChannel(this.CHANNELNAME);
+          this.PusherChannel();
+          this.bindEvents(this.channel);
       }
 
       setupPusherClient(resolve, reject) {
@@ -292,14 +295,6 @@ export class PusherclientService {
           // return promise;
           // this.displayPusherDialog();
       }
-
-  getPusherChannel() {
-      const promise = new Promise(function(resolve, reject) {
-          const result = this.setupPusherClient(resolve, reject);
-          console.log('getPusherChannel returns ' + result);
-      });
-      return promise;
-  }
 
   addToTouristList(member: string) {
     this.tourClients.add(member);
@@ -371,10 +366,7 @@ export class PusherclientService {
           frame.lon = frame.x;
           frame.zoom = frame.z;
       }
-      for (const clName in this.clients) {
-        if (this.clients.hasOwnProperty(clName)) {
-          const client = this.clients[clName];
-          // for (handler in this.clients.  eventHandlers) {
+      this.clients.forEach((client: PusherClient, clName: string) => {
           if (client.hasOwnProperty('eventHandlers')) {
             const obj = client.eventHandlers;
             console.log('publish pan event to map ' + client.eventHandlers);
@@ -382,14 +374,7 @@ export class PusherclientService {
               obj['client-MapXtntEvent'](frame);
             }
         }
-        // if (this.eventHandlers.hasOwnProperty(handler)) {
-        //     obj = this.eventHandlers[handler];
-        //     console.log('publish pan event to map ' + this.eventHandlers[handler]);
-        //     if (obj) {
-        //         obj['client-MapXtntEvent'](frame);
-        //     }
-        // }
-      }}
+      });
       if (this.userName === this.currentTourGuide ) {
         this.channel.trigger('client-MapXtntEvent', frame);
       }

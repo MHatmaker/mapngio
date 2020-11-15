@@ -12,7 +12,7 @@ import { EMapSource } from '../services/configparams.service';
 // import { GeoCodingService } from '../services/GeoCodingService';
 // import { IPositionParams, IPositionData } from '../services/positionupdate.interface';
 import { PositionupdateService } from '../services/positionupdate.service';
-import { PusherclientService } from '../services/pusherclient.service';
+import { PusherclientService, PusherDetails } from '../services/pusherclient.service';
 import { PusherConfig } from './PusherConfig';
 // import { PusherEventHandler } from './PusherEventHandler';
 import { MapHoster } from './MapHoster';
@@ -137,6 +137,7 @@ export class MapHosterGoogle extends MapHoster {
         this.pusherConfig = MLInjector.injector.get(PusherConfig);
         this.geoCoder = MLInjector.injector.get(GeocodingService);
         this.initialLocations = MLInjector.injector.get(LocationsService);
+        this.selfPusherDetails = this.pusherClientService.getPusherDetails();
     }
 
     updateGlobals(msg: string, cntrx: number, cntry: number, zm: number) {
@@ -284,17 +285,19 @@ export class MapHosterGoogle extends MapHoster {
             const xtExt = this.extractBounds(action),
                 xtntJsonStr = JSON.stringify(xtExt);
 
+
+            this.selfPusherDetails = this.pusherClientService.getPusherDetails();
             console.log('extracted bounds ' + xtntJsonStr);
             const cmp = this.compareExtents('MapHosterGoogle ' + this.mlconfig.getMapNumber() + ' setBounds', xtExt);
             if (cmp === false) {
                 console.log('MapHoster Google setBounds ' + this.mlconfig.getMapNumber() +
                 ' pusher send to channel ' + this.selfPusherDetails.channelName);
-                if (this.selfPusherDetails.pusher) {
-                    const triggered = this.selfPusherDetails.pusher.channel(
-                      this.selfPusherDetails.channelName).trigger('client-MapXtntEvent', xtExt);
-                    console.log('triggered?');
-                    console.log(triggered);
-                }
+                // if (this.selfPusherDetails.pusher) {
+                //     const triggered = this.selfPusherDetails.pusher.channel(
+                //       this.selfPusherDetails.channelName).trigger('client-MapXtntEvent', xtExt);
+                //     console.log('triggered?');
+                //     console.log(triggered);
+                // }
                 this.pusherClientService.publishPanEvent(xtExt);
                 this.updateGlobals('in setBounds with cmp false', +xtExt.lon, +xtExt.lat, xtExt.zoom);
 
