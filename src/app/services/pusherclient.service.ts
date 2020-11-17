@@ -253,6 +253,9 @@ export class PusherclientService {
               this.userName = data.myID;
               // this.pollTourClients();
           });
+          this.channel.bind('pusher:member_removed', (member) => {
+            alert('member removed ' + member.id);
+          })
       }
       createPusherClient(mlcfg: MLConfig, nfo): PusherClient {
           console.log('pusherClientService.createPusherClient');

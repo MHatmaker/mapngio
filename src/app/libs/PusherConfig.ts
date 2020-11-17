@@ -19,8 +19,7 @@ export interface IPusherConfig {
         userName: string,
         userId: string,
         mapLinkrSvrPathPre: string,
-        // mapLinkrSvrPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
-        mapLinkrSvrPathNgrok: string,
+
         mapLinkrSvrPathPost: string,
         search: string,
         query: string
@@ -36,9 +35,9 @@ export class PusherConfig implements IPusherConfig {
         userName: 'defaultuser',
         userId: 'uidnone',
         mapLinkrSvrPathPre: 'https://',
-        // mapLinkrSvrPathNgrok:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
-        mapLinkrSvrPathNgrok: 'c5d33cd44ac4.ngrok.io', // 'smppushmaplinkrsrv.herokuapp.com',
-        mapLinkrSvrPathPost: '', // '.ngrok.io',
+        // mapLinkrSvrPath:'maplinkroc3-maplinkr.7e14.starter-us-west-2.openshiftapps.com', //'c1232bf1',
+        mapLinkrSvrPath: 'maplinkr-simpleserver.herokuapp.com', //  'c5d33cd44ac4.ngrok.io',
+        mapLinkrSvrPathPost: '',
         search: '/',
         query: ''
     };
@@ -102,8 +101,8 @@ export class PusherConfig implements IPusherConfig {
         return {llx, lly, urx, ury};
     }
     getMapLinkrSvrPath(): string {
-        const path = this.details.mapLinkrSvrPathPre + this.details.mapLinkrSvrPathNgrok + this.details.mapLinkrSvrPathPost;
-        console.log('Pusher ngrok path is ' + path);
+        const path = this.details.mapLinkrSvrPathPre + this.details.mapLinkrSvrPath + this.details.mapLinkrSvrPathPost;
+        console.log('MapLinkrSvr path is ' + path);
         return path;
     }
     getQueryFromUrl() {

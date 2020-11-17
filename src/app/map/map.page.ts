@@ -162,8 +162,9 @@ export class MapPage implements AfterViewInit, AfterContentInit {
             const modal = await modalCtrl.create({component: TourguideComponent});
             modal.present();
             const { data } = await modal.onDidDismiss();
-            /// alert('Tour guide is new ' + data.name);
-            this.pusherClientService.updateCurrentTourGuide(data.tourguide);
+            if(data) {
+              this.pusherClientService.updateCurrentTourGuide(data.tourguide);
+            }
           },
           'Pusher Setup': async () => {
             const modal = await modalCtrl.create({component: PushersetupComponent});
