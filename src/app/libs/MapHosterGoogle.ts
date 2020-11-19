@@ -162,7 +162,7 @@ export class MapHosterGoogle extends MapHoster {
             {key: 'zm',
               val: {
                 zm: this.zmG,
-                scl: this.scale2Level.length > 0 ? this.scale2Level[this.zmG].scale : 3,
+                scl: this.scale2Level.length > 0 ? this.scale2Level[this.zmG].scale : this.scale2Level[3],
                 cntrlng: this.cntrxG,
                 cntrlat: this.cntryG,
                 evlng: this.cntrxG,
