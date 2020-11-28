@@ -21,7 +21,7 @@ interface ITourGuide {
 export class PusherDetails {
   public pusher: any;
   public channelName: string;
-  constructor(pusher: any, channelName: string){
+  constructor(pusher: any, channelName: string) {
     this.pusher = pusher;
     this.channelName = channelName;
   }
@@ -49,7 +49,7 @@ export class PusherclientService {
       private userName = '';
       private channel: any = null;
       private CHANNELNAME = '';
-      private pusherDetails : PusherDetails;
+      private pusherDetails: PusherDetails;
       // private mph: null;
       // private pusher: Pusher;
       private info: null;
@@ -116,14 +116,14 @@ export class PusherclientService {
 
       traverseClients(evt, frame) {
           // for (const clientName in this.clients) {
-          this.clients.forEach((client: PusherClient, clientName:string) => {
+          this.clients.forEach((client: PusherClient, clientName: string) => {
               if (client.eventHandlers.hasOwnProperty(evt)) {
                   client.eventHandlers[evt](frame);
               }
           });
       }
 
-      getPusherDetails() : PusherDetails {
+      getPusherDetails(): PusherDetails {
         return this.pusherDetails;
       }
 
@@ -137,6 +137,12 @@ export class PusherclientService {
                   frame.lat = frame.y;
                   frame.lon = frame.x;
                   frame.zoom = frame.z;
+
+              } else if (frame.hasOwnProperty('__zone_symbol__value')) {
+                const fv = frame.__zone_symbol__value;
+                frame.lat = fv.y;
+                frame.lon = fv.x;
+                frame.zoom = fv.z;
               }
               this.traverseClients('client-MapXtntEvent', frame);
 
@@ -255,7 +261,7 @@ export class PusherclientService {
           });
           this.channel.bind('pusher:member_removed', (member) => {
             alert('member removed ' + member.id);
-          })
+          });
       }
       createPusherClient(mlcfg: MLConfig, nfo): PusherClient {
           console.log('pusherClientService.createPusherClient');
@@ -267,7 +273,7 @@ export class PusherclientService {
 
           this.info = nfo;
           console.log('createPusherClient for map ' + clientName);
-          this.clients.set(clientName,new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber));
+          this.clients.set(clientName, new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber));
 
           this.bindEvents(this.channel);
           // this.tourClients.add(this.userName);
@@ -368,7 +374,12 @@ export class PusherclientService {
           frame.lat = frame.y;
           frame.lon = frame.x;
           frame.zoom = frame.z;
-      }
+      } else if (frame.hasOwnProperty('__zone_symbol__value')) {
+        const fv = frame.__zone_symbol__value;
+        frame.lat = fv.y;
+        frame.lon = fv.x;
+        frame.zoom = fv.z;
+    }
       this.clients.forEach((client: PusherClient, clName: string) => {
           if (client.hasOwnProperty('eventHandlers')) {
             const obj = client.eventHandlers;
@@ -391,7 +402,13 @@ export class PusherclientService {
           frame.lat = frame.y;
           frame.lon = frame.x;
           frame.zoom = frame.z;
+      } else if (frame.hasOwnProperty('__zone_symbol__value')) {
+         const fv = frame.__zone_symbol__value;
+         frame.lat = fv.y;
+         frame.lon = fv.x;
+         frame.zoom = fv.z;
       }
+
       const keys = Array.from(this.clients.keys());
       const withoutHidden = _.without(keys, 'hiddenmap');  // this.clients.get('hiddenmap'));
       console.log(withoutHidden);

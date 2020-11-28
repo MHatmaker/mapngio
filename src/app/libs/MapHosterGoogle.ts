@@ -354,6 +354,12 @@ export class MapHosterGoogle extends MapHoster {
 
     async retrievedBoundsInternal(xj) {
         console.log('Back in MapHosterGoogle ' + this.mlconfig.getMapNumber() + ' retrievedBounds');
+        if (xj.hasOwnProperty('__zone_symbol__value')) {
+          const fv = xj.__zone_symbol__value;
+          xj.lat = fv.lat;
+          xj.lon = fv.lon;
+          xj.zoom = fv.zoom;
+        }
         if (xj.zoom === '0') {
             xj.zoom = this.zmG;
         }

@@ -149,7 +149,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     //     return this.mphmap;
     // }
 
-    async updateGlobals(msg, cntrx, cntry, zm) {
+    async updateGlobals(msg: string, cntrx: string, cntry: string, zm: number) {
         const [esriwebMercatorUtils] = await loadModules([
              'esri/geometry/support/webMercatorUtils'
           ], this.agoOptions);
@@ -205,7 +205,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         console.log('zoom levels: ' + this.zoomLevels);
     }
 
-    async extractBounds(zm, cntr, action): Promise<XtntParams> {
+    async extractBounds(zm: number, cntr: any, action: string): Promise<XtntParams> {
         const [esriPoint, esriSpatialReference] = await loadModules([
             'esri/geometry/Point', 'esri/geometry/SpatialReference',
           ], this.agoOptions);
@@ -253,6 +253,12 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
 
     async setBounds(xtExt) {
         console.log('MapHosterArcGIS setBounds with selfPusherDetails.pusher ' + this.mlconfig.getMapNumber());
+        if (xtExt.hasOwnProperty('__zone_symbol__value')) {
+          const fv = xtExt.__zone_symbol__value;
+          xtExt.lat = fv.lat;
+          xtExt.lon = fv.lon;
+          xtExt.zoom = fv.zoom;
+        }
 
         if (this.mapReady === true) { // } && selfPusherDetails.pusher) { // && self.pusher.ready == true) {
             // runs this code after you finishing the zoom
@@ -371,13 +377,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         zoom: xj.zoom,
         lon: xj.lon, // x[0],
         lat: xj.lat  // x[1]
-      }),
-      view = xj.lon + ', ' + xj.lat + ': ' + zm + ' ' + this.scale2Level[zm].scale;
-
-      if (document.getElementById('mppos') !== null) {
-          const elementVal = document.getElementById('mppos') as HTMLTextAreaElement;
-          elementVal.innerHTML = view;
-      }
+      });
       if (cmp === false) {
           const tmpLon = this.cntrxG;
           const tmpLat = this.cntryG;
@@ -600,9 +600,9 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           const qzoom = this.mlconfig.zoom();
 
           if (qlat !== '') {
-              await this.updateGlobals('in configureMap - MapHosterArcGIS init with qlon, qlat', qlon, qlat, qzoom);
+              await this.updateGlobals('in configureMap - MapHosterArcGIS init with qlon, qlat', qlon, qlat, +qzoom);
           } else {
-              await this.updateGlobals('in configureMap - MapHosterArcGIS init with hard-coded values', -87.620692, 41.888941, 13);
+              await this.updateGlobals('in configureMap - MapHosterArcGIS init with hard-coded values', '-87.620692', '41.888941', 13);
           }
 
           // updateGlobals('init standard', -87.7, 41.8, 13);
@@ -638,14 +638,14 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           // this.userZoom = true;
       });
 
-      watchUtils.whenTrue(this.mphmap, 'stationary', async (evt) => {
+      watchUtils.whenTrue(this.mphmap, 'stationary', async (evt: any) => {
         if (this.mphmap.center) {
           console.log('x' + this.mphmap.center.x +  ', y' + this.mphmap.center.y);
-          this.prepareToUpdateBounds();
+          this.prepareToSetBounds();
         }
         if (this.mphmap.extent) {
           if (this.userZoom === true) {
-              const bnds = await this.extractBounds(this.mphmap.zoom, this.mphmap.center, 'zoom');
+              const bnds = await this.extractBounds(this.mphmap.zoom, this.mphmap.center, 'pan');
               this.setBounds(bnds);
           }
         }
@@ -711,7 +711,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       // mpCanRoot = document.getElementById('map' + this.mlconfig.getMapNumber() + '_root');
     }
 
-    async prepareToUpdateBounds() {// newMapId, mapOpts
+    async prepareToSetBounds() {// newMapId, mapOpts
       const [ esriwebMercatorUtils] = await loadModules([
             'esri/geometry/support/webMercatorUtils'
           ], this.agoOptions);
