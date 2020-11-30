@@ -205,7 +205,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         console.log('zoom levels: ' + this.zoomLevels);
     }
 
-    async extractBounds(zm: number, cntr: any, action: string): Promise<XtntParams> {
+    async extractBounds(zm: number, cntr: any, action: string) {
         const [esriPoint, esriSpatialReference] = await loadModules([
             'esri/geometry/Point', 'esri/geometry/SpatialReference',
           ], this.agoOptions);
@@ -641,7 +641,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       watchUtils.whenTrue(this.mphmap, 'stationary', async (evt: any) => {
         if (this.mphmap.center) {
           console.log('x' + this.mphmap.center.x +  ', y' + this.mphmap.center.y);
-          this.prepareToSetBounds();
+          await this.prepareToSetBounds();
         }
         if (this.mphmap.extent) {
           if (this.userZoom === true) {
@@ -723,10 +723,10 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         this.bounds = new MlboundsService(lld[0], lld[1], urd[0], urd[1]);
         // this.bounds = this.mphmap.extent;
         this.mlconfig.setBounds(this.bounds);
-        const xtExt = this.extractBounds(this.mphmap.zoom, mapPt, 'pan');
-        xtExt.then( () => {
-          this.setBounds(xtExt);
-        });
+        const xtExt = await this.extractBounds(this.mphmap.zoom, mapPt, 'pan');
+        // xtExt.then( () => {
+        this.setBounds(xtExt);
+        // });
       }
     }
 
