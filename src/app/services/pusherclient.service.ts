@@ -138,12 +138,13 @@ export class PusherclientService {
                   frame.lon = frame.x;
                   frame.zoom = frame.z;
 
-              } else if (frame.hasOwnProperty('__zone_symbol__value')) {
-                const fv = frame.__zone_symbol__value;
-                frame.lat = fv.y;
-                frame.lon = fv.x;
-                frame.zoom = fv.z;
               }
+              // else if (frame.hasOwnProperty('__zone_symbol__value')) {
+              //   const fv = frame.__zone_symbol__value;
+              //   frame.lat = fv.y;
+              //   frame.lon = fv.x;
+              //   frame.zoom = fv.z;
+              // }
               this.traverseClients('client-MapXtntEvent', frame);
 
               console.log('back from boundsRetriever');
@@ -267,12 +268,12 @@ export class PusherclientService {
           console.log('pusherClientService.createPusherClient');
           const
               mapHoster = mlcfg.getMapHosterInstance(),
-              clientName = 'map' + this.pusherConfig.getUserName() + mlcfg.getMapNumber();
+              clientName = this.pusherConfig.getUserName() + mlcfg.getMapNumber();
 
           this.mapNumber = mlcfg.getMapNumber();
 
           this.info = nfo;
-          console.log('createPusherClient for map ' + clientName);
+          console.log('createPusherClient for' + clientName);
           this.clients.set(clientName, new PusherClient(mapHoster.getEventDictionary(), clientName, this.userName, this.mapNumber));
 
           this.bindEvents(this.channel);
@@ -370,16 +371,6 @@ export class PusherclientService {
 
   publishPanEvent(frame) {
       console.log('frame is', frame);
-      if (frame.hasOwnProperty('x')) {
-          frame.lat = frame.y;
-          frame.lon = frame.x;
-          frame.zoom = frame.z;
-      } else if (frame.hasOwnProperty('__zone_symbol__value')) {
-        const fv = frame.__zone_symbol__value;
-        frame.lat = fv.y;
-        frame.lon = fv.x;
-        frame.zoom = fv.z;
-    }
       this.clients.forEach((client: PusherClient, clName: string) => {
           if (client.hasOwnProperty('eventHandlers')) {
             const obj = client.eventHandlers;
@@ -417,12 +408,13 @@ export class PusherclientService {
       const withoutPopId = _.without(withoutSubmitter, this.clients[frame.popId]);
       console.log(withoutPopId);
       _.each(withoutPopId, (client) => {
-          const testId = client.userName + client.mapNumber;
-          console.log(`client is clientName ${client.clientName}, userName ${client.userName}, testId ${testId}`);
+          const testId = this.clients.get(client).clientName; //  + this.clients.get(client).mapNumber;
+          const testClient = this.clients.get(client);
+          console.log(`client is clientName ${this.clients.get(client).clientName}, testId ${testId}`);
           if (testId !== frame.referrerId) {
-            if (client.hasOwnProperty('eventHandlers')) {
-                const obj = client.eventHandlers;
-                console.log('publish shared click event to map ' + client.clientName);
+            if (testClient.hasOwnProperty('eventHandlers')) {
+                const obj = testClient.eventHandlers;
+                console.log('publish shared click event to map ' +  this.clients.get(client).clientName);
                 obj['client-MapClickEvent'](frame);
             }
           }

@@ -253,12 +253,6 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
 
     async setBounds(xtExt) {
         console.log('MapHosterArcGIS setBounds with selfPusherDetails.pusher ' + this.mlconfig.getMapNumber());
-        if (xtExt.hasOwnProperty('__zone_symbol__value')) {
-          const fv = xtExt.__zone_symbol__value;
-          xtExt.lat = fv.lat;
-          xtExt.lon = fv.lon;
-          xtExt.zoom = fv.zoom;
-        }
 
         if (this.mapReady === true) { // } && selfPusherDetails.pusher) { // && self.pusher.ready == true) {
             // runs this code after you finishing the zoom

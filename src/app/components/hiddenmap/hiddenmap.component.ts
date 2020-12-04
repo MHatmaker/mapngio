@@ -64,16 +64,16 @@ export class HiddenmapComponent implements AfterViewInit {
     });
   }
   onPan(xj) {
-    if (xj.hasOwnProperty('x')) {
-        xj.lat = xj.y;
-        xj.lon = xj.x;
-        xj.zoom = xj.z;
-    } else if (xj.hasOwnProperty('__zone_symbol__value')) {
-       const fv = xj.__zone_symbol__value;
-       xj.lat = fv.y;
-       xj.lon = fv.x;
-       xj.zoom = fv.z;
-    }
+    // if (xj.hasOwnProperty('x')) {
+    //     xj.lat = xj.y;
+    //     xj.lon = xj.x;
+    //     xj.zoom = xj.z;
+    // } else if (xj.hasOwnProperty('__zone_symbol__value')) {
+    //    const fv = xj.__zone_symbol__value;
+    //    xj.lat = fv.y;
+    //    xj.lon = fv.x;
+    //    xj.zoom = fv.z;
+    // }
     const cntr = new google.maps.LatLng(xj.lat, xj.lon);
     this.map.setCenter(cntr);
     this.map.setZoom(xj.zoom);
