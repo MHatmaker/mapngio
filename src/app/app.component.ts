@@ -101,11 +101,11 @@ export class AppComponent implements AfterContentInit, OnInit {
 
   async ngAfterContentInit() {
     console.log('query server for user name and pusher keys');
-    // this.queryForUserName();
-    // await this.queryForPusherKeys().then(data => {
-    //   this.initializeApp();
-    // });
-    this.initializeApp();
+    this.queryForUserName();
+    await this.queryForPusherKeys().then(data => {
+      this.initializeApp();
+    });
+    // this.initializeApp();
     console.log('finished user name and pusher key query');
   }
 
