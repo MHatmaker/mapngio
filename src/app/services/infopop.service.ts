@@ -113,14 +113,16 @@ export class InfopopService {
           // remove modal from array of active modals
           // const modalToRemove = _.findWhere(this.modals, { id: id });
           // this.modals = _.without(this.modals, modalToRemove);
-          const popItem = this.modalMap.get(id);
-          const mapNo = popItem.mapNumber;
-          const elemToRemove = popItem.pop.element;
-          // const mapNo = this.modalMap.get(id).mapNumber;
-          const parentElem = document.getElementById('google-map-component' + mapNo);
-          // const elemToRemove = this.modalMap.get(id).pop.element;
-          parentElem.removeChild(elemToRemove);
-          this.modalMap.delete(id);
+          if (this.modalMap.has(id)) {
+            const popItem = this.modalMap.get(id);
+            const mapNo = popItem.mapNumber;
+            const elemToRemove = popItem.pop.element;
+            // const mapNo = this.modalMap.get(id).mapNumber;
+            const parentElem = document.getElementById('google-map-component' + mapNo);
+            // const elemToRemove = this.modalMap.get(id).pop.element;
+            parentElem.removeChild(elemToRemove);
+            this.modalMap.delete(id);
+          }
       }
 
       open(content: string, title: string, ngUid: string) {

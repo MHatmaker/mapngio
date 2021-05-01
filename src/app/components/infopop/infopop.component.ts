@@ -23,7 +23,7 @@ export class InfopopComponent implements OnDestroy, OnInit {
     public mrkrlabel: string;
     public worldCoordinates: {'lat': number, 'lng': number};
 
-    constructor(private infopopProvider: InfopopService, private el: ElementRef) {
+    constructor(private infopopsvc: InfopopService, private el: ElementRef) {
         this.element = el.nativeElement;
         this.popped = true;
         this.worldCoordinates = {lat: 99, lng: 99};
@@ -55,10 +55,10 @@ export class InfopopComponent implements OnDestroy, OnInit {
         });
 
         // add self (this modal instance) to the modal service so it's accessible from controllers
-        console.log('add this popup to infopopProvider');
+        console.log('add this popup to infopopsvc');
 // this.popoverId = uuid();
         console.log(this);
-        this.infopopProvider.add(this);
+        this.infopopsvc.add(this);
     }
 
 
@@ -81,7 +81,7 @@ export class InfopopComponent implements OnDestroy, OnInit {
 
     // remove self from modal service when directive is destroyed
     ngOnDestroy(): void {
-        this.infopopProvider.remove(this.popoverId);
+        this.infopopsvc.remove(this.popoverId);
         this.element.remove();
     }
 
@@ -100,17 +100,17 @@ export class InfopopComponent implements OnDestroy, OnInit {
         this.popped = false;
     }
   shareClick(evt: Event) {
-    this.infopopProvider.share(this.popoverId);
+    this.infopopsvc.share(this.popoverId);
     // this.viewCtrl.dismiss({"action": "share"});
   }
   dockPopup(evt: Event) {
     console.log(`got dockPopup event from ${this.title}`);
-    this.infopopProvider.undock(this.popoverId);
+    this.infopopsvc.undock(this.popoverId);
     // this.viewCtrl.dismiss({"action": "undock"});
     this.minimized = ! this.minimized;
   }
   closePopup(evt: Event) {
-    this.infopopProvider.close(this.popoverId);
+    this.infopopsvc.close(this.popoverId);
     // this.viewCtrl.dismiss({"action": "close"});
   }
 }

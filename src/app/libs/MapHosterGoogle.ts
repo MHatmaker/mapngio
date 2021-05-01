@@ -206,9 +206,11 @@ export class MapHosterGoogle extends MapHoster {
         for (const place of places) {
             if (place) {
                 const lbl = this.labels[this.labelIndex++ % this.labels.length];
+                const fixedLL = this.utils.toFixedTwo(place.geometry.location.lng(), place.geometry.location.lat(), 6);
+               // fixedGeo = new google.maps.Point(fixedLL.lon, fixedLL.lat);
 
                 const mip = new MarkerInfoPopup(place.geometry.location, place.formatted_address, place.name, place.icon,
-                    this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), lbl);
+                    this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), lbl, this);
                 this.markerInfoPopups.set(mip.getId(), mip);
                 this.markers.push(mip.getMarker());
                 this.addToPopupSet(mip.getMarker().getPosition().lng(), mip.getMarker().getPosition().lat());
@@ -224,7 +226,7 @@ export class MapHosterGoogle extends MapHoster {
         const popPt = new google.maps.LatLng(lat, lng);
         const label = this.labels[this.labelIndex++ % this.labels.length];
         const mip = new MarkerInfoPopup(popPt, text,
-          hint, 'assets/icon/ltblu-stars.png', this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
+          hint, 'assets/icon/ltblu-stars.png', this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label, this);
         this.markerInfoPopups.set(mip.getId(), mip);
     }
 
@@ -392,8 +394,14 @@ export class MapHosterGoogle extends MapHoster {
       }
     }
 
+    closePopup(popupId: string, popPt) {
+      const xystr = '' + popPt.lng() + ', ' + popPt.lat();
+      console.log('close popup ID ' + popupId + ' at ' + xystr);
+      this.popupSet.delete(xystr);
+    }
+
     retrievedClick(clickPt) {
-        const fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9);
+        const fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 6);
         console.log('Back in retrievedClick - with click at ' +  clickPt.x + ', ' + clickPt.y);
         // latlng = L.latLng(clickPt.y, clickPt.x, clickPt.y);
         // $inj = this.mlconfig.getInjector();
@@ -415,16 +423,16 @@ export class MapHosterGoogle extends MapHoster {
         console.log(`referrerId is ${clickPt.referrerId}, I am ${this.mlconfig.getUserId()}`);
         console.log(`popoverId is ${clickPt.popId}`);
         if (clickPt.referrerId !== this.mlconfig.getUserId()) {
-            if (this.popupSet.has('' + clickPt.x + ', ' + clickPt.y) === false) {
+            if (this.popupSet.has('' + fixedLL.lon + ', ' + fixedLL.lat) === false) {
             // if(this.markerInfoPopups.has(clickPt.popId) === false) {
               const titleShared = '(shared )' + clickPt.title;
               const lbl = this.labels[this.labelIndex++ % this.labels.length];
               const mip = new MarkerInfoPopup(popPt, content, titleShared,
                 // 'Received from user ' + clickPt.referrerName + ', ' + clickPt.referrerId,
-                null, this.mphmap, this.mlconfig.getUserId(), this.mapNumber, clickPt.popId, lbl, true);
+                null, this.mphmap, this.mlconfig.getUserId(), this.mapNumber, clickPt.popId, lbl, this, true);
               this.markerInfoPopups.set(clickPt.popId, mip);
               this.markers.push(mip.getMarker());
-              this.addToPopupSet(clickPt.x, clickPt.y);
+              this.addToPopupSet(fixedLL.lon, fixedLL.lat);
               // this.addToPopupSet(mip.getMarker().getPosition().lng(), mip.getMarker().getPosition().lat());
               mip.openSharedPopover();
 
@@ -784,7 +792,7 @@ export class MapHosterGoogle extends MapHoster {
             const label = this.labels[this.labelIndex++ % this.labels.length];
             const mip = new MarkerInfoPopup(popPt, content, 'Shareable position/info',
             'assets/icon/ltblu-stars.png', // placeholder for image icon url
-              this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label);
+              this.mphmap, this.mlconfig.getUserId(), this.mapNumber, uuid(), label, this);
             this.markerInfoPopups.set(mip.getId(), mip);
               // MLInjector.injector.get(Pophandlerprovider).addpopup('mapclicked', mip);
               // this.markerInfoPopups[place.name] = mip;
