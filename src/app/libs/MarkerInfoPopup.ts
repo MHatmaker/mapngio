@@ -85,16 +85,14 @@ export class MarkerInfoPopup {
                         console.log(`retval.action is ${retval.action}`);
                         if (retval.action === 'undock') {
                           if (retval.title === self.popupId) {
-                              console.log('titles matched....');
+                            console.log('titles matched....');
+                            console.log(`close popover for ${title}`);
+                            infopopsvc.close(self.popupId, false);
+                            this.mphg.closePopup(this.popupId, this.pos);
+                            console.log('dockPopEmitter client received and processed undock');
                           } else {
                               console.log('titles did not match....unsubscribe');
                               // subscriber.unsubscribe();
-                          }
-                          if (retval.title === self.popupId) {
-                            console.log(`close popover for ${title}`);
-                            infopopsvc.close(self.popupId);
-                            this.mphg.closePopup(this.popupId, this.pos);
-                            console.log('dockPopEmitter client received and processed undock');
                           }
                         } else if (retval.action === 'close') {
                             console.log('dockPopEmitter client received close...close popover');
@@ -103,6 +101,9 @@ export class MarkerInfoPopup {
                               infopopsvc.remove(self.popupId);
                               // infopopsvc.close(self.popupId);
                               this.mphg.closePopup(this.popupId, this.pos);
+                              if (this.isShared === true) {
+                                this.popMarker.setMap(null);
+                              }
                             }
                         } else if (retval.action === 'share') {
                           console.log('dockPopEmitter client received share');
@@ -112,7 +113,7 @@ export class MarkerInfoPopup {
                         // got click on map outside docked popover
                         console.log('dockPopEmitter client received map click....close popover and unsubscribe');
                         this.mphg.closePopup(this.popupId, this.pos);
-                        infopopsvc.close(this.popupId);
+                        infopopsvc.close(this.popupId, true);
                         // subscriber.unsubscribe();
                     }
                     // this.pophandlerProvider.closePopupsExceptOne(title);
@@ -160,7 +161,7 @@ export class MarkerInfoPopup {
         console.log(`shareClick with popoverId: ${popoverId}, this.popupId ${this.popupId} `);
         if (popoverId === this.popupId) {
           const marker = self.popMarker,
-              fixedLL = self.utils.toFixedTwo(marker.getPosition().lng(), marker.getPosition().lat(), 9),
+              fixedLL = self.utils.toFixedTwo(marker.getPosition().lng(), marker.getPosition().lat(), 6),
               referrerName = self.pusherConfig.getUserName(),
               referrerId = this.userId,
               mapId = 'map' + this.userId,
@@ -194,7 +195,7 @@ export class MarkerInfoPopup {
 
     closePopover() {
       const infopopsvc = this.infopopService;
-      infopopsvc.close(this.popupId);
+      infopopsvc.close(this.popupId, true);
       this.mphg.closePopup(this.popupId, this.pos);
     }
 }

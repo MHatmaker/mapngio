@@ -133,10 +133,12 @@ export class InfopopService {
           // modal.open(content, title);
       }
 
-      close(ngUid: string) {
+      close(ngUid: string, removeMarker: boolean) {
           // close modal specified by id
-          this.dockPopEmitter.emit({action: 'close', title: ngUid, labelShort: '',
-          position: {x: this.pos.lng(), y: this.pos.lat()}});
+          if (removeMarker) {
+            this.dockPopEmitter.emit({action: 'close', title: ngUid, labelShort: '',
+            position: {x: this.pos.lng(), y: this.pos.lat()}});
+          }
           // const modal = _.find(this.modals, { ngUid: ngUid });
           const modal = this.modalMap.get(ngUid); // [ngUid];
           if (modal) {

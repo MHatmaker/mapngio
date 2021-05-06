@@ -110,7 +110,7 @@ export class InfopopComponent implements OnDestroy, OnInit {
     this.minimized = ! this.minimized;
   }
   closePopup(evt: Event) {
-    this.infopopsvc.close(this.popoverId);
+    this.infopopsvc.close(this.popoverId, true);
     // this.viewCtrl.dismiss({"action": "close"});
   }
 }
