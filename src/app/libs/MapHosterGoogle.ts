@@ -4,7 +4,7 @@ import { MLConfig } from './MLConfig';
 // import { PusherClientService } from '../services/pusherclient.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { Utils } from './utils';
-import { MlboundsService, ImlBoundsParams } from '../services/mlbounds.service';
+import { MlboundsService, ImlBoundsParams, XtntParams } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 // import { GoogleMap, Size, Point, LatLngLiteral, LatLng, LatLngBounds } from '@agm/core/services/google-maps-types';
 // import { createClient, GoogleMapsClient } from '@google/maps';
@@ -242,19 +242,19 @@ export class MapHosterGoogle extends MapHoster {
     //     return s;
     // }
 
-    extractBounds(action) {
+    extractBounds(action: string): XtntParams {
         const zm = this.mphmap.getZoom(),
             cntr = this.mphmap.getCenter(),
             fixedLL = this.utils.toFixedTwo(cntr.lng(), cntr.lat(), 9),
-            bnds = this.mphmap.getBounds(),
+            // bnds = this.mphmap.getBounds(),
             xtntDict = {
                 src: 'google',
                 zoom: zm < this.maxZoom ? zm : this.maxZoom - 1,
                 lon: fixedLL.lon,
                 lat: fixedLL.lat,
                 scale: this.scale2Level[zm < this.maxZoom ? zm : this.maxZoom - 1].scale,
-                action,
-                bounds: bnds
+                action
+                // bounds: bnds
             };
         return xtntDict;
     }
@@ -280,7 +280,7 @@ export class MapHosterGoogle extends MapHoster {
         return cmp;
     }
 
-    async setBounds(action) {
+    async setBounds(action: string) {
         console.log('MapHosterGoogle setBounds with  ' + this.pusherEventHandler.getMapNumber());
         if (this.mapReady === true) {
             // runs this code after you finishing the zoom
@@ -354,9 +354,9 @@ export class MapHosterGoogle extends MapHoster {
       }
     }
 
-    retrievedBoundsInternal(xj) {
+    retrievedBoundsInternal(xj: XtntParams) {
         console.log('Back in MapHosterGoogle ' + this.mlconfig.getMapNumber() + ' retrievedBounds');
-        if (xj.zoom === '0') {
+        if (xj.zoom === 0) {
             xj.zoom = this.zmG;
         }
         const cmp = this.compareExtents('retrievedBounds', {zoom: xj.zoom, lon: xj.lon, lat: xj.lat});
@@ -749,7 +749,7 @@ export class MapHosterGoogle extends MapHoster {
         this.pusherEventHandler = new PusherEventHandler(this.mlconfig.getMapNumber());
         console.log('Add pusher event handler for MapHosterGoogle ' + this.mlconfig.getMapNumber());
 
-        this.pusherEventHandler.addEvent('client-MapXtntEvent', (xj) => this.retrievedBoundsInternal(xj));
+        this.pusherEventHandler.addEvent('client-MapXtntEvent', (xj: XtntParams) => this.retrievedBoundsInternal(xj));
         this.pusherEventHandler.addEvent('client-MapClickEvent',  (clickPt) => this.retrievedClick(clickPt));
         /*
         createBounds() {
@@ -944,7 +944,7 @@ export class MapHosterGoogle extends MapHoster {
 
     }
 
-    retrievedBounds(xj) {
+    retrievedBounds(xj: XtntParams) {
         return this.retrievedBoundsInternal(xj);
     }
 

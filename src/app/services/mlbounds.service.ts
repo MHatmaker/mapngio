@@ -29,6 +29,26 @@ export interface XtntParams  {
     'action': string;
 }
 
+export class Xtnt {
+
+  constructor(
+    private src: string, private zoom: number, private lon: number,
+    private lat: number, private scale: number= -1, private action: string = 'noaction') {
+  }
+
+  public getParams(): XtntParams {
+    const xtn: XtntParams = {
+      src: this.src,
+      zoom: this.zoom,
+      lon: this.lon,
+      lat: this.lat,
+      scale: this.scale,
+      action: this.action
+    };
+    return xtn;
+  }
+}
+
 console.log('loading MLBounds');
 
 @Injectable({

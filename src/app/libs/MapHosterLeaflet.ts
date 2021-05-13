@@ -248,7 +248,7 @@ export class MapHosterLeaflet extends MapHoster {
             });
     }
 
-    extractBounds(action): XtntParams {
+    extractBounds(action: string): XtntParams {
             // scale = mphmap.options.crs.scale(zm),
             // oldMapCenter = mphmapCenter,
 
@@ -320,9 +320,9 @@ export class MapHosterLeaflet extends MapHoster {
         }
     }
 
-    retrievedBounds(xj) {
+    retrievedBounds(xj: XtntParams) {
         console.log('Back in retrievedBounds');
-        if (xj.zoom === '0') {
+        if (xj.zoom === 0) {
             xj.zoom = this.zmG;
         }
         const zm = xj.zoom,
@@ -535,7 +535,7 @@ export class MapHosterLeaflet extends MapHoster {
         const bndsUrl = this.mlconfig.getBoundsForUrl();
         pos.search += bnds;
 
-        MLInjector.injector.get(PusherclientService).publishPosition(pos);
+        // MLInjector.injector.get(PusherclientService).publishPosition(pos);
     }
 
     getCenter() {

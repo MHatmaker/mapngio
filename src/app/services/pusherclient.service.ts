@@ -8,6 +8,7 @@ import { MLConfig } from '../libs/MLConfig';
 import { IEventDct } from '../libs/PusherEventHandler';
 import { MapopenerService } from './mapopener.service';
 import { IMapShare } from './positionupdate.interface';
+import { XtntParams } from '../services/mlbounds.service';
 // declare const Pusher: any;
 import * as _ from 'underscore';
 declare const Pusher: any;
@@ -369,7 +370,7 @@ export class PusherclientService {
     this.setCurrentTourGuide({name, myname: this.userName, thisClient: true});
   }
 
-  publishPanEvent(frame) {
+  publishPanEvent(frame: XtntParams) {
       console.log('frame is', frame);
       this.clients.forEach((client: PusherClient, clName: string) => {
           if (client.hasOwnProperty('eventHandlers')) {
@@ -439,6 +440,7 @@ export class PusherclientService {
       // this.pusher.channels(this.CHANNELNAME).trigger('client-MapClickEvent', frame);
   }
 
+
   publishPosition(pos: string) {
       // var handler, client: PusherClient,
       //     clName,
@@ -453,4 +455,5 @@ export class PusherclientService {
       // }
       this.channel.trigger('client-NewMapPosition', pos);
     }
+
 }
