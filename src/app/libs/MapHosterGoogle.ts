@@ -4,7 +4,7 @@ import { MLConfig } from './MLConfig';
 // import { PusherClientService } from '../services/pusherclient.service';
 import { PusherEventHandler } from './PusherEventHandler';
 import { Utils } from './utils';
-import { MlboundsService, ImlBoundsParams, XtntParams } from '../services/mlbounds.service';
+import { MlboundsService, ImlBoundsParams, XtntParams, Xtnt } from '../services/mlbounds.service';
 import { EMapSource } from '../services/configparams.service';
 // import { GoogleMap, Size, Point, LatLngLiteral, LatLng, LatLngBounds } from '@agm/core/services/google-maps-types';
 // import { createClient, GoogleMapsClient } from '@google/maps';
@@ -33,40 +33,6 @@ import { MLInjector } from './MLInjector';
 
 // declare var google;
 
-class PointIndex {
-  constructor(private x: number, private y: number) {
-  }
-    getX(): number {
-      return this.x;
-    }
-    getY(): number {
-      return this.y;
-    }
-    equals(ndx: PointIndex): boolean {
-      return (this.x === ndx.getX() && this.y === ndx.getY());
-    }
-}
-
-interface SetItem {
-    equals(other: SetItem): boolean;
-}
-
-class SetObj<T extends SetItem> extends Set<T> {
-    add(value: T): this {
-        let found = false;
-        this.forEach(item => {
-            if (value.equals(item)) {
-                found = true;
-            }
-        });
-
-        if (!found) {
-            super.add(value);
-        }
-
-        return this;
-    }
-}
 // interface IInfoWnd  IMap<{'title': string, infownd: google.maps.InfoWindow};
 
 // @Injectable()
@@ -88,7 +54,7 @@ export class MapHosterGoogle extends MapHoster {
     popup = null;
     marker = null;
     markers = [];
-    popupSet: Set<string> = new Set<string>(); // SetObj<PointIndex> = new SetObj<PointIndex>();
+    popupSet: Set<string> = new Set<string>();
     popups = [];
     infoWnds = new Map<string, google.maps.InfoWindow> ();
     // popovers = new Map<string, Popover>();
@@ -259,7 +225,7 @@ export class MapHosterGoogle extends MapHoster {
         return xtntDict;
     }
 
-    compareExtents(msg: string, xtnt) {
+    compareExtents(msg: string, xtnt: XtntParams) {
         let cmp = true;
         const gmBounds = this.mphmap.getBounds();
 
@@ -359,7 +325,7 @@ export class MapHosterGoogle extends MapHoster {
         if (xj.zoom === 0) {
             xj.zoom = this.zmG;
         }
-        const cmp = this.compareExtents('retrievedBounds', {zoom: xj.zoom, lon: xj.lon, lat: xj.lat});
+        const cmp = this.compareExtents('retrievedBounds', xj);
             // view = xj.lon + ', ' + xj.lat + ': ' + zm + ' ' + this.scale2Level[zm].scale;
             // document.getElementById('mppos').innerHTML = view;
         if (cmp === false) {
@@ -373,17 +339,16 @@ export class MapHosterGoogle extends MapHoster {
             // this.userZoom = true;
             if (xj.action === 'pan') {
                 if (tmpZm !== xj.zoom) {
-                    this.mphmap.setZoom(xj.zoom);
+                  this.mphmap.setZoom(xj.zoom > 21? 21 : xj.zoom);
                 }
                 this.mphmap.setCenter(cntr);
-                this.refreshPlaces();
             } else {
                 if (tmpLon !== xj.lon || tmpLat !== xj.lat) {
                     this.mphmap.setCenter(cntr);
                 }
-                this.mphmap.setZoom(xj.zoom);
-                this.refreshPlaces();
+                this.mphmap.setZoom(xj.zoom > 21? 21 : xj.zoom);
             }
+            this.refreshPlaces();
             this.userZoom = true;
         }
     }
@@ -394,7 +359,7 @@ export class MapHosterGoogle extends MapHoster {
       }
     }
 
-    closePopup(popupId: string, popPt) {
+    closePopup(popupId: string, popPt: google.maps.LatLng) {
       const xystr = '' + popPt.lng() + ', ' + popPt.lat();
       console.log('close popup ID ' + popupId + ' at ' + xystr);
       this.popupSet.delete(xystr);
@@ -454,11 +419,11 @@ export class MapHosterGoogle extends MapHoster {
       const cntr = new google.maps.LatLng(loc.center.lat, loc.center.lng);
       // this.updateGlobals('setCurrentLocation', loc.center.lng, loc.center.lat, this.zmG);
       this.mphmap.panTo(cntr);
-      const userMarker = new google.maps.Marker({
-            position: cntr,
-            map: this.mphmap,
-            icon: this.im
-        });
+      // const userMarker = new google.maps.Marker({
+      //       position: cntr,
+      //       map: this.mphmap,
+      //       icon: this.im
+      //   });
       this.setBounds('pan');
     }
 
@@ -472,7 +437,7 @@ export class MapHosterGoogle extends MapHoster {
           }
       });
     }
-    configureMap(gMap, mapOptions, goooogle, googPlaces, config) {
+    configureMap(gMap: google.maps.Map, mapOptions: google.maps.MapOptions, config) {
         console.log('MapHosterGoogle configureMap');
         let initZoom = mapOptions.zoom;
         let qlat = '';
@@ -481,7 +446,6 @@ export class MapHosterGoogle extends MapHoster {
         this.mlconfig = config;
         this.self = this;
         this.mphmap = gMap;
-        this.google = goooogle;
         // this.geoCoder = new google.maps.Geocoder();
 
 
@@ -489,12 +453,14 @@ export class MapHosterGoogle extends MapHoster {
             qlat = this.mlconfig.lat();
             qlon = this.mlconfig.lon();
             const qzoom = this.mlconfig.zoom();
-            initZoom = qzoom; // parseInt(qzoom, 10);
+            initZoom = +qzoom; // parseInt(qzoom, 10);
             this.updateGlobals('iin configureMap - nit with qlon, qlat', +qlon, +qlat, +qzoom);
         } else {
             if (mapOptions) {
+              const lat = mapOptions.center.lat;
+              const lng = mapOptions.center.lng;
                 this.updateGlobals('in configureMap - MapHosterGoogle init with passed in mapOptions',
-                mapOptions.center.lng(), mapOptions.center.lat(), +initZoom);
+                +lng, +lat, +initZoom);
             } else {
                 this.updateGlobals('in configureMap - MapHosterGoogle init with hard-coded values', +qlon, +qlat, +initZoom);
             }
@@ -695,7 +661,6 @@ export class MapHosterGoogle extends MapHoster {
                 if (this.scale2Level.length > 0) {
                     this.setBounds('zoom');
                 }
-            // this.userZoom = true;
             }
         });
 
@@ -964,12 +929,6 @@ export class MapHosterGoogle extends MapHoster {
         console.log('in setPlacesFromSearch');
         console.log(this.placesFromSearch);
     }
-
-    // MapHosterGoogle() {
-    //     mapReady = false;
-    //     // bounds = null;
-    //     this.userZoom = true;
-    // }
 
     removeEventListeners() {
         console.log('empty removeEventListeners block in MapHosterGoogle');

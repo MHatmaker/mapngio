@@ -375,7 +375,8 @@ export class PusherclientService {
       this.clients.forEach((client: PusherClient, clName: string) => {
           if (client.hasOwnProperty('eventHandlers')) {
             const obj = client.eventHandlers;
-            console.log('publish pan event to map ' + client.eventHandlers);
+            console.log('publish pan event to map ');
+            // console.log(client.eventHandlers);
             if (obj) {
               obj['client-MapXtntEvent'](frame);
             }

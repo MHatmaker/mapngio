@@ -59,7 +59,7 @@ export class StartupGoogle extends Startup {
 
         // window.loading = dojo.byId('loadingImg');
         // utils.showLoading();
-        const centerLatLng = new google.maps.LatLng(mapLocOpts.center.lat, mapLocOpts.center.lng);
+        const centerLatLng = {lat: mapLocOpts.center.lat, lng: mapLocOpts.center.lng};
         const initZoom = mapLocOpts.zoom;
 
         // if (mapLocOpts) {
@@ -67,7 +67,7 @@ export class StartupGoogle extends Startup {
         //     initZoom = mapLocOpts.zoom;
         // }
 
-        const mapGoogleLocOpts = {
+        const mapGoogleLocOpts: google.maps.MapOptions = {
             center: centerLatLng,
             // center: new google.maps.LatLng(51.50, -0.09),
             zoom: initZoom,
@@ -81,7 +81,7 @@ export class StartupGoogle extends Startup {
         this.gMap = new google.maps.Map(mapElement, mapGoogleLocOpts);
         console.log('StartupGoogle ready to instantiate Map Hoster with map no. ' + this.mapNumber);
         this.mapHoster = new MapHosterGoogle(this.mapNumber, this.mlconfig);
-        this.mapHoster.configureMap(this.gMap, mapGoogleLocOpts, google, google.maps.places, this.mlconfig);
+        this.mapHoster.configureMap(this.gMap, mapGoogleLocOpts, this.mlconfig);
         google.maps.event.trigger(mapElement, 'resize');
         this.mlconfig.setMapHosterInstance(this.mapHoster);
         this.mlconfig.setRawMap(this.gMap);

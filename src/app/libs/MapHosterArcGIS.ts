@@ -205,7 +205,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         console.log('zoom levels: ' + this.zoomLevels);
     }
 
-    async extractBounds(zm: number, cntr: any, action: string): Promise<XtntParams> {
+    async extractBounds(zm: number, cntr: any, whichaction: string): Promise<XtntParams> {
         const [esriPoint, esriSpatialReference] = await loadModules([
             'esri/geometry/Point', 'esri/geometry/SpatialReference',
           ], this.agoOptions);
@@ -235,7 +235,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
             lon: fixedLL.lon,
             lat: fixedLL.lat,
             scale: this.scale2Level[zm].scale,
-            action
+            action: whichaction
         };
     }
 
@@ -608,7 +608,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       // this.mphmap.centerAndZoom(startCenter, this.zmG);
       this.mphmap.goTo({target: startCenter, zoom: this.zmG});
       this.showGlobals('After centerAndZoom');
-      const xtnt = new Xtnt('arcgis', startCenter.y, startCenter.x, this.zmG);
+      const xtnt = new Xtnt('arcgis', this.zmG, startCenter.x, startCenter.y);
       MLInjector.injector.get(PusherclientService).publishPanEvent(xtnt.getParams());
 
       this.initMap();
