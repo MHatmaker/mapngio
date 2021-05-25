@@ -30,12 +30,11 @@ import { MLInjector } from '../libs/MLInjector';
 
 const proj4 = (proj4x as any).default;
 
-export class MapHosterArcGIS extends MapHoster implements OnInit {
+export class MapHosterArcGIS extends MapHoster {
     hostName = 'MapHosterArcGIS';
     scale2Level = [];
     zmG = -1;
     userZoom = true;
-    self: any;
     // this.mphmapCenter;
     cntrxG = null;
     cntryG = null;
@@ -56,7 +55,6 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     initialActionListHtml = '';
     geoLocator: _esri.Locator;
     screenPt = null;
-    fixedLLG = null;
     // btnShare;
     selfPusherDetails = {
         channel: null,
@@ -105,39 +103,6 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
             // this.updateGlobals('adding hidden canvas updateGlobals', pos.lon, pos.lat, pos.zoom);
     }
 
-    async initializeMap() {
-      try {
-        const [esriPoint, esriSpatialReference, esriWebMercator, esriGeometry, Locator,
-              esriwebMercatorUtils, esriMapView] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/geometry/WebMercator',
-            'esri/geometry/Geometry', 'esri/tasks/Locator', 'esri/geometry/support/webMercatorUtils',
-            'esri/views/MapView'
-          ], this.agoOptions);
-        this.esriwebMercatorUtils = esriwebMercatorUtils;
-      } catch (error) {
-        console.log('We have an error: ' + error);
-      }
-    }
-    ngOnInit() {
-      this.initializeMap();
-      this.self = this;
-      /*
-        loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/geometry/WebMercator',
-            'esri/geometry/Geometry', 'esri/tasks/Locator', 'esri/geometry/support/webMercatorUtils',
-            'esri/views/MapView'
-          ]).then(([Point, SpatialReference, WebMercator, Geometry, Locator,
-              webMercatorUtils, MapView]) => {
-                  this.esriMapView = MapView;
-                  this.esriwebMercatorUtils = webMercatorUtils;
-                  this.esriSpatialRef = SpatialReference;
-                  this.esriWebMercator = WebMercator;
-                  this.esriPoint = Point;
-                  this.esriGeometry = Geometry;
-                  this.esriLocator = Locator;
-              });
-              */
-    }
     getMap() {
         return this.mphmap;
     }
@@ -228,12 +193,12 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         console.log('cntrpt ' + cntrpt.x + ', ' + cntrpt.y);
         // let ltln = esriwebMercatorUtils.geographicToWebMercator(cntrpt);
         // fixedLL = this.utils.toFixedTwo(ltln.longitude, ltln.latitude, 3);
-        const fixedLL = this.utils.toFixedTwo(cntrpt.x, cntrpt.y, 9);
+        const fixedLL: ILonLatStrings = this.utils.toFixedTwo(cntrpt.x, cntrpt.y, 9);
         return {
             src: 'arcgis',
             zoom: zm,
-            lon: fixedLL.lon,
-            lat: fixedLL.lat,
+            lon: +fixedLL.lon,
+            lat: +fixedLL.lat,
             scale: this.scale2Level[zm].scale,
             action: whichaction
         };
@@ -254,7 +219,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     async setBounds(xtExt: XtntParams) {
         console.log('MapHosterArcGIS setBounds with selfPusherDetails.pusher ' + this.mlconfig.getMapNumber());
 
-        if (this.mapReady === true) { // } && selfPusherDetails.pusher) { // && self.pusher.ready == true) {
+        if (this.mapReady === true) { // } && selfPusherDetails.pusher) {
             // runs this code after you finishing the zoom
             console.log('MapHoster ArcGIS ' + this.mlconfig.getMapNumber() + ' setBounds ready to process json xtExt');
             const xtntJsonStr = JSON.stringify(xtExt);
@@ -336,7 +301,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           //      screengraphic = new esri.geometry.toScreenGeometry(this.mphmap.extent,800,600,userdrawlayer.graphics[0].geometry);
 
           // if (clickPt.referrerId !== this.mlconfig.getUserId()) {
-        const fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9);
+        const fixedLL: ILonLatStrings = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9);
         let content = 'Map click at ' + fixedLL.lat + ', ' + fixedLL.lon;
         if (clickPt.title) {
           content += '<br>' + clickPt.title;
@@ -419,7 +384,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
       // cntrpt = new esriPoint({longitude: p.x, latitude: p.y, spatialReference: new esriSpatialReference({wkid: 4326})});
       // console.log('clicked Pt ' + mapPt.x + ', ' + mapPt.y);
       // console.log('converted Pt ' + cntrpt.x + ', ' + cntrpt.y);
-      this.fixedLLG = this.utils.toFixedTwo(e.mapPoint.longitude , e.mapPoint.latitude, 9);
+      const fixedLLG: ILonLatStrings = this.utils.toFixedTwo(e.mapPoint.longitude , e.mapPoint.latitude, 9);
       // let locPt = esriwebMercatorUtils.xyToLngLat(e.mapPoint.longitude, e.mapPoint.latitude);
       // let locPt2 = new esriPoint({longitude: locPt[0], latitude: locPt[1], spatialReference: new esriSpatialReference({wkid: 4326})});
       this.geoLocator.locationToAddress(e.mapPoint)
@@ -428,10 +393,10 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           if (response.address) {
               const address = response.address;
               const location = esriwebMercatorUtils.lngLatToXY(response.location.longitude, response.location.latitude);
-              this.showClickResult(address, e.mapPoint);
+              this.showClickResult(address, e.mapPoint, fixedLLG);
               console.log(location);
           } else {
-              this.showClickResult(null, e.mapPoint);
+              this.showClickResult(null, e.mapPoint, fixedLLG);
           }
 
         }).catch( (err) => {
@@ -461,12 +426,12 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
     // this.pusherEventHandler.addEvent('client-MapXtntEvent', retrievedBounds);
     // this.pusherEventHandler.addEvent('client-MapClickEvent',  retrievedClick);
 
-    async showClickResult(content, mapPt) {
-        const [ActionButton] = await loadModules([
-              'esri/support/actions/ActionButton'
+    async showClickResult(content: string, mapPt: any, fixedLLG: ILonLatStrings) {
+        const [ActionButton, esriPoint] = await loadModules([
+              'esri/support/actions/ActionButton', 'esri.geometry.Point'
             ], this.agoOptions);
 
-        const pushContent = this.configForPusher(content);
+        const pushContent = this.configForPusher(content, fixedLLG);
 
         const shareAction = new ActionButton({
           title: 'Share Info',
@@ -477,7 +442,8 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
 
         if (this.mphmap.popup.visible === false) {
             // let mppt = new esriPoint({longitude: mapPt.x, latitude: clickPt.y}),
-            this.mphmap.popup.open({location: mapPt});
+            const emapPt = new esriPoint({latitude: mapPt.latitude, longitude: mapPt.longitude});
+            this.mphmap.popup.open({location: emapPt});
         }
 
         if (this.mphmap.popup.actions.length < 2) {
@@ -492,7 +458,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         if (content === null) {
             // const addedContent = 'Share lat/lon: ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon;
             this.mphmap.popup.title = 'Ready to Push Click';
-            this.mphmap.popup.content = 'lat/lon: ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon;
+            this.mphmap.popup.content = 'lat/lon: ' + fixedLLG.lat + ', ' + fixedLLG.lon;
         } else {
             if (this.mphmap.popup.content === null) {
               const addedContent = 'Share address: ' + content;
@@ -505,20 +471,20 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
         }
 
     }
-    configForPusher(content) {
+    configForPusher(content: string, fixedLLG: ILonLatStrings) {
         // if (selfPusherDetails.pusher) {
         const referrerId = this.mlconfig.getUserId();
         const referrerName = MLInjector.injector.get(PusherConfig).getUserName();
 
         const pushLL = {
-            x: this.fixedLLG.lon,
-            y: this.fixedLLG.lat,
-            z: this.zmG,
+            lng: fixedLLG.lon,
+            lat: fixedLLG.lat,
+            zoom: this.zmG,
             referrerId,
             referrerName,
             address: content
         };
-        console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon);
+        console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + fixedLLG.lat + ', ' + fixedLLG.lon);
         // selfPusherDetails.pusher.channel(selfPusherDetails.channelName).trigger('client-MapClickEvent', pushLL);
         // this.pusherClientService.publishClickEvent(pushLL);
         return pushLL;
@@ -681,7 +647,7 @@ export class MapHosterArcGIS extends MapHoster implements OnInit {
           });
       });
 
-      this.mphmap.on('click', (evt) => {
+      this.mphmap.on('click', (evt: MouseEvent) => {
         this.onMapClick(evt);
       });
       /*

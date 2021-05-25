@@ -391,17 +391,18 @@ export class PusherclientService {
       console.log(`publishClickEvent: frame for frame.mapId - ${frame.mapId} , referrerId - ${frame.referrerId}
           popId - ${frame.popId}`);
       console.log(frame);
+      /*
       if (frame.hasOwnProperty('x')) {
-          frame.lat = frame.y;
-          frame.lon = frame.x;
-          frame.zoom = frame.z;
+          // frame.lat = frame.y;
+          // frame.lon = frame.x;
+          // frame.zoom = frame.z;
       } else if (frame.hasOwnProperty('__zone_symbol__value')) {
          const fv = frame.__zone_symbol__value;
          frame.lat = fv.y;
          frame.lon = fv.x;
          frame.zoom = fv.z;
       }
-
+*/
       const keys = Array.from(this.clients.keys());
       const withoutHidden = _.without(keys, 'hiddenmap');  // this.clients.get('hiddenmap'));
       console.log(withoutHidden);

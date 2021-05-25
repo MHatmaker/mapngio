@@ -30,7 +30,7 @@
     "@ionic-native/status-bar": "^5.27.0",
     "@ionic/angular": "^5.2.3",
     "@ionic/pwa-elements": "^1.5.2",
-    "@types/arcgis-js-api": "^4.16.0",
+    "@types/arcgis-js-api": "^4.19.0",
     "@types/underscore": "^1.10.7",
     "@types/uuid": "^7.0.4",
     "clipboard": "^2.0.6",
