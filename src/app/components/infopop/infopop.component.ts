@@ -12,14 +12,15 @@ import { InfopopService } from '../../services/infopop.service';
 })
 export class InfopopComponent implements OnDestroy, OnInit {
 
-    private popoverId: string;
+    public popoverId: string;
+    public shareBtnId: string;
     private element: Element;
     private parentElem: Element;
     private minimized = false;
     public title: string;
     public content: string;
     public show: boolean;
-    private popped: boolean;
+    public popped: boolean;
     public mrkrlabel: string;
     public worldCoordinates: {'lat': number, 'lng': number};
 

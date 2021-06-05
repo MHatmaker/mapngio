@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Utils } from '../libs/utils';
-import { loadModules } from 'esri-loader';
+import Portal from '@arcgis/core/portal/Portal';
+import PortalQueryParams from '@arcgis/core/portal/PortalQueryParams';
 import { request } from '@esri/arcgis-rest-request';
 import { IItem, ISearchResult, searchItems } from '@esri/arcgis-rest-portal';
 import { ImlBounds, MlboundsService } from './mlbounds.service';
@@ -49,15 +50,10 @@ export class AgoqueryService {
     // this.loadPortal();
   }
   async loadPortal() {
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      const [ portal ] = await loadModules(
-        ['esri/portal/Portal'], options);
 
       this.utils.showLoading();
       console.log('findArcGISGroup');
-      this.portalForSearch = new portal();
+      this.portalForSearch = new Portal();
       this.portalForSearch.authMode = 'immediate';
       this.portalForSearch.load().then( () => {
         console.log('portal loaded');
@@ -91,12 +87,6 @@ export class AgoqueryService {
   }
 
   async findArcGISGroup(searchTermGrp) {
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      const [ portal, PortalQueryParams ] = await loadModules(
-        ['esri/portal/Portal', 'esri/portal/PortalQueryParams'], options);
-
       // utils.  showLoading();
       const
           portalQueryParams = {

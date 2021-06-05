@@ -12,7 +12,7 @@ export class PushersetupComponent {
 
   // userName: string;
   // channelMashover : string;
-  private pushergroup: FormGroup;
+  public pushergroup: FormGroup;
 
   constructor(
     public viewCtrl: ModalController, private formBuilder: FormBuilder,

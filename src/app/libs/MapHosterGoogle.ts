@@ -402,7 +402,7 @@ export class MapHosterGoogle extends MapHoster {
               mip.openSharedPopover();
 
               const elms = document.getElementsByClassName('sharebutton');
-              for (const elm of elms) {
+              for (const elm of Array.from(elms)) {
                 if (elm instanceof (HTMLElement)) {
                   const btnShare = elm;
                   if (btnShare) {

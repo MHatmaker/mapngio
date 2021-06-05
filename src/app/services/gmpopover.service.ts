@@ -18,10 +18,10 @@ export class GmpopoverService {
   private title: string;
   private content: string;
   private popovers = new Map<string, GmpopoverComponent>();
-  private compProps = {
-      title: this.title,
-      content: this.content
-    };
+  // private compProps = {
+  //     title: this.title,
+  //     content: this.content
+  //   };
   public dockPopEmitter = new EventEmitter<{'action': string, 'title': string}>();
 
   constructor(private popCtrl: PopoverController, private pophandler: PophandlerService) {

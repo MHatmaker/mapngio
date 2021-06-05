@@ -19,6 +19,7 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
+            "allowedCommonJsDependencies": ["moment"],
             "assets": [
               {
                 "glob": "**/*",
@@ -33,13 +34,17 @@
             ],
             "styles": [
               {
-                "input": "src/theme/variables.scss"
+                "input": "src/theme/variables.scss",
+                "input": "src/styles.css"
               },
               {
                 "input": "src/global.scss"
+              },
+              {
+                "input": "./node_modules/bootstrap/dist/css/bootstrap.min.css"
               }
             ],
-            "scripts": []
+            "scripts": ["./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"]
           },
           "configurations": {
             "production": {

@@ -9,7 +9,7 @@ import { SlideviewService } from '../../services/slideview.service';
 
 export class MultiCanvasGoogleComponent implements OnDestroy, OnInit {
     private currentSubscription;
-    private ndx = 0;
+    public ndx = 0;
     public slidevisibility = null;
     public mcactive = {
       position: 'relative',

@@ -10,5 +10,4 @@ export class MulticanvasComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {}
-
 }

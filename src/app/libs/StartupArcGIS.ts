@@ -6,12 +6,25 @@ import { PusherConfig } from './PusherConfig';
 // import { utils } from './utils';
 import { Startup } from './Startup';
 import { MapHosterArcGIS } from './MapHosterArcGIS';
-import { loadModules } from 'esri-loader';
 import { Utils } from './utils';
 import { MLInjector } from '../libs/MLInjector';
 import { MapinstanceService } from '../services/mapinstance.service';
 import { PusherclientService } from '../services/pusherclient.service';
 import { CurrentmaptypeService } from '../services/currentmaptype.service';
+
+import { SpatialReference } from '@arcgis/core/geometry';
+import Point from '@arcgis/core/geometry/Point';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import GeometryService from '@arcgis/core/tasks/GeometryService';
+import Config from '@arcgis/core/config';
+import TileInfo from '@arcgis/core/layers/support/TileInfo';
+import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
+import Locator from '@arcgis/core/tasks/Locator';
+import * as watchUtils from '@arcgis/core/core/watchUtils';
+import SimpleMarkerSymbol from '@arcgis/core/symbols/MarkerSymbol';
+import SimpleLineSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Graphic from '@arcgis/core/Graphic';
 
 interface ConfigOptions {
     // webmap: '4b99c1fb712d4fe694805717df5fadf2', // selectedWebMapId,
@@ -47,7 +60,6 @@ export class StartupArcGIS  extends Startup {
     private esriwebmap;
     private esrimapview;
     private esriPoint;
-    private esriSpatialReference;
     private viewCreated;
     private pointWebMap = [null, null];
     private zoomWebMap = null;
@@ -60,22 +72,12 @@ export class StartupArcGIS  extends Startup {
     private pusherConfig: PusherConfig;
 
     async loadEsriModules() {
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      const [ esriLocator, esriConfig,
-        GeometrySvc, WebMap, MapView, Point, SpatialReference] = await loadModules(
-                ['dojo/_base/event', 'esri/tasks/Locator', 'dojo/_base/fx', 'dojo/fx/easing', 'esri/config',
-                'esri/tasks/GeometryService', 'esri/WebMap', 'esri/views/MapView',
-                'esri/geometry/Point', 'esri/geometry/SpatialReference'], options);
 
-      this.esriLocator = esriLocator;
-      this.esriConfig = esriConfig;
-      this.GeometryService = GeometrySvc;
+      this.esriLocator = Locator;
+      this.esriConfig = Config;
+      this.GeometryService = GeometryService;
       this.esriwebmap = WebMap;
       this.esrimapview = MapView;
-      this.esriPoint = Point;
-      this.esriSpatialReference = SpatialReference;
     }
 
     constructor() {
@@ -114,7 +116,7 @@ export class StartupArcGIS  extends Startup {
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + this.mapNumber);
     }
 
-  configure(newMapId: number, mapLocOpts, elementRef) {
+  configure(newMapId: number, mapLocOpts, elementRef: ElementRef) {
 
     this.elementRef = elementRef;
     this.mapOptions = mapLocOpts;
@@ -240,22 +242,12 @@ export class StartupArcGIS  extends Startup {
   }
 
   async initializePostProc(idAgoItem) {
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      const [
-              esriGeometrySvc, esriWebMap, esriMapView, esriPoint, esriSpatialReference,
-              esriConfig, TileInfo, MapImageLayer] = await loadModules(
-        [
-            'esri/tasks/GeometryService', 'esri/WebMap', 'esri/views/MapView', 'esri/geometry/Point',
-            'esri/geometry/SpatialReference', 'esri/config', 'esri/layers/support/TileInfo', 'esri/layers/MapImageLayer'
-        ], options);
       const
           aMap = null,
           // layer = new MapImageLayer({
           //     url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer'
           //   }),
-          webMap = new esriWebMap({
+          webMap = new WebMap({
               portalItem: { // autocasts as new PortalItem()
                 // id: 'f52bc3aee47749c380ddb0cd89337349'
                 id: this.mlconfig.getWebmapId(false)
@@ -279,7 +271,7 @@ export class StartupArcGIS  extends Startup {
       // This service is for development and testing purposes only.
       // We recommend that you create your own geometry service for use within your applications.
       // esri.config.defaults.geometryService =
-      const  geometrySvc = new esriGeometrySvc('https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
+      // const  geometrySvc = new GeometryService('https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
       // this.esriConfig.GeometryService =
       //     new esri.tasks.GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
 
@@ -298,13 +290,13 @@ export class StartupArcGIS  extends Startup {
           bingMapsKey: '/*Please enter your own Bing Map key*/'
       };
       if (idAgoItem) {
-          this.configOptions.webmap = esriWebMap.portalItem = idAgoItem;
+          this.configOptions.webmap = webMap.portalItem = idAgoItem;
       }
 
       console.log('StartupArcGIS ready to instantiate Map Hoster with map no. ' + this.mapNumber);
-      esriConfig.request.arcgisUrl = this.configOptions.sharingurl;                      // return this.mapHoster;
+      // Config.request.   arcgisUrl = this.configOptions.sharingurl;                      // return this.mapHoster;
       // esri.arcgis.utils.arcgisUrl = configOptions.sharingurl;
-      esriConfig.request.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
+      Config.request.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
       // esri.config.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
 
       // create the map using the web map id specified using configOptions or via the url parameter
@@ -365,16 +357,16 @@ export class StartupArcGIS  extends Startup {
           });
           */
       // try {
-      this.mapView = new esriMapView({
-        container: this.elementRef,
+      this.mapView = new MapView({
+        container: 'viewDiv'+this.mapNumber, // this.elementRef,
         map: webMap, // this.mapService.map,,
         // constraints: {
         //   lods: TileInfo.create().lods
         // },
-        center: new esriPoint({
+        center: new Point({
           x: this.mlconfig.getPosition().lon,
           y: this.mlconfig.getPosition().lat,
-          spatialReference: new esriSpatialReference({ wkid: 4326 })
+          spatialReference: new SpatialReference({ wkid: 4326 })
         })
       });
       this.mapView.when((instance) => {

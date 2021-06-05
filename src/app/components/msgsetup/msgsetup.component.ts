@@ -32,8 +32,8 @@ interface IexpItem {
 export class MsgsetupComponent {
 
   public urlCopyField: string;
-  private recipientAdrs: string;
-  private items: any = [];
+  public recipientAdrs: string;
+  public items: any = [];
   private selectedItem: any = null;
   private mapInstanceService: MapinstanceService;
   private currentMapTypeService: CurrentmaptypeService;

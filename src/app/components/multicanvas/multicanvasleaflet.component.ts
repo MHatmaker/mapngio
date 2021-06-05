@@ -9,8 +9,8 @@ import { CanvasService } from '../../services/canvas.service';
 
 export class MultiCanvasLeafletComponent {
     // private el: string = null;
-    private ndx = null;
-    private mapcolheight = 510;
+    public ndx = null;
+    public mapcolheight = 510;
     public slidevisibility = 'multi-can-current';
 
     constructor(private canvasService: CanvasService) {

@@ -15,8 +15,8 @@ import { Observable } from 'rxjs';
 export class AgogroupComponent {
 
   searchTermGrp: string;
-  private agogroupgroup: FormGroup;
-  private agoGroups: any;
+  public agogroupgroup: FormGroup;
+  public agoGroups: any;
 
   constructor(
     public viewCtrl: ModalController, private formBuilder: FormBuilder,

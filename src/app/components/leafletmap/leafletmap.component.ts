@@ -24,7 +24,7 @@ interface ILeafletParams {
 export class LeafletMapComponent implements AfterViewInit {
   @Output()
   viewCreated = new EventEmitter();
-  private mapNumber: number;
+  public mapNumber: number;
   private mlconfig: MLConfig;
   private mlconfigSet = false;
   private lmap: L.Map;

@@ -24,7 +24,7 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
   @Output()
   viewCreated = new EventEmitter();
   private gmap: google.maps.Map;
-  private mapNumber: number;
+  public mapNumber: number;
   private gmHeight = '540px';
   private glat: number;
   private glng: number;

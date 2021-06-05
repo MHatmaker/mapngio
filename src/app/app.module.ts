@@ -64,7 +64,7 @@ import { MapPageModule } from './map/map.module';
     MsgsetupComponent,
     AccordionListComponent
   ],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, MapPageModule, FormsModule, ClipboardModule],
+  imports: [BrowserModule, IonicModule, AppRoutingModule, HttpClientModule, MapPageModule, FormsModule, ClipboardModule],
   providers: [
     StatusBar,
     SplashScreen,

@@ -8,11 +8,11 @@ import { PopoverController, NavParams } from '@ionic/angular';
 })
 export class GmpopoverComponent implements AfterContentInit {
 
-  dockBtnId: string;
-  shareBtnId: string;
-  content: string;
-  title: string;
-  minimized = false;
+  public dockBtnId: string;
+  public shareBtnId: string;
+  public content: string;
+  public title: string;
+  public minimized = false;
 
   constructor(public popoverCtrl: PopoverController, public navParams: NavParams) {
     console.log(`Hello GmpopoverComponent Component for ${navParams.get('title')}`);
@@ -33,12 +33,12 @@ export class GmpopoverComponent implements AfterContentInit {
   shareClick(evt: Event) {
     this.popoverCtrl.dismiss({actions: 'share'});
   }
-  dockPopup(evt: Event) {
+  dockPopup() {
     console.log(`got dockPopup event from ${this.title}`);
     // this.popoverCtrl.dismiss({'action': 'undock'});
     this.minimized = ! this.minimized;
   }
-  closePopup(evt: Event) {
+  closePopup() {
     this.popoverCtrl.dismiss({action: 'close'});
   }
 }

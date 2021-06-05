@@ -10,14 +10,13 @@ import { Utils, ILonLatStrings } from './utils';
 // import { IPositionParams, IPositionData } from '../../../services/positionupdate.interface';
 import { PositionupdateService } from '../services/positionupdate.service';
 import { PusherEventHandler } from './PusherEventHandler';
-import { loadModules } from 'esri-loader';
 import _esri = __esri;
 // import * as esri from 'arcgis-js-api';
 // import { Point } from 'esri/geometry/Point';
 // import { ImlBounds } from '../../../services/mlbounds.service'
 // import { SpatialReference } from 'esri/geometry';
 // import { Point } from 'esri/geometry';
-import * as proj4x from 'proj4';
+// import * as proj4x from 'proj4';
 // import { toScreenGeometry } from 'esri/geometry/screenUtils';
 // import { webMercatorToGeographic, xyToLngLat, lngLatToXY } from 'esri/geometry/support/webMercatorUtils';
 // import * as Locator from 'esri/tasks/Locator';
@@ -28,7 +27,20 @@ import { ReflectiveInjector } from '@angular/core';
 import { MapLocOptions } from '../services/positionupdate.interface';
 import { MLInjector } from '../libs/MLInjector';
 
-const proj4 = (proj4x as any).default;
+import * as webMercatorUtils from '@arcgis/core/geometry/support/webMercatorUtils';
+import { SpatialReference } from '@arcgis/core/geometry';
+import Point from '@arcgis/core/geometry/Point';
+import MapView from '@arcgis/core/views/MapView';
+import WebMap from '@arcgis/core/WebMap';
+import ActionButton from '@arcgis/core/support/actions/ActionButton';
+import Locator from '@arcgis/core/tasks/Locator';
+import * as watchUtils from '@arcgis/core/core/watchUtils';
+import SimpleMarkerSymbol from '@arcgis/core/symbols/MarkerSymbol';
+import SimpleLineSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+import Graphic from '@arcgis/core/Graphic';
+import { locationToAddress } from '@arcgis/core/rest/locator/locationToAddress';
+//
+// const proj4 = (proj4x as any).default;
 
 export class MapHosterArcGIS extends MapHoster {
     hostName = 'MapHosterArcGIS';
@@ -64,28 +76,6 @@ export class MapHosterArcGIS extends MapHoster {
     pusherEventHandler: PusherEventHandler;
     pusherConfig: PusherConfig;
     utils: any;
-    esriwebMercatorUtils: any;
-
-    agoOptions: {
-        url: 'agourl',
-        version: '0.0.1',
-        css: 'nada',
-        dojoConfig: null,
-        insertCaseBefore: ''
-      };
-
-    // require(['dojo/_base/event','esri/tasks/locator', 'dojo/_base/fx', 'dojo/fx/easing', 'esri/map']);
-    //
-    // define([
-    //     'controllers/PositionViewCtrl',
-    //     'libs/utils',
-    //     'libs/this.mlconfig',
-    //     'libs/PusherEventHandler',
-    //     'controllers/PusherSetupCtrl',
-    //     'libs/PusherConfig',
-    //     'esri/geometry/Point',
-    //     'dojo/_base/event'
-    // ],
 
     constructor(private mphmap: _esri.MapView,
                 private mapNumber: number,
@@ -115,16 +105,13 @@ export class MapHosterArcGIS extends MapHoster {
     // }
 
     async updateGlobals(msg: string, cntrx: string, cntry: string, zm: number) {
-        const [esriwebMercatorUtils] = await loadModules([
-             'esri/geometry/support/webMercatorUtils'
-          ], this.agoOptions);
         console.log('updateGlobals ');
         this.zmG = zm;
         this.cntrxG = cntrx;
         this.cntryG = cntry;
         if (this.mphmap !== null) {
-            const ll = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
-            const ur = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
+            const ll = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
+            const ur = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
             this.bounds = new MlboundsService(ll[0], ll[1], ur[0], ur[1]);
             // this.bounds = this.mphmap.extent;
             this.mlconfig.setBounds(this.bounds);
@@ -171,9 +158,6 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async extractBounds(zm: number, cntr: any, whichaction: string): Promise<XtntParams> {
-        const [esriPoint, esriSpatialReference] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference',
-          ], this.agoOptions);
         // const source = proj4.Proj('GOOGLE'),
         //     dest = proj4.Proj('WGS84'),
         //     p = proj4.toPoint([cntr.longitude, cntr.latitude]);
@@ -186,12 +170,12 @@ export class MapHosterArcGIS extends MapHoster {
         }
         console.log('ready to create ESRI pt with ' + p.x + ', ' + p.y);
 */
-        const cntrpt = new esriPoint({longitude: cntr.longitude, latitude: cntr.latitude,
-          spatialReference: new esriSpatialReference({wkid: 4326})});
-        // cntrpt = new esriPoint({longitude: cntr.x, latitude: cntr.y, spatialReference: new esriSpatialReference({wkid: 4326})});
+        const cntrpt = new Point({longitude: cntr.longitude, latitude: cntr.latitude,
+          spatialReference: new SpatialReference({wkid: 4326})});
+        // cntrpt = new Point({longitude: cntr.x, latitude: cntr.y, spatialReference: new SpatialReference({wkid: 4326})});
         console.log('cntr ' + cntr.x + ', ' + cntr.y);
         console.log('cntrpt ' + cntrpt.x + ', ' + cntrpt.y);
-        // let ltln = esriwebMercatorUtils.geographicToWebMercator(cntrpt);
+        // let ltln = webMercatorUtils.geographicToWebMercator(cntrpt);
         // fixedLL = this.utils.toFixedTwo(ltln.longitude, ltln.latitude, 3);
         const fixedLL: ILonLatStrings = this.utils.toFixedTwo(cntrpt.x, cntrpt.y, 9);
         return {
@@ -274,9 +258,6 @@ export class MapHosterArcGIS extends MapHoster {
 
     async retrievedClick(clickPt) {
       if (clickPt.referrerId !== this.mlconfig.getUserId()) {
-        const [esriPoint, esriMapView] = await loadModules([
-              'esri/geometry/Point', 'esri/views/MapView'
-            ], this.agoOptions);
         console.log('Back in retrievedClick');
         // var latlng = L.latLng(clickPt.y, clickPt.x, clickPt.y);
         console.log('You clicked the map at ' + clickPt.x + ', ' + clickPt.y);
@@ -288,7 +269,7 @@ export class MapHosterArcGIS extends MapHoster {
               // mpDivNG = this.elementRef,
               // wdt = mpDivNG[0].clientWidth,
               // hgt = mpDivNG[0].clientHeight,
-              mppt = new esriPoint({longitude: clickPt.x, latitude: clickPt.y});
+              mppt = new Point({longitude: clickPt.x, latitude: clickPt.y});
               // screenGeo = new toScreenGeometry(this.mphmap.extent, wdt, hgt, mppt),
               // screenGeo = this.mphmap.toScreen(mppt);
 
@@ -322,15 +303,12 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async retrievedBounds(xj: XtntParams) {
-      const [esriPoint, esriSpatialReference, esriwebMercatorUtils] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/geometry/support/webMercatorUtils'
-          ], this.agoOptions);
       console.log('Back in MapHosterArcGIS ' + this.mlconfig.getMapNumber() + ' retrievedBounds');
       if (xj.zoom === 0) {
           xj.zoom = this.zmG;
       }
       const zm = xj.zoom;
-      // x = esriwebMercatorUtils.lngLatToXY(xj.lon, xj.lat),
+      // x = webMercatorUtils.lngLatToXY(xj.lon, xj.lat),
       const xtn = new Xtnt('arcgis', xj.zoom, xj.lon, xj.lat);
       const cmp = this.compareExtents('retrievedBounds', xtn.getParams());
 
@@ -342,7 +320,7 @@ export class MapHosterArcGIS extends MapHoster {
           await this.updateGlobals('in retrievedBounds with cmp false', '' + xj.lon, '' + xj.lat, xj.zoom);
           // this.userZoom = false;
           console.log('retrievedBounds centerAndZoom at zm = ' + zm);
-          const cntr = new esriPoint({longitude: xj.lon, latitude: xj.lat, spatialReference: new esriSpatialReference({wkid: 4326})});
+          const cntr = new Point({longitude: xj.lon, latitude: xj.lat, spatialReference: new SpatialReference({wkid: 4326})});
 
           this.userZoom = false;
           if (xj.action === 'pan') {
@@ -368,9 +346,6 @@ export class MapHosterArcGIS extends MapHoster {
 
     async onMapClick(e: any) {
       try {
-      const [esriPoint, esriSpatialReference, esriwebMercatorUtils] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/geometry/support/webMercatorUtils'
-          ], this.agoOptions);
       // const mapPt = {x: e.mapPoint.x, y: e.mapPoint.y},
       //     source = proj4.Proj('GOOGLE'),
       //     dest =  proj4.Proj('WGS84'),
@@ -381,18 +356,20 @@ export class MapHosterArcGIS extends MapHoster {
       // console.debug(e.screenPoint);
       // p = proj4.toPoint([e.mapPoint.x, e.mapPoint.y]);
       // proj4.transform(source, dest, p);
-      // cntrpt = new esriPoint({longitude: p.x, latitude: p.y, spatialReference: new esriSpatialReference({wkid: 4326})});
+      // cntrpt = new Point({longitude: p.x, latitude: p.y, spatialReference: new SpatialReference({wkid: 4326})});
       // console.log('clicked Pt ' + mapPt.x + ', ' + mapPt.y);
       // console.log('converted Pt ' + cntrpt.x + ', ' + cntrpt.y);
       const fixedLLG: ILonLatStrings = this.utils.toFixedTwo(e.mapPoint.longitude , e.mapPoint.latitude, 9);
-      // let locPt = esriwebMercatorUtils.xyToLngLat(e.mapPoint.longitude, e.mapPoint.latitude);
-      // let locPt2 = new esriPoint({longitude: locPt[0], latitude: locPt[1], spatialReference: new esriSpatialReference({wkid: 4326})});
-      this.geoLocator.locationToAddress(e.mapPoint)
+      // let locPt = webMercatorUtils.xyToLngLat(e.mapPoint.longitude, e.mapPoint.latitude);
+      // let locPt2 = new Point({longitude: locPt[0], latitude: locPt[1], spatialReference: new SpatialReference({wkid: 4326})});
+      // this.geoLocator.locationToAddress(e.mapPoint)
+
+      await locationToAddress({location: e.mapPoint, locationType: 'street'})
       .then((response) => {
           // var location;
           if (response.address) {
               const address = response.address;
-              const location = esriwebMercatorUtils.lngLatToXY(response.location.longitude, response.location.latitude);
+              const location = webMercatorUtils.lngLatToXY(response.location.longitude, response.location.latitude);
               this.showClickResult(address, e.mapPoint, fixedLLG);
               console.log(location);
           } else {
@@ -427,9 +404,6 @@ export class MapHosterArcGIS extends MapHoster {
     // this.pusherEventHandler.addEvent('client-MapClickEvent',  retrievedClick);
 
     async showClickResult(content: string, mapPt: any, fixedLLG: ILonLatStrings) {
-        const [ActionButton, esriPoint] = await loadModules([
-              'esri/support/actions/ActionButton', 'esri.geometry.Point'
-            ], this.agoOptions);
 
         const pushContent = this.configForPusher(content, fixedLLG);
 
@@ -441,8 +415,8 @@ export class MapHosterArcGIS extends MapHoster {
         });
 
         if (this.mphmap.popup.visible === false) {
-            // let mppt = new esriPoint({longitude: mapPt.x, latitude: clickPt.y}),
-            const emapPt = new esriPoint({latitude: mapPt.latitude, longitude: mapPt.longitude});
+            // let mppt = new Point({longitude: mapPt.x, latitude: clickPt.y}),
+            const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
             this.mphmap.popup.open({location: emapPt});
         }
 
@@ -492,13 +466,8 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async setCurrentLocation( loc: MapLocOptions) {
-      const [esriPoint, esriSpatialReference, esriLocator,
-              esriwebMercatorUtils, watchUtils] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/tasks/Locator',
-            'esri/geometry/support/webMercatorUtils', 'esri/core/watchUtils'
-          ], this.agoOptions);
-      const cntr = new esriPoint({longitude: loc.center.lng, latitude: loc.center.lat,
-        spatialReference: new esriSpatialReference({wkid: 4326})});
+      const cntr = new Point({longitude: loc.center.lng, latitude: loc.center.lat,
+        spatialReference: new SpatialReference({wkid: 4326})});
       this.mphmap.goTo({target: cntr, zoom: this.zmG});
       const xtExt = await this.extractBounds(this.mphmap.zoom, cntr, 'pan');
       // xtExt.then( () => {
@@ -508,32 +477,22 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async addGraphic(pt) {
-      const [esriPoint, esriSimpleMarkerSymbol, esriSimpleLineSymbol,
-            esriGraphic] = await loadModules([
-            'esri/geometry/Point', 'esri/symbols/SimpleMarkerSymbol', 'esri/symbols/SimpleLineSymbol',
-            'esri/Graphic'
-          ], this.agoOptions);
-      const symbol = new esriSimpleMarkerSymbol({
+      const symbol = new SimpleMarkerSymbol({
         color: [226, 119, 40],
-        outline: {
-          color: [255, 255, 255],
-          width: 1
-        }
+        // outline: {
+        //   color: [255, 255, 255],
+        //   width: 1
+        // }
       });
 
-      const graphic = new esriGraphic({
+      const graphic = new Graphic({
         geometry: pt,
         symbol
       });
       this.mphmap.graphics.add(graphic);
     }
 
-    async configureMap(xtntMap, zoomWebMap, pointWebMap, mlcfg) { // newMapId, mapOpts
-      const [esriPoint, esriSpatialReference, esriLocator,
-              esriwebMercatorUtils, watchUtils] = await loadModules([
-            'esri/geometry/Point', 'esri/geometry/SpatialReference', 'esri/tasks/Locator',
-            'esri/geometry/support/webMercatorUtils', 'esri/core/watchUtils'
-          ], this.agoOptions);
+    async configureMap(xtntMap, zoomWebMap, pointWebMap, mlcfg) {
       console.log('MapHosterArcGIS configureMap');
       this.mphmap = xtntMap;
       this.mapReady = false;
@@ -566,10 +525,10 @@ export class MapHosterArcGIS extends MapHoster {
       }
       this.showGlobals('in configureMap - MapHosterArcGIS - Prior to new Map');
       // alert('showed first globals');
-      const startCenter = new esriPoint({longitude: this.cntrxG, latitude: this.cntryG,
-        spatialReference: new esriSpatialReference({wkid: 4326})});
+      const startCenter = new Point({longitude: this.cntrxG, latitude: this.cntryG,
+        spatialReference: new SpatialReference({wkid: 4326})});
 
-      await this.updateGlobals('in configureMap - using startCenter', startCenter.x, startCenter.y, this.zmG);
+      await this.updateGlobals('in configureMap - using startCenter', '' + startCenter.x, '' + startCenter.y, this.zmG);
       this.showGlobals('Prior to startup centerAndZoom');
       // this.mphmap.centerAndZoom(startCenter, this.zmG);
       this.mphmap.goTo({target: startCenter, zoom: this.zmG});
@@ -578,10 +537,10 @@ export class MapHosterArcGIS extends MapHoster {
       MLInjector.injector.get(PusherclientService).publishPanEvent(xtnt.getParams());
 
       this.initMap();
-      this.geoLocator = new esriLocator({url: 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'});
+      this.geoLocator = new Locator({url: 'http://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer'});
       // addInitialSymbols();
-      const ll = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
-      const ur = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
+      const ll = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
+      const ur = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
       this.bounds = new MlboundsService(ll[0], ll[1], ur[0], ur[1]);
       this.userZoom = true;
 
@@ -630,7 +589,7 @@ export class MapHosterArcGIS extends MapHoster {
       this.mphmap.on('pointer-move', (evt) => {
       const // pnt = new Point({longitude: evt.mapPoint.x, latitude: evt.mapPoint.y}),
           ltln = this.mphmap.toMap({x: evt.x, y: evt.y}),
-          // ltln = esriwebMercatorUtils.xyToLngLat(evt.mapPoint.x, evt.mapPoint.y),
+          // ltln = webMercatorUtils.xyToLngLat(evt.mapPoint.x, evt.mapPoint.y),
           fixedLL = this.utils.toFixedTwo(ltln.longitude, ltln.latitude, 4),
           evlng = fixedLL.lon,
           evlat = fixedLL.lat;
@@ -670,15 +629,12 @@ export class MapHosterArcGIS extends MapHoster {
       // mpCanRoot = document.getElementById('map' + this.mlconfig.getMapNumber() + '_root');
     }
 
-    async prepareToSetBounds() {// newMapId, mapOpts
-      const [ esriwebMercatorUtils] = await loadModules([
-            'esri/geometry/support/webMercatorUtils'
-          ], this.agoOptions);
+    async prepareToSetBounds() {
       if (this.userZoom === true) {
         // let mapPt = this.mphmap.toMap({x: evt.x, y: evt.y});
         const mapPt = this.mphmap.extent.center;
-        const lld = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
-        const urd = esriwebMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
+        const lld = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
+        const urd = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
         this.bounds = new MlboundsService(lld[0], lld[1], urd[0], urd[1]);
         // this.bounds = this.mphmap.extent;
         this.mlconfig.setBounds(this.bounds);

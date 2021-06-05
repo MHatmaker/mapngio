@@ -12,11 +12,11 @@ import { ModalController } from '@ionic/angular';
 export class AgoitemComponent {
 
   searchTermItem: string;
-  private agoitemgroup: FormGroup;
+  public agoitemgroup: FormGroup;
   private agoItems: any;
   private items: any;
-  private selectedItem: IAgoItem;
-  private detailAccepted = false;
+  public selectedItem: IAgoItem;
+  public detailAccepted = false;
   private agodtl: HTMLIonModalElement;
 
   constructor(
@@ -30,15 +30,15 @@ export class AgoitemComponent {
     });
   }
 
-  checkEnter(e) {   //  e is event object passed from function invocation
+  checkEnter(event) {   //  e is event object passed from function invocation
     let characterCode;   // literal character code will be stored in this variable
 
-    if (e && e.which) {   // if which property of event object is supported (NN4)
-      e = e;
-      characterCode = e.which;   // character code is contained in NN4's which property
+    if (event && event.which) {   // if which property of event object is supported (NN4)
+      event = event;
+      characterCode = event.which;   // character code is contained in NN4's which property
     } else {
-      e = event;
-      characterCode = e.keyCode;   // character code is contained in IE's keyCode property
+      event = event;
+      characterCode = event.keyCode;   // character code is contained in IE's keyCode property
     }
 
     if (characterCode === 13) {   // if generated character code is equal to ascii 13 (if enter key)
@@ -47,6 +47,11 @@ export class AgoitemComponent {
     } else {
       return true;
     }
+  }
+
+  checkEnterKey(value: string) {
+    console.log('keypress value');
+    console.log(value);
   }
 
   async itemFinderSubmit() {

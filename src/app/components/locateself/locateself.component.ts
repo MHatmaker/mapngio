@@ -13,7 +13,7 @@ import { CanvasService } from '../../services/canvas.service';
   styleUrls: ['locateself.component.scss']
 })
 export class LocateselfComponent {
-  private locateselfgroup: FormGroup;
+  public locateselfgroup: FormGroup;
   private latitude: number;
   private longitude: number;
   public findMe = true;

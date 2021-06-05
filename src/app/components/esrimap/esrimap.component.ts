@@ -1,6 +1,8 @@
 import { Component, ElementRef, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 import { EsrimapService } from '../../services/esrimap.service';
-import { loadModules } from 'esri-loader';
+
+import { SpatialReference } from '@arcgis/core/geometry';
+import Point from '@arcgis/core/geometry/Point';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 // import * as proj4 from 'proj4';
 import { MapinstanceService} from '../../services/mapinstance.service';
@@ -32,11 +34,10 @@ export class EsriMapComponent implements OnInit {
   private mapView: any;
   private glat: number;
   private glng: number;
-  private mapNumber: number;
+  public mapNumber: number;
   private amap: any;
   private fixedLLG = null;
   private geoLocator: __esri.Locator;
-  private esriPoint: __esri.Point;
   private screenPt: null;
   private startup: StartupArcGIS;
   private mlconfig: MLConfig;
@@ -49,27 +50,17 @@ export class EsriMapComponent implements OnInit {
   }
 
   ngOnInit() {
-  // Load the mapping API modules
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      loadModules([
-        'esri/geometry/Point', 'esri/geometry/SpatialReference'
-      ], options)
-      .then(([esriPoint, SpatialReference]) => {
-            this.esriPoint = esriPoint();
+    const mapOptions = {
+      center: new Point({
+        x: -87.620692,
+        y: 41.888941,
+        spatialReference: new SpatialReference({ wkid: 4326 })
+      }),
+      zoom: 15
+    };
+    this.mapNumber = this.mapInstanceService.getNextSlideNumber();
+    this.startup = new StartupArcGIS();
+    this.startup.configure(this.mapNumber, mapOptions, this.elementRef.nativeElement.firstChild);
 
-            const mapOptions = {
-              center: new esriPoint({
-                x: -87.620692,
-                y: 41.888941,
-                spatialReference: SpatialReference({ wkid: 4326 })
-              }),
-              zoom: 15
-            };
-            this.mapNumber = this.mapInstanceService.getNextSlideNumber();
-            this.startup = new StartupArcGIS();
-            this.startup.configure(this.mapNumber, mapOptions, this.elementRef.nativeElement.firstChild);
 
-});
 }}

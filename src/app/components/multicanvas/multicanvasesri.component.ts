@@ -9,7 +9,7 @@ import { CanvasService } from '../../services/canvas.service';
 
 export class MultiCanvasEsriComponent implements OnInit, AfterViewInit {
     // private el: string = null;
-    private ndx: number = null;
+    public ndx: number = null;
     public slidevisibility = null;
     public slideCurrent = true;
     public mcactive = {

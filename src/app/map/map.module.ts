@@ -29,6 +29,7 @@ import { AgogroupComponent } from '../components/agogroup/agogroup.component';
 import { AgodetailComponent } from '../components/agodetail/agodetail.component';
 import { InfopopupComponent } from '../components/infopopup/infopopup.component';
 import { InfopopComponent } from '../components/infopop/infopop.component';
+import { GmpopoverComponent } from '../components/gmpopover/gmpopover.component';
 import { TourguideComponent } from '../components/tourguide/tourguide.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { SlidenavService } from '../services/slidenav.service';
@@ -58,6 +59,7 @@ import { SlidenavService } from '../services/slidenav.service';
     AgodetailComponent,
     InfopopupComponent,
     InfopopComponent,
+    GmpopoverComponent,
     TourguideComponent
   ],
 providers: [
@@ -85,6 +87,7 @@ providers: [
     AgodetailComponent,
     InfopopupComponent,
     InfopopComponent,
+    GmpopoverComponent,
     TourguideComponent
   ],
 })

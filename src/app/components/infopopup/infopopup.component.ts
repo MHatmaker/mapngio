@@ -10,7 +10,12 @@ import { PusherclientService } from '../../services/pusherclient.service';
 })
 export class InfopopupComponent {
 
-  itemContent: any;
+  private itemContent: any;
+  public content: string;
+  public title: string;
+  public dockBtnId: string;
+  public shareBtnId: string;
+  public popoverId: string;
 
   constructor(info: NavParams, public modalCtrl: ModalController, private pusherClientService: PusherclientService ) {
     console.log('Hello InfopopupComponent Component');
