@@ -1,6 +1,7 @@
 import { Component, ViewChild, OnInit, AfterContentInit, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 
 import { Platform, MenuController, NavController } from '@ionic/angular';
+import { menuController } from '@ionic/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { HostConfig } from './libs/HostConfig';
@@ -40,6 +41,7 @@ export class AppComponent implements AfterContentInit, OnInit {
   private userName: string;
   public hasPusherKeys = null;
   rootPage = MapPage;
+  // public menuCtrl = menuController;
 
   // Settings for the SideMenuComponent
   public sideMenuSettings: SideMenuSettings = {
@@ -56,9 +58,10 @@ export class AppComponent implements AfterContentInit, OnInit {
 
   constructor(
     private platform: Platform,
+    private menuCtrl: MenuController,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private menuCtrl: MenuController, private pageService: PageService, private domsvc: DomService,
+    private pageService: PageService, private domsvc: DomService,
     private shareMapInfoSvc: SharemapService, private gmpopoverSvc: GmpopoverService,
     private infopopSvc: InfopopService, private mapInstanceService: MapinstanceService,
     private pusherConfig: PusherConfig, private canvasService: CanvasService,
@@ -109,9 +112,12 @@ export class AppComponent implements AfterContentInit, OnInit {
     console.log('finished user name and pusher key query');
   }
 
-  openMenu(mnu: string) {
+  async openMenu(mnu: string) {
     console.log('fired mlmenu click ' + mnu);
-    this.menuCtrl.open(mnu);
+    const menus = await this.menuCtrl.getMenus();
+    console.log(menus);
+    this.menuCtrl.enable(true, mnu);
+    await this.menuCtrl.open(mnu);
   }
 
   setIDsAndNames() {

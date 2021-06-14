@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Utils } from '../libs/utils';
 import Portal from '@arcgis/core/portal/Portal';
 import PortalQueryParams from '@arcgis/core/portal/PortalQueryParams';
-import { request } from '@esri/arcgis-rest-request';
+// import { request } from '@arcgis/core/rest';
 import { IItem, ISearchResult, searchItems } from '@esri/arcgis-rest-portal';
 import { ImlBounds, MlboundsService } from './mlbounds.service';
 

@@ -1,5 +1,5 @@
 <ion-app>
-  <ion-menu side="start" persistent="true" content-id="mlcontent" menu-id="mlmenu" (ionClose)="collapseMenuOptions()">
+  <ion-menu menuId="mlmenu" side="start" persistent="true" content-id="mlcontent" menu-id="mlmenu" (ionClose)="collapseMenuOptions()">
 
   <!-- Side Menu -->
       <side-menu-content [settings]="sideMenuSettings" [options]="options" (selectOption)="selectOption($event)">

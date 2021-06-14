@@ -2,7 +2,10 @@
 // .custom-icon {
 //   background-image: url('https://cdn2.iconfinder.com/data/icons/flat-ui-icons-24-px/24/checkmark-24-24.png');
 // }
-@import 'https://js.arcgis.com/4.19.3/@arcgis/core/assets/esri/themes/light/main.css';
+@import '../../node_modules/@arcgis/core/assets/esri/themes/light/main.css';
+@import '../../node_modules/@ionic/core/css/ionic.bundle.css';
+@import '../../node_modules/leaflet/dist/leaflet.css';
+@import '../../node_modules/@ionic/core/css/float-elements.css';
 .padzero {
     padding: 0px;
 }
