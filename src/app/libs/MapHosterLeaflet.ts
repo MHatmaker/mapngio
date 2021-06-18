@@ -528,7 +528,7 @@ export class MapHosterLeaflet extends MapHoster {
             lfltBounds.ymax = ne.lat;
 
             bnds = {llx: sw.lng, lly: sw.lat,
-                         urx: ne.lng, ury: ne.lat, getCenter : null};
+                         urx: ne.lng, ury: ne.lat, getCenter : null, getEsriExtent: null};
             this.mlconfig.setBounds(bnds);
         }
 

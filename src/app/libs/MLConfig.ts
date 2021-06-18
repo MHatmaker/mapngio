@@ -314,6 +314,9 @@ export class MLConfig {
     getZoom() {
         return this.details.mlposition.zoom;
     }
+    setZoom(z: number) {
+      this.details.mlposition.zoom = z;
+    }
 
     showConfigdetails(msg: string ) {
         console.log(msg);

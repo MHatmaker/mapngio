@@ -45,7 +45,7 @@ import { locationToAddress } from '@arcgis/core/rest/locator/locationToAddress';
 export class MapHosterArcGIS extends MapHoster {
     hostName = 'MapHosterArcGIS';
     scale2Level = [];
-    zmG = -1;
+    zmG = 15;
     userZoom = true;
     // this.mphmapCenter;
     cntrxG = null;
@@ -77,7 +77,7 @@ export class MapHosterArcGIS extends MapHoster {
     pusherConfig: PusherConfig;
     utils: any;
 
-    constructor(private mphmap: _esri.MapView,
+    constructor(private mphmap: MapView,
                 private mapNumber: number,
                 mlconfig: MLConfig,
                 private elementRef: ElementRef) {
@@ -109,7 +109,7 @@ export class MapHosterArcGIS extends MapHoster {
         this.zmG = zm;
         this.cntrxG = cntrx;
         this.cntryG = cntry;
-        if (this.mphmap !== null) {
+        if (this.mphmap !== null && this.mphmap.extent !== null) {
             const ll = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmin, this.mphmap.extent.ymin);
             const ur = webMercatorUtils.xyToLngLat(this.mphmap.extent.xmax, this.mphmap.extent.ymax);
             this.bounds = new MlboundsService(ll[0], ll[1], ur[0], ur[1]);
@@ -508,7 +508,7 @@ export class MapHosterArcGIS extends MapHoster {
 
       if (zoomWebMap !== null) {
           await this.updateGlobals('in configureMap - init with attributes in args',
-              xtntMap.center.longitude, xtntMap.center.latitude, xtntMap.zoom);
+              xtntMap.extent.center.x, xtntMap.extent.center.y, this.mlconfig.getZoom()); // xtntMap.zoom);
       } else {
 
           const qlat = this.mlconfig.lat();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { loadModules } from 'esri-loader';
+import Extent from '@arcgis/core/geometry/Extent';
 
 export interface ImlBoundsParams {
     llx: number;
@@ -18,6 +18,7 @@ export interface ImlPoint extends ImlPointParams {
 
 export interface ImlBounds extends ImlBoundsParams {
     getCenter(): Promise<{x: number, y: number}>;
+    getEsriExtent(): Extent;
 }
 
 export interface XtntParams  {
@@ -70,23 +71,22 @@ export class MlpointService implements ImlPoint {
   providedIn: 'root'
 })
 export class MlboundsService implements ImlBounds {
-
-
     constructor( public llx: number = -1,  public lly: number = -1,  public urx: number =  -1, public ury: number = -1) {
     }
     public async getCenter(): Promise<{x: number, y: number}> {
-      const options = {
-        url: 'https://js.arcgis.com/4.8/'
-      };
-      const [esriExtent] = await loadModules([
-        'esri/geometry/Extent', 'esri/geometry/Point'
-      ], options);
-      const esriXtnt = new esriExtent({xmin: this.llx, ymin: this.lly, xmax: this.urx, ymax: this.ury});
+      const esriXtnt = new Extent({xmin: this.llx, ymin: this.lly, xmax: this.urx, ymax: this.ury});
       const esriCenter = esriXtnt.center;
       const x = esriCenter.x;
       const y = esriCenter.y;
       // let x = this.llx + 0.5 * (this.urx - this.llx);
       // let y = this.lly + 0.5 * (this.ury - this.lly);
       return {x, y};
+    }
+    public getEsriExtent(): Extent {
+      const esriXtnt = new Extent({xmin: this.llx, ymin: this.lly, xmax: this.urx, ymax: this.ury,
+        spatialReference: {
+          wkid: 102100}
+        });
+      return esriXtnt;
     }
 }
