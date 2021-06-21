@@ -42,6 +42,7 @@ interface ConfigOptions {
 export class StartupArcGIS  extends Startup {
     // private hostName: string = 'MapHosterArcGIS';
     private aMap: any = null;
+    private webMap: WebMap;
     private configOptions: ConfigOptions;
     private aView: any = null;
     private mapHoster: MapHosterArcGIS = null;
@@ -248,152 +249,67 @@ export class StartupArcGIS  extends Startup {
   }
 
   async initializePostProc(idAgoItem) {
-      const
-          aMap = null,
-          // layer = new MapImageLayer({
-          //     url: 'https://sampleserver6.arcgisonline.com/arcgis/rest/services/Census/MapServer'
-          //   }),
-          webMap = new WebMap({
-              portalItem: { // autocasts as new PortalItem()
-                // id: 'f52bc3aee47749c380ddb0cd89337349'
-                id: this.mlconfig.getWebmapId(false)
-              }
-              // basemap: 'streets'
-          });
+      console.log('StartupArcGIS initializePostProc with map no. ' + this.mapNumber);
+      console.log('configOptions.webmap will be ' + this.selectedWebMapId);
+
+      try {
+        this.webMap = new WebMap({
+          portalItem: { // autocasts as new PortalItem()
+            // id: '4c3ccb95474c4c4d89ec191d69ba1080'
+            id: this.mlconfig.getWebmapId(false)
+          }
+          // basemap: 'streets'
+        });
+      } catch(err) {
+        console.log(err);
+      }
+      this.webMap.when((w: any) => {
+        console.log('We mighthave a webmap here');
+        console.log(w);
+      },
+      (msg: string) => {
+        console.log('WebMap failed');
+        console.log(msg);
+      });
+
       console.log(`Hopefully created new esriWebMap with id ${this.mlconfig.getWebmapId(false)}`);
       this.selectedWebMapId = this.mlconfig.getWebmapId(false);
+      this.webMap.load()
+        .then(() =>{
+          return this.webMap.basemap.load();
+        });
 
-          // webMap.add(layer);  // adds the layer to the map
-          // viewCreated;
-          /*
-          webMap.load()
-            .then(function(){
-              return webMap.basemap.load();
-            });
-*/
-
-      //     mapOptions = {},
-      // window.loading = dojo.byId('loadingImg');
-      // This service is for development and testing purposes only.
-      // We recommend that you create your own geometry service for use within your applications.
-      // esri.config.defaults.geometryService =
-      // const  geometrySvc = new GeometryService('https://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
-      // this.esriConfig.GeometryService =
-      //     new esri.tasks.GeometryService('http://tasks.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer');
-
-      console.log('StartupArcGIS configure with map no. ' + this.mapNumber);
-      console.log('configOptions.webmap will be ' + this.selectedWebMapId);
-      // specify any default settings for your map
-      // for example a bing maps key or a default web map id
-      this.configOptions  =  {
-          // webmap: '4b99c1fb712d4fe694805717df5fadf2', // selectedWebMapId,
-          webmap: this.selectedWebMapId,
-          title: '',
-          subtitle: '',
-          // arcgis.com sharing url is used modify this if yours is different
-          sharingurl: 'http://arcgis.com/sharing/content/items',
-          // enter the bing maps key for your organization if you want to display bing maps
-          bingMapsKey: '/*Please enter your own Bing Map key*/'
-      };
-      if (idAgoItem) {
-          this.configOptions.webmap = webMap.portalItem = idAgoItem;
-      }
+      // if (idAgoItem) {
+      //     this.configOptions.webmap = this.webMap.portalItem = idAgoItem;
+      // }
 
       console.log('StartupArcGIS ready to instantiate Map Hoster with map no. ' + this.mapNumber);
-      // Config.request.   arcgisUrl = this.configOptions.sharingurl;                      // return this.mapHoster;
-      // esri.arcgis.utils.arcgisUrl = configOptions.sharingurl;
-      this.esriConfig.request.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
-      // esri.config.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
+      // this.esriConfig.request.proxyUrl = '/arcgisserver/apis/javascript/proxy/proxy.ashx';
+      // console.log('call for new WebMap with webmap id ' + this.configOptions.webmap);
 
-      // create the map using the web map id specified using configOptions or via the url parameter
-      // var cpn = new dijit.layout.ContentPane({}, 'map_canvas').startup();
-
-      // dijit.byId('map_canvas').addChild(cpn).placeAt('map_canvas').startup();
-      console.log('call for new WebMap with webmap id ' + this.configOptions.webmap);
-
-      // this.aMap = new WebMap({portalItem: {id: configOptions.webmap}});
-      // this.aMap = new WebMap({portalItem: {id: 'e691172598f04ea8881cd2a4adaa45ba'}});
-
-      // this.aMap = new WebMap({portalItem: {id: 'a4bb8a91ecfb4131aa544eddfbc2f1d0'}});
-        // this.aView = new MapView({
-      //     map: this.aMap,
-      //     container: document.getElementById('map' + this.mapNumber),
-      //     zoom: 14,
-      //     center: [-87.620692, 41.888941]
-      // });
-      // this.initUI();
-      /*
-      this.aMap.load()
-          .then(function() {
-            // load the basemap to get its layers created
-            console.log('map.then callback function');
-              return this.aMap.basemap.load();
-          })
-          .then(function() {
-
-              if (previousSelectedWebMapId !== selectedWebMapId) {
-                  previousSelectedWebMapId = selectedWebMapId;
-                  //dojo.destroy(map.container);
-              }
-              this.mapHoster = new MapHosterArcGIS.MapHosterArcGIS(this.aMap, this.mapNumber, this.mlconfig);
-              this.mapHosterSetupCallback(this.mapHoster, this.aMap);
-              this.aView = new MapView({
-                  map: this.aMap,
-                  container: document.getElementById('map' + this.mapNumber),
-                  zoom: 14,
-                  center: [-87.620692, 41.888941]
-              });
-              initUI();
-
-              // grab all the layers and load them
-              console.log('Ready to get alllayers');
-              var allLayers = this.aMap.allLayers,
-                  promises = allLayers.map(function(layer) {
-                      return layer.load();
-                  });
-              return all(promises.toArray());
-          })
-          .then(function(layers) {
-              // each layer load promise resolves with the layer
-              console.log('all ' + layers.length + ' layers loaded');
-          })
-          .otherwise(function(error) {
-              console.log('otherwise error');
-              console.error(error);
-          });
-          */
       // try {
-      const mlbnds = this.mlconfig.getBounds();
-      const bndsSvc = new MlboundsService(mlbnds.llx, mlbnds.lly, mlbnds.urx, mlbnds.ury);
-      this.mapView = new MapView({
+      const mapView = new MapView({
         container: this.elementRef as unknown as HTMLDivElement, // 'viewDiv'+this.mapNumber, // this.elementRef,
-        map: webMap, // this.mapService.map,,
+        map: this.webMap, // this.mapService.map,,
         // constraints: {
         //   lods: TileInfo.create().lods
         // },
-        center: new Point({
-          x: this.mlconfig.getPosition().lon,
-          y: this.mlconfig.getPosition().lat,
-          spatialReference: new SpatialReference({ wkid: 4326 })
-        }),
-        extent: bndsSvc.getEsriExtent(),
+        // center: this.webMap.portalItem.extent.center,
+        // extent: this.webMap.portalItem.extent,
       });
-      await this.mapView.when((instance: any) => {
+      this.mapView = mapView;
+      mapView.when(() => {
           console.log('mapView.when');
           // console.log(instance);
           if (this.previousSelectedWebMapId !== this.selectedWebMapId) {
               this.previousSelectedWebMapId = this.selectedWebMapId;
               // dojo.destroy(map.container);
           }
-          if (aMap) {
-              aMap.destroy();
-          }
+          // if (aMap) {
+          //     aMap.destroy();
+          // }
           // this.aMap = aMap = webMap;
           this.aMap = this.mapView;
-          // dojo.connect(aMap, 'onUpdateStart', showLoading);
-          // dojo.connect(aMap, 'onUpdateEnd', hideLoading);
-          // dojo.connect(aMap, 'onLoad', initUI);
-          // this.mlconfig.setPosition({lat: this.mapView.center.latitude, lon: this.mapView.center.longitude, zoom: this.mapView.zoom});
           this.mapHoster = new MapHosterArcGIS(this.mapView, this.mapNumber, this.mlconfig, this.elementRef);
           this.mlconfig.setMapHosterInstance(this.mapHoster);
           MLInjector.injector.get(MapinstanceService).setMapHosterInstance(this.mapNumber, this.mapHoster);
@@ -407,10 +323,6 @@ export class StartupArcGIS  extends Startup {
       this.viewCreated.next(this.mapView);
 
   }
-  // function getMapHoster() {
-  //     console.log('StartupArcGIS return mapHoster with map no. ' + mapHoster.getMapNumber());
-  //     return mapHoster;
-  // }
 
   prepareWindow(idAgoItem, referringMph, displayDestination) {
 
