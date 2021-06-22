@@ -1,86 +1,60 @@
 import { EventEmitter, ElementRef} from '@angular/core';
 import { MLConfig } from './MLConfig';
-import { ConfigparamsService, EMapSource } from '../services/configparams.service';
+import { EMapSource } from '../services/configparams.service';
 import { PusherConfig } from './PusherConfig';
 // import { PusherClientService } from '../../../services/pusherclient.service';
 // import { utils } from './utils';
 import { Startup } from './Startup';
 import { MapHosterArcGIS } from './MapHosterArcGIS';
-import { Utils } from './utils';
 import { MLInjector } from '../libs/MLInjector';
 import { MapinstanceService } from '../services/mapinstance.service';
 import { PusherclientService } from '../services/pusherclient.service';
 import { CurrentmaptypeService } from '../services/currentmaptype.service';
-import { MlboundsService } from '../services/mlbounds.service';
 
-import { SpatialReference } from '@arcgis/core/geometry';
-import Point from '@arcgis/core/geometry/Point';
 import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
-import GeometryService from '@arcgis/core/tasks/GeometryService';
-import Config from '@arcgis/core/config';
-import TileInfo from '@arcgis/core/layers/support/TileInfo';
-import MapImageLayer from '@arcgis/core/layers/MapImageLayer';
-import Locator from '@arcgis/core/tasks/Locator';
-import * as watchUtils from '@arcgis/core/core/watchUtils';
-import SimpleMarkerSymbol from '@arcgis/core/symbols/MarkerSymbol';
-import SimpleLineSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
-import Graphic from '@arcgis/core/Graphic';
 
-interface ConfigOptions {
-    // webmap: '4b99c1fb712d4fe694805717df5fadf2', // selectedWebMapId,
-    webmap: string;
-    title: string;
-    subtitle: string;
-    // arcgis.com sharing url is used modify this if yours is different
-    sharingurl: string;
-    // enter the bing maps key for your organization if you want to display bing maps
-    bingMapsKey: string;
-  }
+// interface ConfigOptions {
+//     // webmap: '4b99c1fb712d4fe694805717df5fadf2', // selectedWebMapId,
+//     webmap: string;
+//     title: string;
+//     subtitle: string;
+//     // arcgis.com sharing url is used modify this if yours is different
+//     sharingurl: string;
+//     // enter the bing maps key for your organization if you want to display bing maps
+//     bingMapsKey: string;
+//   }
+interface DstSel {
+  destination: string;
+}
 
 // @Injectable()
 export class StartupArcGIS  extends Startup {
     // private hostName: string = 'MapHosterArcGIS';
     private aMap: any = null;
     private webMap: WebMap;
-    private configOptions: ConfigOptions;
-    private aView: any = null;
     private mapHoster: MapHosterArcGIS = null;
     // private newSelectedWebMapId: string = '';
-    // private pusherChannel: string = '';
+    private pusherChannel = '';
     selectedWebMapId = 'f52bc3aee47749c380ddb0cd89337349'; // Requires a space after map ID
     previousSelectedWebMapId = this.selectedWebMapId;
+    private viewCreated; // : EventEmitter;
+    private mapOptions: any;
+
 
     // private newSelectedWebMapId: string = '';
-    private pusher: any = null;
-    private pusherChannel = null;
-    private channel = null;
-    private mapHosterSetupCallback: any = null;
-    private esriLocator;
-    private esriConfig : Config;
-    private esriGeometryService;
-    private esriwebmap;
-    private esrimapview;
-    private esriPoint;
-    private viewCreated; // : EventEmitter;
+    private pusher: any = null;    private channel = null;
     private pointWebMap = [null, null];
     private zoomWebMap = null;
     private mapView: any = null;
     private mlconfig: MLConfig;
     private elementRef: ElementRef;
-    private mapOptions: any;
     private mapNumber: number;
     private utils: any;
     private pusherConfig: PusherConfig;
 
     async loadEsriModules() {
 
-      this.esriLocator = Locator;
-      this.esriConfig = Config;
-      this.esriGeometryService = GeometryService;
-      this.esriwebmap = WebMap;
-      this.esrimapview = MapView;
-      this.esriPoint = Point;
     }
 
     // constructor(private esriwebmap: WebMap, private esrimapview: MapView,
@@ -138,7 +112,7 @@ export class StartupArcGIS  extends Startup {
       this.aMap.hideZoomSlider();
   }
 
-  hideLoading(error) {
+  hideLoading(error: any) {
       this.utils.hideLoading(error);
       this.aMap.enableMapNavigation();
       this.aMap.showZoomSlider();
@@ -248,7 +222,7 @@ export class StartupArcGIS  extends Startup {
       }
   }
 
-  async initializePostProc(idAgoItem) {
+  async initializePostProc(idAgoItem: string) {
       console.log('StartupArcGIS initializePostProc with map no. ' + this.mapNumber);
       console.log('configOptions.webmap will be ' + this.selectedWebMapId);
 
@@ -324,7 +298,7 @@ export class StartupArcGIS  extends Startup {
 
   }
 
-  prepareWindow(idAgoItem, referringMph, displayDestination) {
+  prepareWindow(idAgoItem: string, referringMph, displayDestination) {
 
       const curmph = this.mapHoster;
       let baseUrl = '';
@@ -363,8 +337,8 @@ export class StartupArcGIS  extends Startup {
       }
   }
 
-  initialize(idAgoItem, destDetails, selectedMapTitle, referringMph) {
-      const displayDestination = destDetails.dstSel;
+  initialize(idAgoItem: string, destDetails: DstSel, selectedMapTitle: string, referringMph) {
+      const displayDestination = destDetails.destination;
       //     $inj,
       // CurrentMapTypeService;
       /*
@@ -409,7 +383,7 @@ export class StartupArcGIS  extends Startup {
           this.pointWebMap = [-87.620692, 41.888941];
           this.zoomWebMap = 15;
           // initialize(selectedWebMapId, '', '');   original from mlhybrid requires space after comma
-          this.initialize(this.selectedWebMapId, {dstSel: 'no destination selection probably Same Window'},
+          this.initialize(this.selectedWebMapId, {destination: 'no destination selection probably Same Window'},
               'Name Placeholder', null);
       } else {
           console.log('found idAgoItem');
@@ -425,7 +399,7 @@ export class StartupArcGIS  extends Startup {
               const llat = this.mlconfig.getPosition().lat;
               this.pointWebMap = [llon, llat];
           }
-          this.initialize(idAgoItem, {dstSel: 'no destination selection probably Same Window'},
+          this.initialize(idAgoItem, {destination: 'no destination selection probably Same Window'},
               'Name Placeholder', null);
       }
   }

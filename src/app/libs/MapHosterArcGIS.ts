@@ -657,7 +657,7 @@ export class MapHosterArcGIS extends MapHoster {
         console.log('open map using framework {pos.maphost} at x {pos.lon}, y {pos.lat} zoom {pos.zoom}');
     }
 
-    getGlobalsForUrl() {
+    getGlobalsForUrl(): string {
         console.log(' MapHosterArcGIS.prototype.getGlobalsForUrl');
         console.log('&lon=' + this.cntrxG + '&lat=' + this.cntryG + '&zoom=' + this.zmG);
         return '&lon=' + this.cntrxG + '&lat=' + this.cntryG + '&zoom=' + this.zmG;
