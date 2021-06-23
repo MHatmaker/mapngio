@@ -38,7 +38,9 @@ import * as watchUtils from '@arcgis/core/core/watchUtils';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/MarkerSymbol';
 import SimpleLineSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Graphic from '@arcgis/core/Graphic';
-import { locationToAddress } from '@arcgis/core/rest/locator/locationToAddress';
+import { locationToAddress } from '@arcgis/core/rest/locator';
+import config from '@arcgis/core/config';
+// import { locationToAddress } from '@arcgis/core/tasks/Locator');
 //
 // const proj4 = (proj4x as any).default;
 
@@ -345,27 +347,13 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async onMapClick(e: any) {
-      try {
-      // const mapPt = {x: e.mapPoint.x, y: e.mapPoint.y},
-      //     source = proj4.Proj('GOOGLE'),
-      //     dest =  proj4.Proj('WGS84'),
-      //     p,
-      //     cntrpt;
-      // this.screenPt = e.mapPoint;
-      // console.log('e.screenPoint');
-      // console.debug(e.screenPoint);
-      // p = proj4.toPoint([e.mapPoint.x, e.mapPoint.y]);
-      // proj4.transform(source, dest, p);
-      // cntrpt = new Point({longitude: p.x, latitude: p.y, spatialReference: new SpatialReference({wkid: 4326})});
-      // console.log('clicked Pt ' + mapPt.x + ', ' + mapPt.y);
-      // console.log('converted Pt ' + cntrpt.x + ', ' + cntrpt.y);
       const fixedLLG: ILonLatStrings = this.utils.toFixedTwo(e.mapPoint.longitude , e.mapPoint.latitude, 9);
-      // let locPt = webMercatorUtils.xyToLngLat(e.mapPoint.longitude, e.mapPoint.latitude);
-      // let locPt2 = new Point({longitude: locPt[0], latitude: locPt[1], spatialReference: new SpatialReference({wkid: 4326})});
-      // this.geoLocator.locationToAddress(e.mapPoint)
 
-      await locationToAddress({location: e.mapPoint, locationType: 'street'})
-      .then((response) => {
+      const geoLocater = new Locator ({
+        url: 'http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer'
+      });
+      config.apiKey = 'AAPK0f6edcdc643b4ca9bc1fad44f3c659ee9dUyLj5MqZdGhsgnM1i-lWgsHwOCad4_rfRLz6gYlS_qswzHXioQ5kMqHOTwc6M7';
+      geoLocater.locationToAddress({location: e.mapPoint, locationType: 'street'}).then((response) => {
           // var location;
           if (response.address) {
               const address = response.address;
@@ -375,28 +363,11 @@ export class MapHosterArcGIS extends MapHoster {
           } else {
               this.showClickResult(null, e.mapPoint, fixedLLG);
           }
-
-        }).catch( (err) => {
+        },
+        (err) => {
           console.log(err);
         });
-
-     /*
-        // this.mphmap.infoWindow.setTitle('Coordinates');
-        // this.mphmap.infoWindow.setContent('lat/lon: ' + fixedLL.lat + ', ' + fixedLL.lon);
-        this.mphmap.infoWindow.show(e.screenPoint,this.mphmap.getInfoWindowAnchor(e.screenPoint));
-
-        if (selfPusherDetails.pusher)
-        {
-            var latlng = {'x': fixedLL.lon, 'y': fixedLL.lat,  'z': '0'};
-            console.log('Push coordinates');
-            console.debug(latlng);
-            selfPusherDetails.pusher.channel(selfPusherDetails.channel).trigger('client-MapClickEvent', latlng);
-        }
-         */
-        } catch (error) {
-          console.log('We have an error: ' + error);
-        }
-    }
+      }
 
     // this.pusherEventHandler = new PusherEventHandler.PusherEventHandler(this.mlconfig.getMapNumber());
     //
@@ -404,45 +375,45 @@ export class MapHosterArcGIS extends MapHoster {
     // this.pusherEventHandler.addEvent('client-MapClickEvent',  retrievedClick);
 
     async showClickResult(content: string, mapPt: any, fixedLLG: ILonLatStrings) {
+      console.log('showClickResult : ' + content);
+      const pushContent = this.configForPusher(content, fixedLLG);
 
-        const pushContent = this.configForPusher(content, fixedLLG);
+      const shareAction = new ActionButton({
+        title: 'Share Info',
+        id: 'idShareInfo',
+        className: 'share-action',
+        image: 'assets/imgs/share-info.png'
+      });
 
-        const shareAction = new ActionButton({
-          title: 'Share Info',
-          id: 'idShareInfo',
-          className: 'share-action',
-          image: 'assets/imgs/share-info.png'
-        });
+      if (this.mphmap.popup.visible === false) {
+          // let mppt = new Point({longitude: mapPt.x, latitude: clickPt.y}),
+          const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
+          this.mphmap.popup.open({location: emapPt});
+      }
 
-        if (this.mphmap.popup.visible === false) {
-            // let mppt = new Point({longitude: mapPt.x, latitude: clickPt.y}),
-            const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
-            this.mphmap.popup.open({location: emapPt});
+      if (this.mphmap.popup.actions.length < 2) {
+        this.mphmap.popup.actions.push(shareAction);
+      }
+      this.mphmap.popup.on('trigger-action', (event) => {
+        if (event.action.id === 'idShareInfo') {
+          MLInjector.injector.get(PusherclientService).publishClickEvent(pushContent);
         }
+      });
 
-        if (this.mphmap.popup.actions.length < 2) {
-          this.mphmap.popup.actions.push(shareAction);
-        }
-        this.mphmap.popup.on('trigger-action', (event) => {
-          if (event.action.id === 'idShareInfo') {
-            MLInjector.injector.get(PusherclientService).publishClickEvent(pushContent);
+      if (content === null) {
+          // const addedContent = 'Share lat/lon: ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon;
+          this.mphmap.popup.title = 'Ready to Push Click';
+          this.mphmap.popup.content = 'lat/lon: ' + fixedLLG.lat + ', ' + fixedLLG.lon;
+      } else {
+          if (this.mphmap.popup.content === null) {
+            const addedContent = 'Share address: ' + content;
+            this.mphmap.popup.content = addedContent;
           }
-        });
-
-        if (content === null) {
-            // const addedContent = 'Share lat/lon: ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon;
-            this.mphmap.popup.title = 'Ready to Push Click';
-            this.mphmap.popup.content = 'lat/lon: ' + fixedLLG.lat + ', ' + fixedLLG.lon;
-        } else {
-            if (this.mphmap.popup.content === null) {
-              const addedContent = 'Share address: ' + content;
-              this.mphmap.popup.content = addedContent;
-            }
-            this.mphmap.popup.watch('currentDockPosition', (value) => {
-                console.log('currentDockPosition');
-                console.log(value);
-            });
-        }
+          this.mphmap.popup.watch('currentDockPosition', (value) => {
+              console.log('currentDockPosition');
+              console.log(value);
+          });
+      }
 
     }
     configForPusher(content: string, fixedLLG: ILonLatStrings) {
