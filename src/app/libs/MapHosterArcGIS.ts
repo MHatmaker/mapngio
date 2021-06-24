@@ -90,6 +90,7 @@ export class MapHosterArcGIS extends MapHoster {
         this.cntryG = pos.lat;
         this.zmG = pos.zoom;
         this.utils = MLInjector.injector.get(Utils);
+        this.mphmap.popup.autoOpenEnabled = false;
             // let mpopn = MLInjector.injector.get(MapopenerProvider);
             // mpopn.addHiddenCanvas.emit();
             // this.updateGlobals('adding hidden canvas updateGlobals', pos.lon, pos.lat, pos.zoom);
@@ -385,11 +386,11 @@ export class MapHosterArcGIS extends MapHoster {
         image: 'assets/imgs/share-info.png'
       });
 
-      if (this.mphmap.popup.visible === false) {
+      // if (this.mphmap.popup.visible === null || this.mphmap.popup.visible === false) {
           // let mppt = new Point({longitude: mapPt.x, latitude: clickPt.y}),
           const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
           this.mphmap.popup.open({location: emapPt});
-      }
+      // }
 
       if (this.mphmap.popup.actions.length < 2) {
         this.mphmap.popup.actions.push(shareAction);
