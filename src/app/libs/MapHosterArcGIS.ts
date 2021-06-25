@@ -348,7 +348,20 @@ export class MapHosterArcGIS extends MapHoster {
     }
 
     async onMapClick(e: any) {
-      const fixedLLG: ILonLatStrings = this.utils.toFixedTwo(e.mapPoint.longitude , e.mapPoint.latitude, 9);
+      const mapPt = e.mapPoint;
+      const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
+      this.mphmap.popup.open({location: emapPt});
+
+      const shareAction = new ActionButton({
+        title: 'Share Info',
+        id: 'idShareInfo',
+        className: 'share-action',
+        image: 'assets/imgs/share-info.png'
+      });
+
+      if (this.mphmap.popup.actions.length < 2) {
+        this.mphmap.popup.actions.push(shareAction);
+      }
 
       const geoLocater = new Locator ({
         url: 'http://geocode-api.arcgis.com/arcgis/rest/services/World/GeocodeServer'
@@ -359,10 +372,10 @@ export class MapHosterArcGIS extends MapHoster {
           if (response.address) {
               const address = response.address;
               const location = webMercatorUtils.lngLatToXY(response.location.longitude, response.location.latitude);
-              this.showClickResult(address, e.mapPoint, fixedLLG);
+              this.showClickResult(address, e.mapPoint);
               console.log(location);
           } else {
-              this.showClickResult(null, e.mapPoint, fixedLLG);
+              this.showClickResult(null, e.mapPoint);
           }
         },
         (err) => {
@@ -375,26 +388,11 @@ export class MapHosterArcGIS extends MapHoster {
     // this.pusherEventHandler.addEvent('client-MapXtntEvent', retrievedBounds);
     // this.pusherEventHandler.addEvent('client-MapClickEvent',  retrievedClick);
 
-    async showClickResult(content: string, mapPt: any, fixedLLG: ILonLatStrings) {
+    async showClickResult(content: string, mapPt: any) {
       console.log('showClickResult : ' + content);
+      const fixedLLG: ILonLatStrings = this.utils.toFixedTwo(mapPt.longitude , mapPt.latitude, 9);
       const pushContent = this.configForPusher(content, fixedLLG);
 
-      const shareAction = new ActionButton({
-        title: 'Share Info',
-        id: 'idShareInfo',
-        className: 'share-action',
-        image: 'assets/imgs/share-info.png'
-      });
-
-      // if (this.mphmap.popup.visible === null || this.mphmap.popup.visible === false) {
-          // let mppt = new Point({longitude: mapPt.x, latitude: clickPt.y}),
-          const emapPt = new Point({latitude: mapPt.latitude, longitude: mapPt.longitude});
-          this.mphmap.popup.open({location: emapPt});
-      // }
-
-      if (this.mphmap.popup.actions.length < 2) {
-        this.mphmap.popup.actions.push(shareAction);
-      }
       this.mphmap.popup.on('trigger-action', (event) => {
         if (event.action.id === 'idShareInfo') {
           MLInjector.injector.get(PusherclientService).publishClickEvent(pushContent);
@@ -403,7 +401,7 @@ export class MapHosterArcGIS extends MapHoster {
 
       if (content === null) {
           // const addedContent = 'Share lat/lon: ' + this.fixedLLG.lat + ', ' + this.fixedLLG.lon;
-          this.mphmap.popup.title = 'Ready to Push Click';
+          this.mphmap.popup.title = 'No address at this location';
           this.mphmap.popup.content = 'lat/lon: ' + fixedLLG.lat + ', ' + fixedLLG.lon;
       } else {
           if (this.mphmap.popup.content === null) {
@@ -417,10 +415,12 @@ export class MapHosterArcGIS extends MapHoster {
       }
 
     }
+
     configForPusher(content: string, fixedLLG: ILonLatStrings) {
         // if (selfPusherDetails.pusher) {
         const referrerId = this.mlconfig.getUserId();
         const referrerName = MLInjector.injector.get(PusherConfig).getUserName();
+        const mapId = referrerName + this.mapNumber;
 
         const pushLL = {
             lng: fixedLLG.lon,
@@ -428,6 +428,7 @@ export class MapHosterArcGIS extends MapHoster {
             zoom: this.zmG,
             referrerId,
             referrerName,
+            mapId,
             address: content
         };
         console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + fixedLLG.lat + ', ' + fixedLLG.lon);

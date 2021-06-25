@@ -93,6 +93,7 @@ export class StartupArcGIS  extends Startup {
             this.mlconfig = mapInstanceService.getConfigInstanceForMap(this.mapNumber);
         }
         this.mlconfig.setUserId(this.pusherConfig.getUserName() + this.mapNumber);
+        this.mlconfig.setMapNumber(this.mapNumber);
     }
 
   configure(newMapId: number, mapLocOpts, elementRef: ElementRef) {

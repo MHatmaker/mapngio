@@ -388,8 +388,8 @@ export class PusherclientService {
       // this.pusher.channels[this.CHANNELNAME].trigger('client-MapXtntEvent', frame);
   }
   publishClickEvent(frame) {
-      console.log(`publishClickEvent: frame for frame.mapId - ${frame.mapId} , referrerId - ${frame.referrerId}
-          popId - ${frame.popId}`);
+      console.log(`publishClickEvent => frame for frame.mapId : ${frame.mapId} , referrerId : ${frame.referrerId}
+          popId : ${frame.popId}`);
       console.log(frame);
       /*
       if (frame.hasOwnProperty('x')) {
@@ -403,22 +403,31 @@ export class PusherclientService {
          frame.zoom = fv.z;
       }
 */
+      let withoutPopId = null;
       const keys = Array.from(this.clients.keys());
       const withoutHidden = _.without(keys, 'hiddenmap');  // this.clients.get('hiddenmap'));
       console.log(withoutHidden);
-      const withoutSubmitter = _.without(withoutHidden, this.clients[frame.mapId]);
+      const withoutSubmitter = _.without(withoutHidden, frame.mapId);
       console.log(withoutSubmitter);
-      const withoutPopId = _.without(withoutSubmitter, this.clients[frame.popId]);
+      if (frame.popId) {
+        withoutPopId = _.without(withoutSubmitter, this.clients[frame.popId]);
+      } else {
+        withoutPopId = withoutSubmitter;
+      }
       console.log(withoutPopId);
       _.each(withoutPopId, (client) => {
-          const testId = this.clients.get(client).clientName; //  + this.clients.get(client).mapNumber;
+          const testId = client; //  + this.clients.get(client).mapNumber;
           const testClient = this.clients.get(client);
           console.log(`client is clientName ${this.clients.get(client).clientName}, testId ${testId}`);
           if (testId !== frame.referrerId) {
             if (testClient.hasOwnProperty('eventHandlers')) {
-                const obj = testClient.eventHandlers;
-                console.log('publish shared click event to map ' +  this.clients.get(client).clientName);
-                obj['client-MapClickEvent'](frame);
+                const handlers  = testClient.eventHandlers;
+                const handler = handlers['client-MapClickEvent'];
+                console.log(handler);
+                handler(frame);
+                // const obj = testClient.eventHandlers['client-MapClickEvent'];
+                // // console.log('publish shared click event to map ' +  this.clients.get(client).clientName);
+                // obj(frame);
             }
           }
       });

@@ -165,7 +165,7 @@ export class MarkerInfoPopup {
               referrerName = self.pusherConfig.getUserName(),
               referrerId = this.userId,
               mapId = 'map' + this.userId,
-              pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: self.popMarker.getZIndex(),
+              pushLL = {lng: fixedLL.lon, lat: fixedLL.lat, z: self.popMarker.getZIndex(),
                 referrerId, referrerName,
                 mapId, popId: popoverId, mapNumber: this.mapNumber,
                 address: marker.getLabel(), title: marker.getTitle() };

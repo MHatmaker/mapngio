@@ -22,8 +22,8 @@ export class InfopopupComponent {
     // alert(info.get('address'));
     // this.itemContent = info.get('address');
     const pushLL = {
-        x : info.get('x'),
-        y : info.get('y'),
+        lng : info.get('x'),
+        lat : info.get('y'),
         z : info.get('z'),
         referrerId : info.get('referrerId'),
         referrerName : info.get('referrerName'),

@@ -366,14 +366,14 @@ export class MapHosterGoogle extends MapHoster {
     }
 
     retrievedClick(clickPt) {
-        const fixedLL = this.utils.toFixedTwo(clickPt.x, clickPt.y, 6);
-        console.log('Back in retrievedClick - with click at ' +  clickPt.x + ', ' + clickPt.y);
+        const fixedLL = this.utils.toFixedTwo(clickPt.lng, clickPt.lat, 6);
+        console.log('Back in retrievedClick - with click at ' +  clickPt.lng + ', ' + clickPt.lat);
         // latlng = L.latLng(clickPt.y, clickPt.x, clickPt.y);
         // $inj = this.mlconfig.getInjector();
         // linkrSvc = $inj.get('LinkrService');
         // linkrSvc.hideLinkr();
 
-        const popPt = new google.maps.LatLng(clickPt.y, clickPt.x);
+        const popPt = new google.maps.LatLng(clickPt.lat, clickPt.lng);
         let content = 'Map click at ' + fixedLL.lat + ', ' + fixedLL.lon;
         if (clickPt.title) {
             content += '<br>' + clickPt.title;
@@ -766,7 +766,7 @@ export class MapHosterGoogle extends MapHoster {
                 const fixedLL = this.utils.toFixedTwo(popPt.lng(), popPt.lat(), 6),
                 referrerId = this.mlconfig.getUserId(),
                 referrerName = this.pusherConfig.getUserName(),
-                pushLL = {x: fixedLL.lon, y: fixedLL.lat, z: '0',
+                pushLL = {lng: fixedLL.lon, lat: fixedLL.lat, z: '0',
                     referrerId, referrerName };
                 console.log('You, ' + referrerName + ', ' + referrerId + ', clicked the map at ' + fixedLL.lat + ', ' + fixedLL.lon);
                 this.selfPusherDetails.pusher.channel(this.selfPusherDetails.channelName).trigger('client-MapClickEvent', pushLL);
