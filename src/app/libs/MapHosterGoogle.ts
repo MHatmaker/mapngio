@@ -21,7 +21,6 @@ import { GeocodingService } from '../services/geocoding.service';
 import { MapLocOptions } from '../services/positionupdate.interface';
 // import { SearchplacesService } from '../services/searchplaces.service';
 import { LocationsService } from '../services/locations.service';
-// import { InfopopupComponent } from '../src/infopopup/infopopup';
 // import { GmpopoverService } from '../services/gmpopover.service';
 // import { Popover } from '@ionic/angular';
 import { MarkerInfoPopup } from './MarkerInfoPopup';
