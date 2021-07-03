@@ -1,5 +1,5 @@
 // Angular
-import { Component, Input, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core'; // tslint:disable-line
+import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core'; // tslint:disable-line
 import {Observable} from 'rxjs';
 
 // Ionic
@@ -71,7 +71,7 @@ class InnerMenuOptionModel {
   templateUrl: 'side-menu-content.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SideMenuContentComponent {
+export class SideMenuContentComponent implements OnDestroy {
 
 //  Main inputs
   public menuSettings: SideMenuSettings;
@@ -131,6 +131,7 @@ export class SideMenuContentComponent {
     }
 
     ngOnDestroy() {
+      console.log('ngOnDestroy');
       // this.eventsCtrl.unsubscribe(SideMenuRedirectEvent);
     }
     // ---------------------------------------------------

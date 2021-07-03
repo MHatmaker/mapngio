@@ -11,6 +11,7 @@ import { SideMenuContentComponent } from './components/side-menu-content/side-me
 import { SideMenuSettings } from './components/side-menu-content/models/side-menu-settings';
 import { PageService, MenuOpenEvent } from './services/page.service';
 import { MenuOptionModel } from './components/side-menu-content/models/menu-option-model';
+import { IonMenu } from '@ionic/core/components/ion-menu';
 import { PusherConfig } from './libs/PusherConfig';
 // import { Geolocation } from '@ionic-native/geolocation';
 import { DomService } from './services/dom.service';
@@ -34,6 +35,7 @@ export class AppComponent implements AfterContentInit, OnInit {
   // Get the instance to call the public methods
   @ViewChild(SideMenuContentComponent, {static: false}) sideMenu: SideMenuContentComponent;
   @ViewChild(MapPage, {static: false}) mapPage: MapPage;
+  @ViewChild('mnuparent') ionMnu : IonMenu;
 
     // Options to show in the SideMenuComponent
   public options: Array<MenuOptionModel>;
@@ -58,7 +60,6 @@ export class AppComponent implements AfterContentInit, OnInit {
 
   constructor(
     private platform: Platform,
-    private menuCtrl: MenuController,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private pageService: PageService, private domsvc: DomService,
@@ -94,7 +95,7 @@ export class AppComponent implements AfterContentInit, OnInit {
       gmpopoverSvc: this.gmpopoverSvc,
       infopopSvc: this.infopopSvc} );
 
-    this.menuCtrl.enable(true, 'mlmenu');
+    menuController.enable(true, 'mlmenu');
     this.pageService.menuOpenEvent.subscribe((data: MenuOpenEvent) => {
       this.openMenu(data.menuName);
     });
@@ -114,10 +115,10 @@ export class AppComponent implements AfterContentInit, OnInit {
 
   async openMenu(mnu: string) {
     console.log('fired mlmenu click ' + mnu);
-    const menus = await this.menuCtrl.getMenus();
+    const menus = await menuController.getMenus();
     console.log(menus);
-    this.menuCtrl.enable(true, mnu);
-    await this.menuCtrl.open(mnu);
+    menuController.enable(true, mnu);
+    await menuController.open(mnu);
   }
 
   setIDsAndNames() {
@@ -292,9 +293,13 @@ async queryForUserName() {
 		});*/
 }
 
-  public selectOption(option: MenuOptionModel) {
-    this.menuCtrl.close().then(() => {
+  public async selectOption(option: MenuOptionModel) {
+    // menuController.close('mlmenu'); // .then(() => {
       this.pageService.menuOption.emit(option);
+      // this.menuCtrl.toggle();
+      // menuController.close('mlmenu');
+      // this.sideMenu.collapseAllOptions();
+      this.ionMnu.close();
       // if (option.custom && option.custom.isLogin) {
       // 	this.presentAlert('You\'ve clicked the login option!');
       // } else if (option.custom && option.custom.isLogout) {
@@ -308,7 +313,7 @@ async queryForUserName() {
       // this.navCtrl.setRoot(option.component || MapsPage, { 'title': option.displayName });
       // this.rootPage = option.component;
       // }
-    });
+    // });
   }
 
   public collapseMenuOptions(): void {

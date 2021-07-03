@@ -72,6 +72,7 @@ export class MapPage implements AfterViewInit, AfterContentInit {
 
       pageService.menuOption.subscribe(
         (data: MenuOptionModel) => {
+          console.log('menuOption subscriber');
           console.log(data);
           if (this.mapHosterDict.has(data.displayName)) {
               this.onsetMap(data);
