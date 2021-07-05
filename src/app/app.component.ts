@@ -1,6 +1,6 @@
 import { Component, ViewChild, OnInit, AfterContentInit, ApplicationRef, ChangeDetectorRef } from '@angular/core';
 
-import { Platform, MenuController, NavController } from '@ionic/angular';
+import { Platform, NavController } from '@ionic/angular';
 import { menuController } from '@ionic/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
@@ -18,7 +18,6 @@ import { DomService } from './services/dom.service';
 import { CommonToNG } from './libs/CommonToNG';
 import { SharemapService } from './services/sharemap.service';
 import { GmpopoverService } from './services/gmpopover.service';
-import { HttpClient } from '@angular/common/http';
 import { InfopopService } from './services/infopop.service';
 import { MapinstanceService } from './services/mapinstance.service';
 import { CanvasService } from './services/canvas.service';
@@ -27,8 +26,6 @@ import { CanvasService } from './services/canvas.service';
   selector: 'app-root',
   templateUrl: 'app.component.html',
   styleUrls: ['app.component.scss']
-  // templateUrl: './map/map.page.html',
-  // styleUrls: ['./map/map.page.scss'],
 })
 export class AppComponent implements AfterContentInit, OnInit {
   @ViewChild('mlcontent', {static: false}) nav: NavController; // <--- Reference to the Nav
@@ -43,8 +40,6 @@ export class AppComponent implements AfterContentInit, OnInit {
   private userName: string;
   public hasPusherKeys = null;
   rootPage = MapPage;
-  // public menuCtrl = menuController;
-
   // Settings for the SideMenuComponent
   public sideMenuSettings: SideMenuSettings = {
     accordionMode: true,
@@ -261,59 +256,11 @@ async queryForUserName() {
       ]
     });
 
-/*
-		// Load special options
-		// -----------------------------------------------
-		this.options.push({
-			displayName: 'Special options',
-			subItems: [
-				{
-					iconName: 'log-in',
-					displayName: 'Login',
-					custom: {
-						isLogin: true
-					}
-				},
-				{
-					iconName: 'log-out',
-					displayName: 'Logout',
-					custom: {
-						isLogout: true
-					}
-				},
-				{
-					iconName: 'globe',
-					displayName: 'Open Google',
-					custom: {
-						isExternalLink: true,
-						externalUrl: 'http://www.google.com'
-					}
-				}
-			]
-		});*/
 }
 
   public async selectOption(option: MenuOptionModel) {
-    // menuController.close('mlmenu'); // .then(() => {
-      this.pageService.menuOption.emit(option);
-      // this.menuCtrl.toggle();
-      // menuController.close('mlmenu');
-      // this.sideMenu.collapseAllOptions();
-      this.ionMnu.close();
-      // if (option.custom && option.custom.isLogin) {
-      // 	this.presentAlert('You\'ve clicked the login option!');
-      // } else if (option.custom && option.custom.isLogout) {
-      // 	this.presentAlert('You\'ve clicked the logout option!');
-      // } else if (option.custom && option.custom.isExternalLink) {
-      // 	let url = option.custom.externalUrl;
-      // 	window.open(url, '_blank');
-      // } else {
-
-      // Redirect to the selected page
-      // this.navCtrl.setRoot(option.component || MapsPage, { 'title': option.displayName });
-      // this.rootPage = option.component;
-      // }
-    // });
+    this.pageService.menuOption.emit(option);
+    this.ionMnu.close();
   }
 
   public collapseMenuOptions(): void {

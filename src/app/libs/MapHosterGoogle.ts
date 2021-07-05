@@ -393,7 +393,7 @@ export class MapHosterGoogle extends MapHoster {
               const lbl = this.labels[this.labelIndex++ % this.labels.length];
               const mip = new MarkerInfoPopup(popPt, content, titleShared,
                 // 'Received from user ' + clickPt.referrerName + ', ' + clickPt.referrerId,
-                null, this.mphmap, this.mlconfig.getUserId(), this.mapNumber, clickPt.popId, lbl, this, true);
+                'assets/icon/ltblu-stars.png', this.mphmap, this.mlconfig.getUserId(), this.mapNumber, clickPt.popId, lbl, this, true);
               this.markerInfoPopups.set(clickPt.popId, mip);
               this.markers.push(mip.getMarker());
               this.addToPopupSet(fixedLL.lon, fixedLL.lat);
