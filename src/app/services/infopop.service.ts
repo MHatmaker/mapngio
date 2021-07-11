@@ -21,7 +21,7 @@ class PopupItem {
 })
 export class InfopopService {
   public dockPopEmitter = new EventEmitter<{'action': string, 'title': string, 'labelShort': string,
-    position: {'x': number, 'y': number}}>();
+    position: {'x': number, 'y': number}, 'markerElement' : google.maps.Marker}>();
   private latestId: string;
       private modals: any[] = [];
       private modalMap: Map<string, PopupItem> = new Map<string, PopupItem>();
@@ -34,21 +34,25 @@ export class InfopopService {
       private popupId: string;
       public show: boolean;
       private domElem: HTMLElement;
+      private markerElement: google.maps.Marker;
 
     constructor(
-      public mapInstanceService: MapinstanceService,
-      private componentFactoryResolver: ComponentFactoryResolver,
-      private appRef: ApplicationRef,
-      private injector: Injector) {
+        public mapInstanceService: MapinstanceService,
+        private componentFactoryResolver: ComponentFactoryResolver,
+        private appRef: ApplicationRef,
+        private injector: Injector) {
       console.log('Hello InfopopProvider Provider');
     }
-      create(
+
+    create(
         markerElement: google.maps.Marker,
         mapNumber: number, component: any,
         content: string, title: string, lbl: string, popupId: string, showHide: boolean = true) {
+
         const  parentElem = document.getElementById('google-map-component' + mapNumber);
         // console.log(`infpop.create for Id ${popupId}, title ${title}`);
         console.log(parentElem);
+        this.markerElement = markerElement;
         this.currentContent = content;
         this.currentTitle = title;
         this.mrkrlabel = lbl;
@@ -88,6 +92,7 @@ export class InfopopService {
           this.modals.push(modal);
           this.latestId = this.popupId; // modal.getId();
           modal.setId(this.latestId);
+          modal.markerElement = this.markerElement;
           modal.title = this.currentTitle;
           modal.content = this.currentContent;
           modal.mrkrlabel = this.mrkrlabel;
@@ -137,7 +142,7 @@ export class InfopopService {
           // close modal specified by id
           if (removeMarker) {
             this.dockPopEmitter.emit({action: 'close', title: ngUid, labelShort: '',
-            position: {x: this.pos.lng(), y: this.pos.lat()}});
+            position: {x: this.pos.lng(), y: this.pos.lat()}, markerElement: this.markerElement});
           }
           // const modal = _.find(this.modals, { ngUid: ngUid });
           const modal = this.modalMap.get(ngUid); // [ngUid];
@@ -154,7 +159,7 @@ export class InfopopService {
             action: 'share',
             title: id,
             labelShort: modal.pop.mrkrlabel,
-            position: {x: this.pos.lng(), y: this.pos.lat()}});
+            position: {x: this.pos.lng(), y: this.pos.lat()}, markerElement: this.markerElement});
       }
       undock(id: string) {
           const modal = this.modalMap.get(id);
@@ -162,7 +167,8 @@ export class InfopopService {
           // const latlng = new google.maps.LatLng(coords.lng, coords.lat);
           // const pos = this.project(latlng);
           const pos = {x: coords.lng, y: coords.lat};
-          this.dockPopEmitter.emit({action: 'undock', title: id, labelShort: '', position: pos});
+          this.dockPopEmitter.emit({action: 'undock', title: id, labelShort: '', position: pos,
+            markerElement: modal.pop.markerElement});
       }
       contains(id: string): boolean {
         return _.contains(this.modals, id);

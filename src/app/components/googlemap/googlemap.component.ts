@@ -104,6 +104,7 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
     const subscriber = infopop.dockPopEmitter.subscribe((retval: any) => {
       if (retval.action === 'undock') {
         this.transition(retval.position);
+        this.bounce(retval.markerElement);
       }
     });
 
@@ -169,9 +170,18 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
   // markerDragEnd(m: marker, evt: MouseEvent) {
   //   console.log('dragEnd', m, evt);
   // }
+  sleep = (milliseconds) => {
+    return new Promise(resolve => setTimeout(resolve, milliseconds))
+  }
 
-  delayMarker() {
-    return new Promise(resolve => setTimeout(resolve, 7));
+  delayMarker(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
+  async bounce(markerElement: google.maps.Marker) {
+    markerElement.setAnimation(google.maps.Animation.BOUNCE);
+    await this.delayMarker(5000);
+    markerElement.setAnimation(null);
   }
 
   async transition(position) {
@@ -191,7 +201,7 @@ export class GoogleMapComponent implements AfterViewInit, OnInit {
 
         const nums = Array.from(Array(100).keys());
         for (const num of nums) {
-             await this.delayMarker();
+             await this.delayMarker(7);
              ypos += deltaLat;
              xpos += deltaLng;
              const latlng = new google.maps.LatLng(ypos, xpos);

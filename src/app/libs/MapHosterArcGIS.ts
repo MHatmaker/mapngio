@@ -262,9 +262,9 @@ export class MapHosterArcGIS extends MapHoster {
     async retrievedClick(clickPt) {
       if (clickPt.referrerId !== this.mlconfig.getUserId()) {
         console.log('Back in retrievedClick');
-        // var latlng = L.latLng(clickPt.y, clickPt.x, clickPt.y);
-        console.log('You clicked the map at ' + clickPt.x + ', ' + clickPt.y);
-        // alert('You clicked the map at ' + clickPt.x + ', ' + clickPt.y);
+        // var latlng = L.latLng(clickpt.lat, clickpt.lng, clickpt.lat);
+        console.log('You clicked the map at ' + clickPt.lng + ', ' + clickPt.lat);
+        // alert('You clicked the map at ' + clickpt.lng + ', ' + clickpt.lat);
         console.log(clickPt);
         const
               // mpDiv = document.getElementById('map' + this.mlconfig.getMapNumber()),
@@ -272,7 +272,7 @@ export class MapHosterArcGIS extends MapHoster {
               // mpDivNG = this.elementRef,
               // wdt = mpDivNG[0].clientWidth,
               // hgt = mpDivNG[0].clientHeight,
-              mppt = new Point({longitude: clickPt.x, latitude: clickPt.y});
+              mppt = new Point({longitude: clickPt.lng, latitude: clickPt.lat});
               // screenGeo = new toScreenGeometry(this.mphmap.extent, wdt, hgt, mppt),
               // screenGeo = this.mphmap.toScreen(mppt);
 
@@ -285,7 +285,7 @@ export class MapHosterArcGIS extends MapHoster {
           //      screengraphic = new esri.geometry.toScreenGeometry(this.mphmap.extent,800,600,userdrawlayer.graphics[0].geometry);
 
           // if (clickPt.referrerId !== this.mlconfig.getUserId()) {
-        const fixedLL: ILonLatStrings = this.utils.toFixedTwo(clickPt.x, clickPt.y, 9);
+        const fixedLL: ILonLatStrings = this.utils.toFixedTwo(clickPt.lng, clickPt.lat, 9);
         let content = 'Map click at ' + fixedLL.lat + ', ' + fixedLL.lon;
         if (clickPt.title) {
           content += '<br>' + clickPt.title;

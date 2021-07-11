@@ -44,6 +44,10 @@ export class MarkerInfoPopup {
         this.geoCoder = MLInjector.injector.get(GeocodingService);
         this.infopopService = MLInjector.injector.get(InfopopService);
 
+/*
+InvalidValueError: setIcon: not a string; and not an instance of PinView;
+and no url property; and no path property
+*/
         const image = {
             url: placeIconUrl,
             size: new google.maps.Size(71, 71),
