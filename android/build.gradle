@@ -15,12 +15,24 @@ buildscript {
     }
 }
 
+
 apply from: "variables.gradle"
+
+//android {
+//    compileSdkVersion31)
+//
+// defaultConfig {
+//        targetSdkVersion(31)
+//    }
+//}
 
 allprojects {
     repositories {
         google()
         jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
     }
 }
 

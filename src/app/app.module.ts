@@ -37,6 +37,8 @@ import { SharinghelpComponent } from './components/sharinghelp/sharinghelp.compo
 import { MsgsetupComponent } from './components/msgsetup/msgsetup.component';
 import { AccordionListComponent } from './components/accordion-list/accordion-list.component';
 import { MapPageModule } from './map/map.module';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 // import { PlacesSearchComponent } from './components/placessearch/placessearch.component';
 // import { PositionviewComponent } from './components/positionview/positionview.component';
@@ -64,7 +66,13 @@ import { MapPageModule } from './map/map.module';
     MsgsetupComponent,
     AccordionListComponent
   ],
-  imports: [BrowserModule, IonicModule, AppRoutingModule, HttpClientModule, MapPageModule, FormsModule, ClipboardModule],
+  imports: [BrowserModule, IonicModule, AppRoutingModule, HttpClientModule,
+    MapPageModule, FormsModule, ClipboardModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: environment.production,
+  // Register the ServiceWorker as soon as the app is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})],
   providers: [
     StatusBar,
     SplashScreen,

@@ -359,7 +359,7 @@ export class MapHosterArcGIS extends MapHoster {
         image: 'assets/imgs/share-info.png'
       });
 
-      if (this.mphmap.popup.actions.length < 2) {
+      if (this.mphmap.popup.actions.length < 1) {
         this.mphmap.popup.actions.push(shareAction);
       }
 
@@ -407,6 +407,8 @@ export class MapHosterArcGIS extends MapHoster {
           if (this.mphmap.popup.content === null) {
             const addedContent = 'Share address: ' + content;
             this.mphmap.popup.content = addedContent;
+          } else {
+            this.mphmap.popup.content = content;
           }
           this.mphmap.popup.watch('currentDockPosition', (value) => {
               console.log('currentDockPosition');
