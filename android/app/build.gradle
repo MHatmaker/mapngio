@@ -38,6 +38,12 @@ dependencies {
     implementation project(':capacitor-cordova-android-plugins')
 }
 
+android {
+    packagingOptions {
+        exclude("META-INF/NOTICE.md")
+        exclude("META-INF/LICENSE.md")
+    }
+}
 apply from: 'capacitor.build.gradle'
 
 try {

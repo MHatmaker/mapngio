@@ -33,3 +33,8 @@ gitpass
 package-lock.-bkjson
 src/app/components/multicanvas/multicanvas.component.css
 /extras
+.gradle
+android/.idea
+src/assets/icons
+src/manifest.webmanifest
+
