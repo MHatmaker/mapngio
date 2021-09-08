@@ -37,4 +37,6 @@ src/app/components/multicanvas/multicanvas.component.css
 android/.idea
 src/assets/icons
 src/manifest.webmanifest
+android/app/.gitignore
+resources
 
