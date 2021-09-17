@@ -34,7 +34,7 @@ import MapView from '@arcgis/core/views/MapView';
 import WebMap from '@arcgis/core/WebMap';
 import ActionButton from '@arcgis/core/support/actions/ActionButton';
 import Locator from '@arcgis/core/tasks/Locator';
-import * as watchUtils from '@arcgis/core/core/watchUtils';
+import { pausable, whenTrueOnce, whenFalseOnce } from '@arcgis/core/core/watchUtils';
 import SimpleMarkerSymbol from '@arcgis/core/symbols/MarkerSymbol';
 import SimpleLineSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 import Graphic from '@arcgis/core/Graphic';
@@ -295,6 +295,7 @@ export class MapHosterArcGIS extends MapHoster {
         }
         this.mphmap.popup.title = 'Received from user ' + clickPt.referrerName + ', ' + clickPt.referrerId;
         this.mphmap.popup.content = content;
+        this.mphmap.popup.alignment = 'top-center';
         // }
 
         this.mphmap.popup.open({location: mppt}); // this.mphmap.getInfoWindowAnchor(screenGeo));
@@ -531,6 +532,42 @@ export class MapHosterArcGIS extends MapHoster {
           // this.userZoom = true;
       });
 
+      const zoomhandle = pausable(this.mphmap, 'scale', async (scale) => {
+          zoomhandle.pause();
+          whenTrueOnce(this.mphmap, 'stationary').then( async () => {
+              console.log(this.mphmap.scale);
+              // zoomhandle.resume();
+              whenFalseOnce(this.mphmap, 'updating').then( async () => {
+                if (this.mphmap.extent) {
+                  if (this.userZoom === true) {
+                    const bnds = await this.extractBounds(this.mphmap.zoom, this.mphmap.center, 'zoom');
+                    this.setBounds(bnds);
+                  }
+                }
+              });
+              zoomhandle.resume();
+          });
+      });
+
+      const panhandle = pausable(this.mphmap, 'center', async (center, oldcenter, property, obj) => {
+        console.log(
+        'new value: ', center,      // The new value of the property
+              '<br>Old value: ', oldcenter,  // The previous value of the changed property
+              '<br>Watched property: ', property,  // In this example this value will always be "basemap.title"
+              '<br>Watched object: ', obj);
+          panhandle.pause();
+          whenTrueOnce(this.mphmap, 'stationary').then( async () => {
+              console.log(this.mphmap.center);
+              whenFalseOnce(this.mphmap, 'updating').then( async () => {
+                if (this.mphmap.center) {
+                  console.log('x' + this.mphmap.center.x +  ', y' + this.mphmap.center.y);
+                  await this.prepareToSetBounds();
+                }
+              });
+              panhandle.resume();
+          });
+      });
+/*
       watchUtils.whenTrue(this.mphmap, 'stationary', async (evt: any) => {
         if (this.mphmap.center) {
           console.log('x' + this.mphmap.center.x +  ', y' + this.mphmap.center.y);
@@ -543,6 +580,8 @@ export class MapHosterArcGIS extends MapHoster {
           }
         }
       });
+*/
+
 /*
       this.mphmap.on('pan-start',  (evt) => {
           // event.stop(evt);

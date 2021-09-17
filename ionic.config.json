@@ -4,5 +4,8 @@
     "capacitor": {},
     "cordova": {}
   },
-  "type": "angular"
+  "type": "angular",
+  "hooks": {
+    "build:after": "./attach-source-maps.js"
+  }
 }
