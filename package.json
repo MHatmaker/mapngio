@@ -48,7 +48,7 @@
     "core-js": "^3.15.2",
     "cors": "^2.8.5",
     "esri-loader": "^3.2.0",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "google": "^2.1.0",
     "googleapis": "^81.0.0",
     "leaflet": "^1.7.1",
